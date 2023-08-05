@@ -214,4 +214,45 @@ get in the way.
     ./bin/osx-samba-mount pi-1 pi-1tb
     ./bin/osx-samba-mount pi-1 pi-4tb
 
+TODOs
+-----
+
+* deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
+* deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
+* deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
+* deploy a webscrape notifier / task dag and migrate from github release tracker:
+  * full ifttt: `huginn <https://github.com/huginn/huginn>`_
+  * full ifttt: `munin <http://munin-monitoring.org/>`_
+  * full ifttt: `leon <https://getleon.ai/>`_
+  * only webscrape: `changedetection <https://github.com/dgtlmoon/changedetection.io>`_
+  * only webscrape: `kibitzr <https://kibitzr.github.io/>`_
+  * get past cloudflare: `flaresolverr <https://github.com/FlareSolverr/FlareSolverr>`_
+* configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
+* deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
+* backup `photos <https://github.com/awesome-selfhosted/awesome-selfhosted#photo-and-video-galleries>`_ from Google Photos
+* configure `notifications <https://github.com/caronc/apprise>`_
+* monitor:
+  * `hard drives <https://github.com/AnalogJ/scrutiny>`_
+  * and "everything else" via prometheus/grafana
+* manage `music <https://lidarr.audio/>`_
+* optimize `transcoding of tv shows and movies <https://home.tdarr.io/>`_
+* selfhost `location sharing <https://github.com/bilde2910/Hauk>`_
+* investigate `openhab hub as new aio dashboard <https://www.openhab.org/>`_
+* clean up `document management <https://github.com/awesome-selfhosted/awesome-selfhosted#document-management>`_
+* set up `chatbot <https://errbot.readthedocs.io/en/latest/>`_
+* selfhost `calendars and contacts <https://github.com/awesome-selfhosted/awesome-selfhosted#calendar--contacts---caldav-or-carddav-servers>`_, backup from Google
+* host calendar scheduling:
+  * `cal.com <https://cal.com/>`_
+  * `easyappointments <https://github.com/alextselegidis/easyappointments>`_
+* backup my bookmarks:
+  * `various options <https://github.com/awesome-selfhosted/awesome-selfhosted#bookmarks-and-link-sharing>`_
+  * `lnks <https://github.com/hamvocke/lnks>`_
+  * `sync from firefox <https://floccus.org/>`_
+* expose `fava viewer <https://beancount.github.io/fava/>`_
+* mirror repos to `gitea <https://about.gitea.com/>`_:
+  * check out `plugins <https://gitea.com/gitea/awesome-gitea>`_
+  * also `mirror to gitlab <https://docs.gitlab.com/ee/user/project/repository/mirror/index.html>`_?
+  * also mirror to sourcehut?
+  * `mirroring script <https://github.com/beefsack/git-mirror>`_
+
 .. _Install Raspbian OS Lite x64: https://www.raspberrypi.com/software/
