@@ -9,7 +9,7 @@
         container: hass
     - Homepage:
         href: http://192.168.1.64:3000/
-        description: Homepage on applebox
+        description: Homepage
         icon: mdi-home-circle
         server: applebox
         container: homepage
