@@ -5,19 +5,19 @@
         href: http://192.168.1.64:8123/
         description: Home Assistant
         icon: home-assistant
-        server: docker-local
+        server: applebox
         container: hass
     - Homepage:
         href: http://192.168.1.64:3000/
         description: Homepage on applebox
         icon: mdi-home-circle
-        server: docker-local
+        server: applebox
         container: homepage
     - Homepage:
         href: http://192.168.1.71:3000/
         description: Homepage on pi-1
         icon: mdi-home-circle
-        server: docker-local
+        server: pi-1
         container: homepage
 
 - Media:
@@ -25,19 +25,19 @@
         href: http://192.168.1.64:8096/
         description: Media Server
         icon: jellyfin
-        server: docker-local
+        server: applebox
         container: jellyfin
     - Radarr:
         href: http://192.168.1.71:7878/
         description: Movie Collection Manager
         icon: radarr
-        server: docker-local
+        server: pi-1
         container: radarr
     - Sonarr:
         href: http://192.168.1.71:8989/
         description: TV Show Collection Manager
         icon: sonarr
-        server: docker-local
+        server: pi-1
         container: sonarr
 
 - Torrents:
@@ -45,13 +45,13 @@
         href: http://192.168.1.71:8080/
         description: Torrent Client
         icon: qbittorrent
-        server: docker-local
+        server: pi-1
         container: qbittorrent
     - Prowlarr:
         href: http://192.168.1.71:9696/
         description: Indexer Manager
         icon: prowlarr
-        server: docker-local
+        server: applebox
         container: prowlarr
 
 - Networking:
@@ -66,7 +66,7 @@
     - Cloudflared:
         description: DNS Tunnel
         icon: cloudflare-zero-trust
-        server: docker-local
+        server: applebox
         container: cloudflared
 
 - Services:
@@ -79,17 +79,17 @@
         href: https://auth.thekev.in/
         description: Secure Reverse Proxy
         icon: caddy
-        server: docker-local
+        server: applebox
         container: syncthing
     - Syncthing:
         href: http://192.168.1.64:8384/
         description: Syncthing on applebox
         icon: syncthing
-        server: docker-local
+        server: applebox
         container: syncthing
     - Syncthing:
         href: http://192.168.1.71:8384/
         description: Syncthing on pi-1
         icon: syncthing
-        server: docker-local
+        server: pi-1
         container: syncthing

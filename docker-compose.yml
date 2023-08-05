@@ -37,6 +37,20 @@ services:
     volumes:
       - ./cloudflared:/home/nonroot/.cloudflared:Z
 
+  docker-socket-proxy:
+    container_name: docker-socket-proxy
+    image: ghcr.io/tecnativa/docker-socket-proxy:0.1.1
+    ports:
+      - 2375:2375
+    restart: unless-stopped
+    environment:
+      - CONTAINERS=1
+      - POST=0
+      - SERVICES=0
+      - TASKS=0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   hass:
     profiles:
       - applebox
@@ -58,7 +72,6 @@ services:
     volumes:
       - /mnt/1tb:/mnt/1tb
       - /mnt/4tb:/mnt/4tb
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./homepage:/app/config:Z
 
   jellyfin:
