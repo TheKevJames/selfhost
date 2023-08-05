@@ -45,7 +45,7 @@
         href: http://192.168.1.71:9696/
         description: Indexer Manager
         icon: prowlarr
-        server: applebox
+        server: pi-1
         container: prowlarr
 
 - Networking:
