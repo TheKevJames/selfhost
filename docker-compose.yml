@@ -27,6 +27,7 @@ services:
       - ./caddy:/config/caddy:Z
 
   # TODO: configure ssh tunneling
+  # TODO: consider https://github.com/linuxserver/docker-mods/tree/universal-cloudflared
   cloudflared:
     profiles:
       - applebox
@@ -64,6 +65,7 @@ services:
       - /mnt/4tb:/mnt/4tb
       - ./homepage:/app/config:Z
 
+  # TODO: expose domain?
   jellyfin:
     profiles:
       - applebox
@@ -103,6 +105,7 @@ services:
     volumes:
       - ./mosura:/data:Z
 
+  # TODO: expose domain
   prowlarr:
     profiles:
       - pi-1
@@ -119,6 +122,7 @@ services:
     volumes:
       - ./prowlarr:/config:Z
 
+  # TODO: expose domain
   qbittorrent:
     profiles:
       - pi-1
@@ -136,6 +140,7 @@ services:
       - /mnt/1tb/torrents:/data/torrents
       - ./qbittorrent:/config:Z
 
+  # TODO: expose domain
   radarr:
     profiles:
       - pi-1
@@ -154,6 +159,7 @@ services:
       - /mnt/4tb/movies:/data/media/movies
       - ./radarr:/config:Z
 
+  # TODO: expose domain
   sonarr:
     profiles:
       - pi-1
@@ -172,6 +178,7 @@ services:
       - /mnt/4tb/shows:/data/media/shows
       - ./sonarr:/config:Z
 
+  # TODO: expose domain?
   syncthing:
     container_name: syncthing
     image: lscr.io/linuxserver/syncthing:1.23.6
