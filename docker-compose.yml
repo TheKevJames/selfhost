@@ -201,3 +201,18 @@ services:
     volumes:
       - /mnt/4tb/sync:/data/sync
       - ./syncthing:/config:Z
+
+  unpackerr:
+    profiles:
+      - pi-1
+    container_name: unpackerr
+    image: ghcr.io/hotio/unpackerr:release-0.12.0
+    restart: unless-stopped
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Etc/UTC
+      - UMASK=002
+    volumes:
+      - /mnt/1tb/torrents:/data/torrents
+      - ./unpackerr:/config:Z

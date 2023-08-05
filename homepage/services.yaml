@@ -47,6 +47,11 @@
         icon: prowlarr
         server: pi-1
         container: prowlarr
+    - Unpackerr:
+        description: Archive Auto-Extraction
+        icon: mdi-archive-sync
+        server: pi-1
+        container: unpackerr
 
 - Networking:
     - Pi-Hole:

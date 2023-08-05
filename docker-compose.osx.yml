@@ -48,3 +48,10 @@ services:
       - PUID=20
     volumes:
       - ~/sync:/data/sync
+
+  unpackerr:
+    environment:
+      - PGID=503
+      - PUID=20
+    volumes:
+      - /Volumes/pi-1tb/torrents:/data/torrents
