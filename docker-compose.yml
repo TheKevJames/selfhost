@@ -30,7 +30,7 @@ services:
   cloudflared:
     profiles:
       - applebox
-    image: docker.io/cloudflare/cloudflared:latest
+    image: docker.io/cloudflare/cloudflared:2023.7.3
     command: tunnel run
     container_name: cloudflared
     restart: unless-stopped
@@ -41,7 +41,7 @@ services:
     profiles:
       - applebox
     container_name: hass
-    image: ghcr.io/home-assistant/home-assistant:stable
+    image: ghcr.io/home-assistant/home-assistant:2023.8.1
     ports:
       - 8123:8123
     restart: unless-stopped
@@ -51,7 +51,7 @@ services:
 
   homepage:
     container_name: homepage
-    image: ghcr.io/benphelps/homepage:latest
+    image: ghcr.io/benphelps/homepage:v0.6.28
     ports:
       - 3000:3000
     restart: unless-stopped
@@ -65,7 +65,7 @@ services:
     profiles:
       - applebox
     container_name: jellyfin
-    image: lscr.io/linuxserver/jellyfin:latest
+    image: lscr.io/linuxserver/jellyfin:10.8.10
     ports:
       - 1900:1900/udp
       - 7359:7359/udp
@@ -104,7 +104,7 @@ services:
     profiles:
       - pi-1
     container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: lscr.io/linuxserver/prowlarr:1.7.4
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -120,7 +120,7 @@ services:
     profiles:
       - pi-1
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent:release
+    image: ghcr.io/hotio/qbittorrent:release-4.5.4
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -137,7 +137,7 @@ services:
     profiles:
       - pi-1
     container_name: radarr
-    image: lscr.io/linuxserver/radarr:latest
+    image: lscr.io/linuxserver/radarr:4.6.4
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -155,7 +155,7 @@ services:
     profiles:
       - pi-1
     container_name: sonarr
-    image: lscr.io/linuxserver/sonarr:latest
+    image: lscr.io/linuxserver/sonarr:3.0.10
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -171,7 +171,7 @@ services:
 
   syncthing:
     container_name: syncthing
-    image: lscr.io/linuxserver/syncthing:latest
+    image: lscr.io/linuxserver/syncthing:1.23.6
     ports:
       - 8384:8384
       - 22000:22000/tcp
