@@ -1,12 +1,6 @@
 # TODO: service widgets (require auth, plaintext in this file :()
 ---
 - Control:
-    - HASS:
-        href: http://192.168.1.64:8123/
-        description: Home Assistant
-        icon: home-assistant
-        server: applebox
-        container: hass
     - Homepage:
         href: http://home.thekev.in/
         description: Homepage

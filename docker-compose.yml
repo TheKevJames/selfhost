@@ -51,18 +51,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  hass:
-    profiles:
-      - applebox
-    container_name: hass
-    image: ghcr.io/home-assistant/home-assistant:2023.8.1
-    ports:
-      - 8123:8123
-    restart: unless-stopped
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./hass:/config:Z
-
   homepage:
     profiles:
       - applebox
