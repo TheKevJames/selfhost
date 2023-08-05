@@ -8,7 +8,7 @@
         server: applebox
         container: hass
     - Homepage:
-        href: http://192.168.1.64:3000/
+        href: http://home.thekev.in/
         description: Homepage
         icon: mdi-home-circle
         server: applebox
