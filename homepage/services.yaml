@@ -66,6 +66,7 @@
     - Mosura:
         href: https://mosura.thekev.in/
         description: Task Management Frontend
+        icon: mdi-jira
         server: docker-local
         container: mosura
     - Caddy:
