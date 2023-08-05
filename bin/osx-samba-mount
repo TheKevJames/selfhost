@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HOSTNAME="${1:?usage: $0 HOSTNAME VOLUME}"
+MOUNTNAME="${2:?usage: $0 HOSTNAME MOUNTNAME}"
+
+sudo mkdir "/Volumes/${MOUNTNAME}"
+sudo chown -R 0777 "/Volumes/${MOUNTNAME}"
+sudo mount_smbfs -N -d 0777 -f 0777 "//guest@${HOSTNAME}/${MOUNTNAME}" "/Volumes/${MOUNTNAME}"

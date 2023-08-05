@@ -210,8 +210,8 @@ get in the way.
 
 .. code-block:: console
 
-    sudo mkdir /Volumes/pi-1tb
-    sudo chown -R 0777 /Volumes/pi-1tb
-    sudo mount_smbfs -N -d 0777 -f 0777 //guest@pi-1/pi-1tb /Volumes/pi-1tb
+    # ./bin/osx-samba-mount HOSTNAME MOUNTNAME
+    ./bin/osx-samba-mount pi-1 pi-1tb
+    ./bin/osx-samba-mount pi-1 pi-4tb
 
 .. _Install Raspbian OS Lite x64: https://www.raspberrypi.com/software/
