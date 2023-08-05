@@ -13,12 +13,6 @@
         icon: mdi-home-circle
         server: applebox
         container: homepage
-    - Homepage:
-        href: http://192.168.1.71:3000/
-        description: Homepage on pi-1
-        icon: mdi-home-circle
-        server: pi-1
-        container: homepage
 
 - Media:
     - Jellyfin:

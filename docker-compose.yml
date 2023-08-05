@@ -64,6 +64,8 @@ services:
       - ./hass:/config:Z
 
   homepage:
+    profiles:
+      - applebox
     container_name: homepage
     image: ghcr.io/benphelps/homepage:v0.6.28
     ports:
