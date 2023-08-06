@@ -105,6 +105,58 @@ services:
     volumes:
       - ./mosura:/data:Z
 
+  photoprism:
+    profiles:
+      - applebox
+    container_name: photoprism
+    image: photoprism/photoprism:230719
+    working_dir: "/photoprism"
+    ports:
+      - 2342:2342
+    restart: unless-stopped
+    # https://dl.photoprism.app/docker/docker-compose.yml
+    # TODO: use config files? https://docs.photoprism.app/getting-started/config-files/
+    environment:
+      - PHOTOPRISM_ADMIN_USER=admin
+      - PHOTOPRISM_ADMIN_PASSWORD=insecure
+      # TODO: use "public" and offload auth to caddy?
+      - PHOTOPRISM_AUTH_MODE=password
+      - PHOTOPRISM_SITE_URL=http://localhost:2342/
+      - PHOTOPRISM_DISABLE_TLS=false
+      - PHOTOPRISM_DEFAULT_TLS=true
+      - PHOTOPRISM_ORIGINALS_LIMIT=5000
+      - PHOTOPRISM_HTTP_COMPRESSION=gzip
+      - PHOTOPRISM_LOG_LEVEL=info
+      # TODO: set readonly (and add :ro to original mount) if I set up eg. digikam
+      - PHOTOPRISM_READONLY=false
+      - PHOTOPRISM_EXPERIMENTAL=false
+      - PHOTOPRISM_DISABLE_CHOWN=false
+      - PHOTOPRISM_DISABLE_WEBDAV=false
+      - PHOTOPRISM_DISABLE_SETTINGS=false
+      - PHOTOPRISM_DISABLE_TENSORFLOW=false
+      - PHOTOPRISM_DISABLE_FACES=false
+      - PHOTOPRISM_DISABLE_CLASSIFICATION=false
+      - PHOTOPRISM_DISABLE_VECTORS=false
+      - PHOTOPRISM_DISABLE_RAW=false
+      - PHOTOPRISM_RAW_PRESETS=false
+      - PHOTOPRISM_JPEG_QUALITY=100  # default: 85
+      - PHOTOPRISM_DETECT_NSFW=false
+      - PHOTOPRISM_UPLOAD_NSFW=true
+      - PHOTOPRISM_DATABASE_DRIVER=sqlite
+      - PHOTOPRISM_SITE_CAPTION="AI-Powered Photos App"
+      - PHOTOPRISM_SITE_DESCRIPTION=""
+      - PHOTOPRISM_SITE_AUTHOR=""
+      - PHOTOPRISM_UID=1000
+      - PHOTOPRISM_GID=1000
+      - PHOTOPRISM_UMASK=0002
+      # TODO: install tensorflow etc?
+      # - PHOTOPRISM_INIT: "tensorflow"  # options: (update https gpu tensorflow davfs clitools clean)
+    user: "1000:1000"
+    volumes:
+      - /mnt/4tb/sync/images/import:/photoprism/import
+      - /mnt/4tb/sync/images/library:/photoprism/originals
+      - ./photoprism:/photoprism/storage:Z
+
   # TODO: expose domain
   prowlarr:
     profiles:

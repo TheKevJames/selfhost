@@ -8,50 +8,59 @@ services:
 
   jellyfin:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - /Volumes/pi-4tb/movies:/data/media/movies
       - /Volumes/pi-4tb/shows:/data/media/shows
 
+  photoprism:
+    environment:
+      - PHOTOPRISM_GID=20
+      - PHOTOPRISM_UID=503
+    user: "503:20"
+    volumes:
+      - ~/sync/images/import:/photoprism/import
+      - ~/sync/images/library:/photoprism/originals
+
   prowlarr:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
 
   qbittorrent:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - /Volumes/pi-1tb/torrents:/data/torrents
 
   radarr:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - /Volumes/pi-1tb/torrents:/data/torrents
       - /Volumes/pi-4tb/movies:/data/media/movies
 
   sonarr:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - /Volumes/pi-1tb/torrents:/data/torrents
       - /Volumes/pi-4tb/shows:/data/media/shows
 
   syncthing:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - ~/sync:/data/sync
 
   unpackerr:
     environment:
-      - PGID=503
-      - PUID=20
+      - PGID=20
+      - PUID=503
     volumes:
       - /Volumes/pi-1tb/torrents:/data/torrents

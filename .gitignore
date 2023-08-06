@@ -10,6 +10,7 @@ jellyfin/data/metadata/*
 jellyfin/data/transcodes/*
 jellyfin/log/*
 mosura/*
+photoprism/*
 prowlarr/*
 !prowlarr/config.xml
 qbittorrent/cache/*

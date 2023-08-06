@@ -229,7 +229,8 @@ TODOs
   * get past cloudflare: `flaresolverr <https://github.com/FlareSolverr/FlareSolverr>`_
 * configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
 * deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
-* backup `photos <https://github.com/awesome-selfhosted/awesome-selfhosted#photo-and-video-galleries>`_ from Google Photos
+* backup photos from Google:
+  * consider adding a tagger such as `digikam <https://www.digikam.org/>`_ to embed metadata
 * configure `notifications <https://github.com/caronc/apprise>`_
 * monitor:
   * `hard drives <https://github.com/AnalogJ/scrutiny>`_
@@ -238,7 +239,6 @@ TODOs
 * optimize `transcoding of tv shows and movies <https://home.tdarr.io/>`_
 * selfhost `location sharing <https://github.com/bilde2910/Hauk>`_
 * investigate `openhab hub as new aio dashboard <https://www.openhab.org/>`_
-* clean up `document management <https://github.com/awesome-selfhosted/awesome-selfhosted#document-management>`_
 * set up `chatbot <https://errbot.readthedocs.io/en/latest/>`_
 * selfhost `calendars and contacts <https://github.com/awesome-selfhosted/awesome-selfhosted#calendar--contacts---caldav-or-carddav-servers>`_, backup from Google
 * host calendar scheduling:
