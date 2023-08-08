@@ -93,9 +93,9 @@ services:
     container_name: mosura
     restart: unless-stopped
     environment:
+      - MOSURA_APPDATA=/data
       - MOSURA_HEADER_USER_EMAIL=X-Token-User-Email
       - MOSURA_PORT=8080
-      - MOSURA_APPDATA=/data
     secrets:
       - jira_auth_token
       - jira_auth_user
