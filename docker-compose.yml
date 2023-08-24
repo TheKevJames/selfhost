@@ -31,7 +31,7 @@ services:
   cloudflared:
     profiles:
       - applebox
-    image: docker.io/cloudflare/cloudflared:2023.7.3
+    image: docker.io/cloudflare/cloudflared:2023.8.0
     command: tunnel run
     container_name: cloudflared
     restart: unless-stopped
