@@ -6,6 +6,7 @@ cloudflared/*
 homepage/logs/*
 jellyfin/cache/*
 jellyfin/data/data/*
+!jellyfin/data/data/playlists
 jellyfin/data/metadata/*
 jellyfin/data/transcodes/*
 jellyfin/log/*
