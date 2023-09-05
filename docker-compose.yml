@@ -70,7 +70,7 @@ services:
     profiles:
       - applebox
     container_name: jellyfin
-    image: lscr.io/linuxserver/jellyfin:10.8.10
+    image: quay.io/linuxserver.io/jellyfin:10.8.10
     ports:
       - 1900:1900/udp
       - 7359:7359/udp
@@ -163,7 +163,7 @@ services:
     profiles:
       - pi-1
     container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:1.7.4
+    image: quay.io/linuxserver.io/prowlarr:1.7.4
     ports:
       - 9696:9696
     restart: unless-stopped
@@ -198,7 +198,7 @@ services:
     profiles:
       - pi-1
     container_name: radarr
-    image: lscr.io/linuxserver/radarr:4.7.5
+    image: quay.io/linuxserver.io/radarr:4.7.5
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -217,7 +217,7 @@ services:
     profiles:
       - pi-1
     container_name: sonarr
-    image: lscr.io/linuxserver/sonarr:3.0.10
+    image: quay.io/linuxserver.io/sonarr:3.0.10
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -234,7 +234,7 @@ services:
   # TODO: expose domain?
   syncthing:
     container_name: syncthing
-    image: lscr.io/linuxserver/syncthing:1.23.7
+    image: quay.io/linuxserver.io/syncthing:1.23.7
     ports:
       - 8384:8384
       - 22000:22000/tcp
