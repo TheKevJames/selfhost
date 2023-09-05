@@ -1,8 +1,12 @@
 # TODO: service widgets (require auth, plaintext in this file :()
 ---
 - Control:
+    - Website:
+        href: https://thekev.in/
+        description: Website
+        icon: mdi-post-outline
     - Homepage:
-        href: http://home.thekev.in/
+        href: https://home.thekev.in/
         description: Homepage
         icon: mdi-home-circle
         server: applebox
@@ -73,7 +77,7 @@
         href: https://mosura.thekev.in/
         description: Task Management Frontend
         icon: mdi-jira
-        server: docker-local
+        server: applebox
         container: mosura
     - Caddy:
         href: https://auth.thekev.in/
