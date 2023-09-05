@@ -23,4 +23,4 @@ start:
 stop:
 	$(COMPOSE) --profile=$(shell hostname) stop $(SERVICE)
 up:
-	$(COMPOSE) --profile=$(shell hostname) up -d --remove-orphans
+	$(COMPOSE) --profile=$(shell hostname) up -d --remove-orphans $(SERVICE)

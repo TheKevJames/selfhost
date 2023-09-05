@@ -180,7 +180,7 @@ services:
     profiles:
       - pi-1
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent:release-4.5.4
+    image: ghcr.io/hotio/qbittorrent:release-4.5.5
     ports:
       - 8080:8080
     restart: unless-stopped
