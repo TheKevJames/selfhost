@@ -198,7 +198,7 @@ services:
     profiles:
       - pi-1
     container_name: radarr
-    image: lscr.io/linuxserver/radarr:4.7.5
+    image: lscr.io/linuxserver/radarr:4.0.5-nightly-alpine
     ports:
       - 7878:7878
     restart: unless-stopped
