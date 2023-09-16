@@ -3,16 +3,16 @@ version: '3.8'
 services:
   homepage:
     volumes:
-      - /Volumes/pi-1tb:/mnt/1tb
-      - /Volumes/pi-4tb:/mnt/4tb
+      - /Volumes/1tb:/mnt/1tb
+      - /Volumes/4tb:/mnt/4tb
 
   jellyfin:
     environment:
       - PGID=20
       - PUID=503
     volumes:
-      - /Volumes/pi-4tb/movies:/data/media/movies
-      - /Volumes/pi-4tb/shows:/data/media/shows
+      - /Volumes/4tb/movies:/data/media/movies
+      - /Volumes/4tb/shows:/data/media/shows
 
   photoprism:
     environment:
@@ -33,23 +33,23 @@ services:
       - PGID=20
       - PUID=503
     volumes:
-      - /Volumes/pi-1tb/torrents:/data/torrents
+      - /Volumes/1tb/torrents:/data/torrents
 
   radarr:
     environment:
       - PGID=20
       - PUID=503
     volumes:
-      - /Volumes/pi-1tb/torrents:/data/torrents
-      - /Volumes/pi-4tb/movies:/data/media/movies
+      - /Volumes/1tb/torrents:/data/torrents
+      - /Volumes/4tb/movies:/data/media/movies
 
   sonarr:
     environment:
       - PGID=20
       - PUID=503
     volumes:
-      - /Volumes/pi-1tb/torrents:/data/torrents
-      - /Volumes/pi-4tb/shows:/data/media/shows
+      - /Volumes/1tb/torrents:/data/torrents
+      - /Volumes/4tb/shows:/data/media/shows
 
   syncthing:
     environment:
@@ -63,4 +63,4 @@ services:
       - PGID=20
       - PUID=503
     volumes:
-      - /Volumes/pi-1tb/torrents:/data/torrents
+      - /Volumes/1tb/torrents:/data/torrents
