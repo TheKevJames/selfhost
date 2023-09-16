@@ -26,42 +26,44 @@
         server: applebox
         container: photoprism
     - Radarr:
-        href: http://192.168.1.71:7878/
+        href: http://192.168.1.75:7878/
         description: Movie Collection Manager
         icon: radarr
-        server: pi-1
+        server: bmaxbox
         container: radarr
     - Sonarr:
-        href: http://192.168.1.71:8989/
+        href: http://192.168.1.75:8989/
         description: TV Show Collection Manager
         icon: sonarr
-        server: pi-1
+        server: bmaxbox
         container: sonarr
 
 - Torrents:
     - qBittorrent:
-        href: http://192.168.1.71:8080/
+        href: http://192.168.1.75:8080/
         description: Torrent Client
         icon: qbittorrent
-        server: pi-1
+        server: bmaxbox
         container: qbittorrent
     - Prowlarr:
-        href: http://192.168.1.71:9696/
+        href: http://192.168.1.75:9696/
         description: Indexer Manager
         icon: prowlarr
-        server: pi-1
+        server: bmaxbox
         container: prowlarr
     - Unpackerr:
         description: Archive Auto-Extraction
         icon: mdi-archive-sync
-        server: pi-1
+        server: bmaxbox
         container: unpackerr
 
 - Networking:
     - Pi-Hole:
-        href: http://192.168.1.71:8000/admin/
+        href: http://192.168.1.75:8888/admin/
         description: Pi-Hole Admin Portal
         icon: pi-hole
+        server: bmaxbox
+        container: pihole
     - Router:
         href: http://192.168.1.1/
         description: Router Admin Portal
@@ -92,8 +94,8 @@
         server: applebox
         container: syncthing
     - Syncthing:
-        href: http://192.168.1.71:8384/
-        description: Syncthing on pi-1
+        href: http://192.168.1.75:8384/
+        description: Syncthing on bmaxbox
         icon: syncthing
-        server: pi-1
+        server: bmaxbox
         container: syncthing

@@ -12,6 +12,7 @@ jellyfin/data/transcodes/*
 jellyfin/log/*
 mosura/*
 photoprism/*
+pihole/*
 prowlarr/*
 !prowlarr/config.xml
 qbittorrent/cache/*

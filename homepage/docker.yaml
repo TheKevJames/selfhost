@@ -2,6 +2,6 @@
 applebox:
   host: 192.168.1.64
   port: 2375
-pi-1:
-  host: 192.168.1.71
+bmaxbox:
+  host: 192.168.1.75
   port: 2375

@@ -50,22 +50,11 @@ where your default swapfile lives on an SD card::
 
 Now, install your container manager::
 
-    # podman is simplest, if available
-    sudo apt install -y --no-install-recommends podman pipx
-    pipx ensure-path
-    pipx install podman-compose
-    # ~/.config/containers/containers.conf
-    # [engine]
-    # cgroup_manager="cgroupfs"
-
-    # last time I set up a Pi, Raspbian couldn't get podman setup without a lot
-    # of manual go compiler toolchain boostrapping, so docker is an option if
-    # you need:
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh ./get-docker.sh
     rm get-docker.sh
     sudo groupadd docker
-    sudo usermod -aG docker $USER
+    sudo usermod -aG docker $USER  # then logout / login
 
     # on OSX, use colima for your Docker VM backend to avoid needing Docker for
     # OSX:
@@ -91,49 +80,45 @@ repo::
     $ make pull
     $ make up -d
 
-TODO: pi-hole in docker
+If this if the first time setup on a new machine and you want to migrate off a
+previous one, using rsync on the relevant app directory should do the trick
+(before you start the relevant pod, but after shutting it down on the old
+host!)::
 
-    ## PI-HOLE
-    # follow the visual prompts
-    $ curl -sSL https://install.pi-hole.net | bash
-    # set your admin panel password, if you enabled it
-    $ echo "server.port := 8000" | sudo tee /etc/lighttpd/external.conf
-    $ sudo pihole -a -p
+    rsync -aP oldhost:~/src/personal/selfhost/foobar/ foobar
 
-    # verify it's working at the web portal and with:
-    $ pihole status
-    # verify from one of your client machines that the DNS resolver is working
-    $ dig -4 @PI_IP_ADDRESS example.com
+There are also some manual steps which you may want to do included below.
 
-    # if not, a `sudo poweroff --reboot` after the first install can help
-    # if you have issues with the above, here's some things which have helped:
-    # reboot: `sudo poweroff --reboot`
-    # update: `pihole -up`
-    # update blocklists: `pihole -g` (sometimes these seem to be initialized
-    # badly at first?)
+* syncthing: visit the web UI and share any folders
+* pihole: ``docker logs pihole | grep random`` to get your password, ``
 
-    # now is also a great time to set up IPv6:
-    # /admin/settings.php?tab=dns to toggle it on
-    # get the ip with `ip -6 addr show | grep global`
-    $ dig -6 @PI_IPV6_ADDRESS example.com
+Syncthing
+~~~~~~~~~
 
-    # update your router/clients to start using the pihole
+Visit ``:8384`` and set up any relevant shares.
+
+Pi-Hole
+~~~~~~~
+
+::
+
+    # grab your admin password, configure settings in the web ui
+    docker logs pihole | grep random
+
+    # verify it works
+    dig -4 @NODEIPv4 example.com
+    # NODEIPv6=$( ip -6 addr show | awk '/global/ {print $2}'
+    dig -4 @NODEIPv6 example.com
+
+    # make your router/hosts/etc use pihole dns
     # https://docs.pi-hole.net/main/post-install/
     # note that if you want fallback DNS addresses, I like Cloudflare:
     #   1.1.1.1, 1.0.0.1
     #   2606:4700:4700::1111, 2606:4700:4700::1001
-    # verify that worked with
-    $ dig -4 example.com | grep SERVER
-    $ dig -6 example.com | grep SERVER
+    # verify it's configured:
+    dig -4 example.com | grep SERVER
+    dig -6 example.com | grep SERVER
     # the SERVER should be using the IPv4 and IPv6 addresses you found earlier
-
-    # upgrade and restart
-    $ sudo apt upgrade -y
-    $ sudo poweroff --reboot
-
-    # setup the admin account, unless you restored from a backup
-    # visit http://pi.hole:8123/
-
 
 Updates
 -------
@@ -142,9 +127,6 @@ To update the various components::
 
     sudo apt update -y
     sudo apt upgrade -y
-    pipx upgrade-all
-
-    pihole -up
 
     cd ~/src/experiments/selfhost
     git pull
@@ -217,7 +199,7 @@ Exposing Mounts via Samba
     sudo systemctl restart smbd
 
 Connect to Samba Shares
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 To mount samba shares on OSX clients, note that the permissions the server
 grants and the permissions OSX *thinks* it has don't tend to stay in sync very

@@ -158,10 +158,28 @@ services:
       - /mnt/4tb/sync/images/library:/photoprism/originals
       - ./photoprism:/photoprism/storage:Z
 
+  # TODO: expose domain?
+  pihole:
+    profiles:
+      - bmaxbox
+    container_name: pihole
+    image: docker.io/pihole/pihole:2023.05.2
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 8888:80
+    restart: unless-stopped
+    environment:
+      - DNSMASQ_LISTENING=all
+      - TZ=Etc/UTC
+    volumes:
+      - ./pihole/config:/etc/pihole:Z
+      - ./pihole/dnsmasq:/etc/dnsmasq.d:Z
+
   # TODO: expose domain
   prowlarr:
     profiles:
-      - pi-1
+      - bmaxbox
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:1.7.4
     ports:
@@ -178,7 +196,7 @@ services:
   # TODO: expose domain
   qbittorrent:
     profiles:
-      - pi-1
+      - bmaxbox
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-4.5.5
     ports:
@@ -196,7 +214,7 @@ services:
   # TODO: expose domain
   radarr:
     profiles:
-      - pi-1
+      - bmaxbox
     container_name: radarr
     image: quay.io/linuxserver.io/radarr:4.7.5
     ports:
@@ -215,7 +233,7 @@ services:
   # TODO: expose domain
   sonarr:
     profiles:
-      - pi-1
+      - bmaxbox
     container_name: sonarr
     image: quay.io/linuxserver.io/sonarr:3.0.10
     ports:
@@ -252,7 +270,7 @@ services:
 
   unpackerr:
     profiles:
-      - pi-1
+      - bmaxbox
     container_name: unpackerr
     image: ghcr.io/hotio/unpackerr:release-0.12.0
     restart: unless-stopped
