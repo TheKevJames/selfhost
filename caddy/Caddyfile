@@ -57,8 +57,8 @@
             set auth url https://auth.thekev.in/
 
             acl rule {
-                comment allow thekev admins and users
-                match roles thekev/admin thekev/user
+                comment allow thekev admins
+                match roles thekev/admin
                 allow stop log info
             }
 
@@ -87,5 +87,5 @@ http://mosura.thekev.in {
 
 http://pihole.thekev.in {
     authorize with meonly
-    reverse_proxy http://192.168.1.71:8000
+    reverse_proxy http://192.168.1.75:8888
 }

@@ -158,7 +158,6 @@ services:
       - /mnt/4tb/sync/images/library:/photoprism/originals
       - ./photoprism:/photoprism/storage:Z
 
-  # TODO: expose domain?
   pihole:
     profiles:
       - bmaxbox
