@@ -25,10 +25,15 @@
     <string>Nfo</string>
   </LocalMetadataReaderOrder>
   <DisabledSubtitleFetchers />
-  <SubtitleFetcherOrder />
+  <SubtitleFetcherOrder>
+    <string>Open Subtitles</string>
+  </SubtitleFetcherOrder>
   <SkipSubtitlesIfEmbeddedSubtitlesPresent>false</SkipSubtitlesIfEmbeddedSubtitlesPresent>
   <SkipSubtitlesIfAudioTrackMatches>false</SkipSubtitlesIfAudioTrackMatches>
-  <SubtitleDownloadLanguages />
+  <SubtitleDownloadLanguages>
+    <string>eng</string>
+    <string>pop</string>
+  </SubtitleDownloadLanguages>
   <RequirePerfectSubtitleMatch>true</RequirePerfectSubtitleMatch>
   <SaveSubtitlesWithMedia>true</SaveSubtitlesWithMedia>
   <AutomaticallyAddToCollection>true</AutomaticallyAddToCollection>
