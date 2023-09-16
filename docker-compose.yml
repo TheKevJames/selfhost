@@ -17,9 +17,9 @@ services:
     # TODO: better way of specififying profiles, syncing with IPs, etc
     profiles:
       - applebox
+    container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.4-1.1.19
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
-    container_name: caddy
     restart: unless-stopped
     env_file:
       - ./secrets/google.env
@@ -31,9 +31,9 @@ services:
   cloudflared:
     profiles:
       - applebox
+    container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2023.8.2@sha256:93561dfa0032006354be56476f09e3d8743d53d202368672c2847c1631f7be50
     command: tunnel run
-    container_name: cloudflared
     restart: unless-stopped
     volumes:
       - ./cloudflared:/home/nonroot/.cloudflared:Z
@@ -56,7 +56,7 @@ services:
     profiles:
       - applebox
     container_name: homepage
-    image: ghcr.io/benphelps/homepage:v0.6.29
+    image: ghcr.io/benphelps/homepage:v0.6.33
     ports:
       - 3000:3000
     restart: unless-stopped
@@ -89,8 +89,8 @@ services:
   mosura:
     profiles:
       - applebox
-    image: quay.io/thekevjames/mosura:latest
     container_name: mosura
+    image: quay.io/thekevjames/mosura:latest
     restart: unless-stopped
     environment:
       - MOSURA_APPDATA=/data
