@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOSTNAME="${1:?usage: $0 HOSTNAME VOLUME}"
+HOSTNAME="${1:?usage: $0 HOSTNAME MOUNTNAME}"
 MOUNTNAME="${2:?usage: $0 HOSTNAME MOUNTNAME}"
 
 sudo mkdir "/Volumes/${MOUNTNAME}"

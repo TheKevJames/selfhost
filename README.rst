@@ -8,26 +8,90 @@ place where it's all documented, when that's not possible.
 Setup
 -----
 
-`Install Raspbian OS Lite x64`_. Make sure to hit the options and pre-configure
-wifi/hostname/ssh creds/etc before writing the image. Then ssh into the box
-and set things up: you'll probably want to check out `Mounting External
-Drives`_ first, then you can do the following:
+Install the relevant OS:
 
-.. code-block:: console
+* `Raspbian OS Lite`_ (pre-configure the wifi/hostname/ssh creds/etc before
+  writing the image to save effort, ``sudo raspi-config`` afterwards to
+  configure locale etc)
+* `Debian`_ (skip the additional packages, but `set up networking`_ and ``apt
+  install openssh-server``)
 
-    ## PI
-    # use the visual setup to configure yourself the correct locale
-    $ sudo raspi-config
+Configure your ssh keys (``ssh-copy-id $hostname``) and modify
+``/etc/ssh/sshd_config`` how you'd like (``PermitRootLogin no`` and
+``PasswordAuthentication no`` and pretty good improvements to the defaults).
 
-    # consider increasing your swap size and moving it off your sd card
-    $ sudo dphys-swapfile swapoff
-    $ sudo vi /etc/dphys-swapfile
+From there, reboot, ssh into the new machine, and::
+
+    sudo apt update -y
+    sudo apt install -y --no-install-recommends git
+    ssh-keygen -o -a 100 -t ed25519 -C "KevinJames@thekev.in" -f ~/.ssh/id_ed25519
+    git clone git@github.com:TheKevJames/selfhost ~/src/personal/selfhost
+    cd ~/src/personal/selfhost
+
+After this point, further steps depend on what functions this machine will
+provide. First off, you probably want to mount `External Drives`_.
+
+Once that's done, consider increasing your swap size and/or moving it onto one
+of those drives. This is especially important for low-memory systems or cases
+where your default swapfile lives on an SD card::
+
+    sudo apt update -y
+    sudo apt install -y --no-install-recommends dphys-swapfile
+
+    sudo dphys-swapfile swapoff
+    sudo vi /etc/dphys-swapfile
     # CONF_SWAPFILE=/mnt/1tb/swap
-    # CONF_SWAPSIZE=2048
-    $ sudo mv /var/swap /mnt/1tb/swap
-    $ sudo dphys-swapfile setup
-    $ sudo dphys-swapfile swapon
-    $ sudo poweroff --reboot
+    # CONF_SWAPFACTOR=2
+    sudo mv /var/swap /mnt/1tb/swap
+
+    sudo dphys-swapfile setup
+    sudo dphys-swapfile swapon
+    sudo poweroff --reboot
+
+Now, install your container manager::
+
+    # podman is simplest, if available
+    sudo apt install -y --no-install-recommends podman pipx
+    pipx ensure-path
+    pipx install podman-compose
+    # ~/.config/containers/containers.conf
+    # [engine]
+    # cgroup_manager="cgroupfs"
+
+    # last time I set up a Pi, Raspbian couldn't get podman setup without a lot
+    # of manual go compiler toolchain boostrapping, so docker is an option if
+    # you need:
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh ./get-docker.sh
+    rm get-docker.sh
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+
+    # on OSX, use colima for your Docker VM backend to avoid needing Docker for
+    # OSX:
+    https://github.com/abiosoft/colima
+
+Once you've got a container manager, you can spin up everything defined in this
+repo::
+
+    # pre-configure any relevant secrets
+    $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
+    $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
+
+    # TODO: generate secrets
+    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
+    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
+    # modify cloudflared/config.yml with the new UUID
+    # TODO: the dns stuff could be a startupcontainer of some sort? Run-once jobs?
+    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost example.com
+    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost foo.example.com
+    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost bar.example.com
+
+    # start images
+    $ make pull
+    $ make up -d
+
+TODO: pi-hole in docker
 
     ## PI-HOLE
     # follow the visual prompts
@@ -67,56 +131,63 @@ Drives`_ first, then you can do the following:
     $ sudo apt upgrade -y
     $ sudo poweroff --reboot
 
-    ## DOCKER
-    # install docker
-    # TODO: switch over to podman once raspbian supports it without manual
-    # compilation and dealing with boostrapping multiple go versions
-    $ curl -fsSL https://get.docker.com -o get-docker.sh
-    $ sudo sh ./get-docker.sh
-    $ rm get-docker.sh
-    $ sudo groupadd docker
-    $ sudo usermod -aG docker $USER
-    # log out and back in
-
-    ## HASS, Homepage
-    # install dependencies we'll need later
-    $ sudo apt update -y
-    $ sudo apt install -y git
-
-    # grab the config
-    $ git clone https://github.com/TheKevJames/experiments ~/src/experiments
-    $ cd ~/src/experiments/selfhost
-
-    # configure any secrets in your config
-    $ vi ./hass/secrets.yaml
-    # restore any backups (gitignore'd by default!)
-    # scp FOO pi@pihole:~/src/experiments/selfhost/hass/
-
-    # properly set up secrets
-    # TODO: use docker secrets, unify management
-    $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
-    $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
-
-    # generate secrets
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
-    # modify cloudflared/config.yml with the new UUID
-    # TODO: the dns stuff could be a startupcontainer of some sort? Run-once jobs?
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost example.com
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost foo.example.com
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost bar.example.com
-
-    # start images
-    $ make pull
-    $ make up -d
-
     # setup the admin account, unless you restored from a backup
     # visit http://pi.hole:8123/
 
-    # SAMBA
-    # install dependencies
-    sudo apt update
-    sudo apt install samba samba-common-bin
+
+Updates
+-------
+
+To update the various components::
+
+    sudo apt update -y
+    sudo apt upgrade -y
+    pipx upgrade-all
+
+    pihole -up
+
+    cd ~/src/experiments/selfhost
+    git pull
+    make pull
+    make up -d
+
+External Drives
+---------------
+
+Machines generally either mount external drives physically and expose them via
+Samba, or mount them via Samba.
+
+Physical Mounts
+~~~~~~~~~~~~~~~
+
+Quick walkthrough of how to fstab some external drives into being auto-mounted::
+
+    # find the drives
+    $ lsblk -f
+    NAME        FSTYPE FSVER LABEL  UUID                                 FSAVAIL FSUSE% MOUNTPOINT
+    sda
+    `-sda1      ext4   1.0          43162a5a-f1b2-441f-9d51-433bea2e113c
+    sdb
+    `-sdb1      ext4   1.0          b9479cb5-b306-430b-998d-3d793aadfde6
+
+    # set up the mount points
+    $ sudo mkdir /mnt/1tb /mnt/4tb
+
+    # auto-mount 'em at startup
+    $ echo "UUID=43162a5a-f1b2-441f-9d51-433bea2e113c /mnt/4tb  ext4  defaults,noatime  0 0" | sudo tee -a /etc/fstab
+    $ echo "UUID=b9479cb5-b306-430b-998d-3d793aadfde6 /mnt/1tb  ext4  defaults,noatime  0 0" | sudo tee -a /etc/fstab
+    $ sudo systemctl daemon-reolad
+
+    # mount 'em now
+    $ sudo mount -a
+
+Exposing Mounts via Samba
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    sudo apt update -y
+    sudo apt install -y --no-install-recommends samba samba-common-bin
 
     # configure drives
     # $ sudo vi /etc/samba/smb.conf
@@ -145,59 +216,6 @@ Drives`_ first, then you can do the following:
     # restart samba
     sudo systemctl restart smbd
 
-Updates
--------
-
-To update the various components:
-
-.. code-block:: console
-
-    sudo apt update -y
-    sudo apt upgrade -y
-
-    pihole -up
-
-    cd ~/src/experiments/selfhost
-    git pull
-    make pull
-    make up -d
-
-Mounting External Disks
------------------------
-
-Quick walkthrough of how to fstab some external drives into being auto-mounted:
-
-.. code-block:: console
-
-    $ lsblk -f
-    NAME        FSTYPE FSVER LABEL  UUID                                 FSAVAIL FSUSE% MOUNTPOINT
-    sda
-    `-sda1      ext4   1.0          43162a5a-f1b2-441f-9d51-433bea2e113c
-    sdb
-    `-sdb1      ext4   1.0          b9479cb5-b306-430b-998d-3d793aadfde6
-    mmcblk0
-    |-mmcblk0p1 vfat   FAT32 boot   0F92-BECC
-    `-mmcblk0p2 ext4   1.0   rootfs 41c98998-6a08-4389-bf74-79c9efcf0739   26.4G     5% /
-
-    # manually mount them
-    $ sudo mkdir /mnt/1tb /mnt/4tb
-    $ sudo mount /dev/sda1 /mnt/4tb
-    $ sudo mount /dev/sdb1 /mnt/1tb
-
-    # grab their details
-    $ sudo blkid
-    /dev/mmcblk0p1: LABEL_FATBOOT="boot" LABEL="boot" UUID="0F92-BECC" BLOCK_SIZE="512" TYPE="vfat" PARTUUID="620d2702-01"
-    /dev/mmcblk0p2: LABEL="rootfs" UUID="41c98998-6a08-4389-bf74-79c9efcf0739" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="620d2702-02"
-    /dev/sda1: UUID="43162a5a-f1b2-441f-9d51-433bea2e113c" BLOCK_SIZE="4096" TYPE="ext4" PARTLABEL="logical" PARTUUID="2570b09b-b7ea-407d-b1b7-9738fee48c80"
-    /dev/sdb1: UUID="b9479cb5-b306-430b-998d-3d793aadfde6" BLOCK_SIZE="4096" TYPE="ext4" PARTUUID="555b5ad7-01"
-
-    # auto-mount 'em at startup
-    $ echo "UUID=43162a5a-f1b2-441f-9d51-433bea2e113c /mnt/4tb  ext4  defaults,noatime  0 0" | sudo tee -a /etc/fstab
-    $ echo "UUID=b9479cb5-b306-430b-998d-3d793aadfde6 /mnt/1tb  ext4  defaults,noatime  0 0" | sudo tee -a /etc/fstab
-
-    # mount 'em now
-    $ sudo mount -a
-
 Connect to Samba Shares
 -----------------------
 
@@ -208,7 +226,7 @@ think it has 0777 -- it won't, the real permissions will be controlled by the
 samba settings above as they are for all other clients, but at least OSX won't
 get in the way.
 
-.. code-block:: console
+::
 
     # ./bin/osx-samba-mount HOSTNAME MOUNTNAME
     ./bin/osx-samba-mount pi-1 pi-1tb
@@ -257,4 +275,7 @@ TODOs
   * also mirror to sourcehut?
   * `mirroring script <https://github.com/beefsack/git-mirror>`_
 
-.. _Install Raspbian OS Lite x64: https://www.raspberrypi.com/software/
+.. _set up networking: https://wiki.debian.org/NetworkConfiguration
+.. _Debian: https://www.debian.org/releases/stable/installmanual
+.. _Raspbian OS Lite x64: https://www.raspberrypi.com/software/
+
