@@ -56,7 +56,7 @@ services:
     profiles:
       - applebox
     container_name: homepage
-    image: ghcr.io/benphelps/homepage:v0.6.33
+    image: ghcr.io/benphelps/homepage:v0.6.35
     ports:
       - 3000:3000
     restart: unless-stopped
