@@ -110,7 +110,7 @@ services:
     profiles:
       - applebox
     container_name: photoprism
-    image: photoprism/photoprism:231021
+    image: photoprism/photoprism:231128
     working_dir: "/photoprism"
     ports:
       - 2342:2342
