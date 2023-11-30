@@ -2,9 +2,7 @@ HAS_PODMAN := $(if $(shell command -v podman),y,n)
 UNAME_S := $(shell uname -s)
 ifeq ($(HAS_PODMAN),y)
 	COMPOSE := podman-compose
-else ifeq ($(UNAME_S),Darwin)
-	COMPOSE := docker-compose-v1
-else ifeq ($(UNAME_S),Linux)
+else
 	COMPOSE := docker compose
 endif
 
