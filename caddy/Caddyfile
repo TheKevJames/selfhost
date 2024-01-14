@@ -75,7 +75,6 @@ http://auth.thekev.in {
     authenticate with myportal
 }
 
-# TODO: expose everything
 http://home.thekev.in {
     reverse_proxy homepage:3000
 }
@@ -90,7 +89,22 @@ http://pihole.thekev.in {
     reverse_proxy pihole:8888
 }
 
+http://prowlarr.thekev.in {
+    authorize with meonly
+    reverse_proxy prowlarr:9696
+}
+
 http://qbittorrent.thekev.in {
     authorize with meonly
-    reverse_proxy qbittorrn:8080
+    reverse_proxy qbittorrent:8080
+}
+
+http://radarr.thekev.in {
+    authorize with meonly
+    reverse_proxy radarr:7878
+}
+
+http://sonarr.thekev.in {
+    authorize with meonly
+    reverse_proxy sonarr:8989
 }
