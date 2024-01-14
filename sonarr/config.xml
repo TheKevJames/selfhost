@@ -7,6 +7,7 @@
   <BindAddress>*</BindAddress>
   <ApiKey>327315a292434a5197e48d3c1c3ada09</ApiKey>
   <AuthenticationMethod>None</AuthenticationMethod>
+  <AuthenticationType>DisabledForLocalAddresses</AuthenticationType>
   <UpdateMechanism>Docker</UpdateMechanism>
   <LaunchBrowser>True</LaunchBrowser>
   <Branch>main</Branch>
