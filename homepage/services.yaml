@@ -1,4 +1,4 @@
-# TODO: expose all public domains, have local override buttons?
+# TODO: for all public domains, have LAN override link for backup
 ---
 - Control:
     - Website:
@@ -13,26 +13,21 @@
         container: homepage
 
 - Media:
+    # TODO: expose jellyfin domain
     - Jellyfin:
         href: http://192.168.1.64:8096/
         description: Media Server
         icon: jellyfin
         server: applebox
         container: jellyfin
-    - PhotoPrism:
-        href: http://192.168.1.64:2342/
-        description: Image Host
-        icon: photoprism
-        server: applebox
-        container: photoprism
     - Radarr:
-        href: http://192.168.1.75:7878/
+        href: https://radarr.thekev.in/
         description: Movie Collection Manager
         icon: radarr
         server: bmaxbox
         container: radarr
     - Sonarr:
-        href: http://192.168.1.75:8989/
+        href: https://sonarr.thekev.in/
         description: TV Show Collection Manager
         icon: sonarr
         server: bmaxbox
@@ -46,7 +41,7 @@
         server: bmaxbox
         container: qbittorrent
     - Prowlarr:
-        href: http://192.168.1.75:9696/
+        href: https://prowlarr.thekev.in/
         description: Indexer Manager
         icon: prowlarr
         server: bmaxbox
@@ -71,7 +66,7 @@
     - Cloudflared:
         description: DNS Tunnel
         icon: cloudflare-zero-trust
-        server: applebox
+        server: bmaxbox
         container: cloudflared
 
 - Services:
@@ -79,14 +74,14 @@
         href: https://mosura.thekev.in/
         description: Task Management Frontend
         icon: mdi-jira
-        server: applebox
+        server: bmaxbox
         container: mosura
     - Caddy:
         href: https://auth.thekev.in/
         description: Secure Reverse Proxy
         icon: caddy
-        server: applebox
-        container: syncthing
+        server: bmaxbox
+        container: caddy
     - Syncthing:
         href: http://192.168.1.64:8384/
         description: Syncthing on applebox

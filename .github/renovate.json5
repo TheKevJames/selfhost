@@ -9,10 +9,5 @@
       ],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d{,3})$",
     },
-    {
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["photoprism/photoprism"],
-      "versioning": "regex:^(?<major>\\d{6})$",
-    },
   ],
 }

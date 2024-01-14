@@ -239,6 +239,7 @@ TODOs
 * deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
 * backup photos from Google:
   * consider adding a tagger such as `digikam <https://www.digikam.org/>`_ to embed metadata
+  * consider a simple frontend (photoprism is way too much)
 * configure `notifications <https://github.com/caronc/apprise>`_
 * monitor:
   * `hard drives <https://github.com/AnalogJ/scrutiny>`_
