@@ -18,7 +18,7 @@ services:
     profiles:
       - bmaxbox
     container_name: caddy
-    image: quay.io/thekevjames/caddy-security:2.7.4-1.1.19
+    image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
     restart: unless-stopped
     env_file:
