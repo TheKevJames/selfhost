@@ -90,7 +90,13 @@ host!)::
 There are also some manual steps which you may want to do included below.
 
 * syncthing: visit the web UI and share any folders
-* pihole: ``docker logs pihole | grep random`` to get your password, ``
+* pihole: ``docker logs pihole | grep random`` to get your password
+
+You may also want to set up NTP. This is especially necessary if this machine
+will be handling any auth, as handshakes will fail if your clock drifts too far
+out of sync::
+
+    sudo apt install ntp
 
 Syncthing
 ~~~~~~~~~
