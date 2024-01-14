@@ -85,13 +85,12 @@ http://mosura.thekev.in {
     reverse_proxy mosura:8080
 }
 
-# TODO: IP -> dns name
 http://pihole.thekev.in {
     authorize with meonly
-    reverse_proxy http://192.168.1.75:8888
+    reverse_proxy pihole:8888
 }
 
 http://qbittorrent.thekev.in {
     authorize with meonly
-    reverse_proxy http://192.168.1.75:8080
+    reverse_proxy qbittorrn:8080
 }

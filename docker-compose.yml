@@ -16,7 +16,7 @@ services:
   caddy:
     # TODO: better way of specififying profiles, syncing with IPs, etc
     profiles:
-      - applebox
+      - bmaxbox
     container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.4-1.1.19
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
@@ -30,7 +30,7 @@ services:
   # TODO: consider https://github.com/linuxserver/docker-mods/tree/universal-cloudflared
   cloudflared:
     profiles:
-      - applebox
+      - bmaxbox
     container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2024.1.2@sha256:116171d734c606a7d67f86f6309b56193095e19fd3af478e83fee3f24d93c692
     command: tunnel run
@@ -54,7 +54,7 @@ services:
 
   homepage:
     profiles:
-      - applebox
+      - bmaxbox
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v0.8.4
     ports:
