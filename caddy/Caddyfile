@@ -86,6 +86,7 @@ http://mosura.thekev.in {
 
 http://pihole.thekev.in {
     authorize with meonly
+    redir / /admin{uri}
     reverse_proxy pihole:8888
 }
 

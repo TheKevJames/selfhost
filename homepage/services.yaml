@@ -54,7 +54,7 @@
 
 - Networking:
     - Pi-Hole:
-        href: https://pihole.thekev.in/admin
+        href: https://pihole.thekev.in/
         description: Pi-Hole Admin Portal
         icon: pi-hole
         server: bmaxbox
