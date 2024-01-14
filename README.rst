@@ -87,6 +87,11 @@ host!)::
 
     rsync -aP oldhost:~/src/personal/selfhost/foobar/ foobar
 
+If you did this, you may need to force Jellyfin to re-init by modifying
+``jellyfin/system.xml`` to have::
+
+    <IsStartupWizardCompleted>false</IsStartupWizardCompleted>
+
 There are also some manual steps which you may want to do included below.
 
 * syncthing: visit the web UI and share any folders
@@ -219,6 +224,10 @@ get in the way.
     # ./bin/osx-samba-mount HOSTNAME MOUNTNAME
     ./bin/osx-samba-mount pi-1 pi-1tb
     ./bin/osx-samba-mount pi-1 pi-4tb
+
+To connect on Windows, use File Explorer, right-click "This PC" and "Add a
+Network Drive". Then input "\\IP.ADDR\SHARE_NAME". You may need to input the
+credentials: "guest:".
 
 TODOs
 -----
