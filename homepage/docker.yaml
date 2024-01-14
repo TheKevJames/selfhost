@@ -1,7 +1,4 @@
 ---
-applebox:
-  host: 192.168.1.64
-  port: 2375
 bmaxbox:
   host: 192.168.1.75
   port: 2375

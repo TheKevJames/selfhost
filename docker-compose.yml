@@ -68,7 +68,7 @@ services:
   # TODO: expose domain?
   jellyfin:
     profiles:
-      - applebox
+      - bmaxbox
     container_name: jellyfin
     image: quay.io/linuxserver.io/jellyfin:10.8.13
     ports:

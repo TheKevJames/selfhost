@@ -9,7 +9,7 @@
         href: https://home.thekev.in/
         description: Homepage
         icon: mdi-home-circle
-        server: applebox
+        server: bmaxbox
         container: homepage
 
 - Media:
@@ -18,7 +18,7 @@
         href: http://192.168.1.64:8096/
         description: Media Server
         icon: jellyfin
-        server: applebox
+        server: bmaxbox
         container: jellyfin
     - Radarr:
         href: https://radarr.thekev.in/
@@ -82,15 +82,10 @@
         icon: caddy
         server: bmaxbox
         container: caddy
-    - Syncthing:
-        href: http://192.168.1.64:8384/
-        description: Syncthing on applebox
-        icon: syncthing
-        server: applebox
-        container: syncthing
+    # TODO: expose syncthing
     - Syncthing:
         href: http://192.168.1.75:8384/
-        description: Syncthing on bmaxbox
+        description: Syncthing
         icon: syncthing
         server: bmaxbox
         container: syncthing
