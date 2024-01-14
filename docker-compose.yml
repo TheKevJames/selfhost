@@ -234,7 +234,7 @@ services:
     profiles:
       - bmaxbox
     container_name: sonarr
-    image: quay.io/linuxserver.io/sonarr:3.0.10
+    image: quay.io/linuxserver.io/sonarr:4.0.0
     ports:
       - 8989:8989
     restart: unless-stopped
