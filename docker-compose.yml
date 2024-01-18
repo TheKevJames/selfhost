@@ -127,7 +127,7 @@ services:
     profiles:
       - bmaxbox
     container_name: prowlarr
-    image: quay.io/linuxserver.io/prowlarr:1.11.4
+    image: quay.io/linuxserver.io/prowlarr:1.12.2
     ports:
       - 9696:9696
     restart: unless-stopped
