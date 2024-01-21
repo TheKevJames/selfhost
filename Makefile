@@ -18,16 +18,16 @@ help:
 	@echo "Wrapper for docker-compose usage"
 
 down:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) down
+	$(COMPOSE) $(COMPOSE_FLAGS) down
 ps:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) ps
+	$(COMPOSE) $(COMPOSE_FLAGS) ps
 pull:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) pull $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) $(SERVICE)
 restart:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) restart $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) $(SERVICE)
 start:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) start $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) $(SERVICE)
 stop:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) stop $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) $(SERVICE)
 up:
-	$(COMPOSE) $(COMPOSE_FLAGS) --profile=$(shell hostname) up -d --remove-orphans $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) $(SERVICE)

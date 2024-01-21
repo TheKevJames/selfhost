@@ -1,5 +1,5 @@
 # TODO: nuke all unnecessary port bindings
-version: '3.8'
+version: '3'
 
 secrets:
   jira_auth_token:
@@ -15,9 +15,6 @@ secrets:
 
 services:
   caddy:
-    # TODO: better way of specififying profiles, syncing with IPs, etc
-    profiles:
-      - bmaxbox
     container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
@@ -30,8 +27,6 @@ services:
   # TODO: configure ssh tunneling
   # TODO: consider https://github.com/linuxserver/docker-mods/tree/universal-cloudflared
   cloudflared:
-    profiles:
-      - bmaxbox
     container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2024.1.4@sha256:90a3eb006af86cba5ea3b3ac08c3f5979c8efa0e98bf490788de8c629e46eb1f
     command: tunnel run
@@ -42,8 +37,6 @@ services:
   docker-socket-proxy:
     container_name: docker-socket-proxy
     image: ghcr.io/tecnativa/docker-socket-proxy:0.1.1
-    ports:
-      - 2375:2375
     restart: unless-stopped
     environment:
       - CONTAINERS=1
@@ -54,8 +47,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
   homepage:
-    profiles:
-      - bmaxbox
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v0.8.4
     ports:
@@ -68,8 +59,6 @@ services:
 
   # TODO: expose domain?
   jellyfin:
-    profiles:
-      - bmaxbox
     container_name: jellyfin
     image: quay.io/linuxserver.io/jellyfin:10.8.13
     ports:
@@ -88,8 +77,6 @@ services:
       - ./jellyfin:/config:Z
 
   mosura:
-    profiles:
-      - bmaxbox
     container_name: mosura
     image: quay.io/thekevjames/mosura:latest
     restart: unless-stopped
@@ -107,8 +94,6 @@ services:
       - ./mosura:/data:Z
 
   pihole:
-    profiles:
-      - bmaxbox
     container_name: pihole
     image: docker.io/pihole/pihole:2024.01.0
     ports:
@@ -124,8 +109,6 @@ services:
       - ./pihole/dnsmasq:/etc/dnsmasq.d:Z
 
   prowlarr:
-    profiles:
-      - bmaxbox
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:1.12.2
     ports:
@@ -140,8 +123,6 @@ services:
       - ./prowlarr:/config:Z
 
   qbittorrent:
-    profiles:
-      - bmaxbox
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-4.5.5
     ports:
@@ -157,8 +138,6 @@ services:
       - ./qbittorrent:/config:Z
 
   radarr:
-    profiles:
-      - bmaxbox
     container_name: radarr
     image: quay.io/linuxserver.io/radarr:5.2.6
     ports:
@@ -175,8 +154,6 @@ services:
       - ./radarr:/config:Z
 
   sonarr:
-    profiles:
-      - bmaxbox
     container_name: sonarr
     image: quay.io/linuxserver.io/sonarr:4.0.1
     ports:
@@ -211,8 +188,6 @@ services:
       - ./syncthing:/config:Z
 
   unpackerr:
-    profiles:
-      - bmaxbox
     container_name: unpackerr
     image: ghcr.io/hotio/unpackerr:release-0.12.0
     restart: unless-stopped

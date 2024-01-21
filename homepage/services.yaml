@@ -9,7 +9,7 @@
         href: https://home.thekev.in/
         description: Homepage
         icon: mdi-home-circle
-        server: bmaxbox
+        server: local
         container: homepage
 
 - Media:
@@ -18,19 +18,19 @@
         href: http://192.168.1.75:8096/
         description: Media Server
         icon: jellyfin
-        server: bmaxbox
+        server: local
         container: jellyfin
     - Radarr:
         href: https://radarr.thekev.in/
         description: Movie Collection Manager
         icon: radarr
-        server: bmaxbox
+        server: local
         container: radarr
     - Sonarr:
         href: https://sonarr.thekev.in/
         description: TV Show Collection Manager
         icon: sonarr
-        server: bmaxbox
+        server: local
         container: sonarr
 
 - Torrents:
@@ -38,18 +38,18 @@
         href: https://qbittorrent.thekev.in/
         description: Torrent Client
         icon: qbittorrent
-        server: bmaxbox
+        server: local
         container: qbittorrent
     - Prowlarr:
         href: https://prowlarr.thekev.in/
         description: Indexer Manager
         icon: prowlarr
-        server: bmaxbox
+        server: local
         container: prowlarr
     - Unpackerr:
         description: Archive Auto-Extraction
         icon: mdi-archive-sync
-        server: bmaxbox
+        server: local
         container: unpackerr
 
 - Networking:
@@ -57,7 +57,7 @@
         href: https://pihole.thekev.in/
         description: Pi-Hole Admin Portal
         icon: pi-hole
-        server: bmaxbox
+        server: local
         container: pihole
     - Router:
         href: http://192.168.1.1/
@@ -66,7 +66,7 @@
     - Cloudflared:
         description: DNS Tunnel
         icon: cloudflare-zero-trust
-        server: bmaxbox
+        server: local
         container: cloudflared
 
 - Services:
@@ -74,18 +74,18 @@
         href: https://mosura.thekev.in/
         description: Task Management Frontend
         icon: mdi-jira
-        server: bmaxbox
+        server: local
         container: mosura
     - Caddy:
         href: https://auth.thekev.in/
         description: Secure Reverse Proxy
         icon: caddy
-        server: bmaxbox
+        server: local
         container: caddy
     # TODO: expose syncthing
     - Syncthing:
         href: http://192.168.1.75:8384/
         description: Syncthing
         icon: syncthing
-        server: bmaxbox
+        server: local
         container: syncthing
