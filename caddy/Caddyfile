@@ -75,6 +75,11 @@ http://auth.thekev.in {
     authenticate with myportal
 }
 
+http://fava.thekev.in {
+    authorize with meonly
+    reverse_proxy fava:5000
+}
+
 http://home.thekev.in {
     reverse_proxy homepage:3000
 }

@@ -45,6 +45,14 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  fava:
+    container_name: fava
+    image: quay.io/thekevjames/fava:1.27.1
+    command: /data/finance/index.beancount
+    restart: unless-stopped
+    volumes:
+      - /mnt/4tb/sync/finance:/data/finance
+
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v0.8.4
