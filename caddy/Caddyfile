@@ -84,12 +84,6 @@ http://mosura.thekev.in {
     reverse_proxy mosura:8080
 }
 
-http://pihole.thekev.in {
-    authorize with meonly
-    redir / /admin{uri}
-    reverse_proxy pihole:8888
-}
-
 http://prowlarr.thekev.in {
     authorize with meonly
     reverse_proxy prowlarr:9696
