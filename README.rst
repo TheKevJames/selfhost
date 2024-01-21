@@ -72,9 +72,9 @@ repo::
     $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
     # modify cloudflared/config.yml with the new UUID
     # TODO: the dns stuff could be a startupcontainer of some sort? Run-once jobs?
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost example.com
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost foo.example.com
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel route dns selfhost bar.example.com
+    $ bin/cloudflare-expose example.com
+    $ bin/cloudflare-expose foo.example.com
+    $ bin/cloudflare-expose bar.example.com
 
     # start images
     $ make pull

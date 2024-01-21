@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DOMAIN="${1:?usage: $0 DOMAIN}"
+
+docker run --rm -it -v "${PWD}/cloudflared":/home/nonroot/.cloudflared "$(docker inspect cloudflared | awk -F' ' '/docker.io/ {print $2}')" tunnel route dns selfhost "${DOMAIN}"
