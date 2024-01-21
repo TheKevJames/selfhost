@@ -30,4 +30,4 @@ start:
 stop:
 	$(COMPOSE) $(COMPOSE_FLAGS) stop $(SERVICE)
 up:
-	$(COMPOSE) $(COMPOSE_FLAGS) up $(SERVICE)
+	$(COMPOSE) $(COMPOSE_FLAGS) up -d --remove-orphans $(SERVICE)
