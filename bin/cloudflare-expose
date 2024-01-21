@@ -3,4 +3,4 @@ set -euo pipefail
 
 DOMAIN="${1:?usage: $0 DOMAIN}"
 
-docker run --rm -it -v "${PWD}/cloudflared":/home/nonroot/.cloudflared "$(docker inspect cloudflared | awk -F' ' '/docker.io/ {print substr($2, 2, length($2)-2}')" tunnel route dns selfhost "${DOMAIN}"
+docker run --rm -it -v "${PWD}/cloudflared":/home/nonroot/.cloudflared "$(docker inspect cloudflared | awk -F' ' '/docker.io/ {print substr($2, 2, length($2)-3)}')" tunnel route dns selfhost "${DOMAIN}"
