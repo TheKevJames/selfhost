@@ -67,11 +67,9 @@ repo::
     $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
     $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
 
-    # TODO: generate secrets
     $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
     $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
     # modify cloudflared/config.yml with the new UUID
-    # TODO: the dns stuff could be a startupcontainer of some sort? Run-once jobs?
     $ bin/cloudflare-expose example.com
     $ bin/cloudflare-expose foo.example.com
     $ bin/cloudflare-expose bar.example.com
@@ -266,7 +264,6 @@ TODOs
   * `various options <https://github.com/awesome-selfhosted/awesome-selfhosted#bookmarks-and-link-sharing>`_
   * `lnks <https://github.com/hamvocke/lnks>`_
   * `sync from firefox <https://floccus.org/>`_
-* expose `fava viewer <https://beancount.github.io/fava/>`_
 * mirror repos to `gitea <https://about.gitea.com/>`_:
   * check out `plugins <https://gitea.com/gitea/awesome-gitea>`_
   * also `mirror to gitlab <https://docs.gitlab.com/ee/user/project/repository/mirror/index.html>`_?
