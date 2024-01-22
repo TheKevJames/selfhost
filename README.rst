@@ -230,7 +230,7 @@ credentials: "guest:".
 TODOs
 -----
 
-* use syncthing folder to hold migrateable state?
+* use syncthing folder to hold migratable state?
 * deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
 * deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
 * deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
@@ -273,4 +273,3 @@ TODOs
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual
 .. _Raspbian OS Lite x64: https://www.raspberrypi.com/software/
-
