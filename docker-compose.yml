@@ -55,7 +55,7 @@ services:
 
   homepage:
     container_name: homepage
-    image: ghcr.io/gethomepage/homepage:v0.8.6
+    image: ghcr.io/gethomepage/homepage:v0.8.7
     restart: unless-stopped
     volumes:
       - /mnt/1tb:/mnt/1tb
