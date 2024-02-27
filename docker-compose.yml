@@ -153,7 +153,7 @@ services:
 
   sonarr:
     container_name: sonarr
-    image: quay.io/linuxserver.io/sonarr:4.0.1
+    image: quay.io/linuxserver.io/sonarr:4.0.2
     restart: unless-stopped
     environment:
       - PGID=1000
