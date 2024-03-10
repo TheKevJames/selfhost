@@ -9,8 +9,12 @@ secrets:
     file: ./mosura/jira_domain
   jira_label_okr:
     file: ./mosura/jira_label_okr
+  jira_other_projects:
+    file: ./mosura/jira_other_projects
   jira_project:
     file: ./mosura/jira_project
+  jira_team:
+    file: ./mosura/jira_team
 
 services:
   caddy:
@@ -93,7 +97,9 @@ services:
       - jira_auth_user
       - jira_domain
       - jira_label_okr
+      - jira_other_projects
       - jira_project
+      - jira_team
     volumes:
       - ./mosura:/data:Z
 
