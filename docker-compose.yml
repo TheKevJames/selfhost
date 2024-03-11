@@ -51,7 +51,7 @@ services:
 
   fava:
     container_name: fava
-    image: quay.io/thekevjames/fava:1.27.2
+    image: quay.io/thekevjames/fava:1.27.3
     command: /data/finance/index.beancount
     restart: unless-stopped
     volumes:
