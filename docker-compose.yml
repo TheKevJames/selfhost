@@ -145,7 +145,7 @@ services:
 
   radarr:
     container_name: radarr
-    image: quay.io/linuxserver.io/radarr:5.6.0
+    image: quay.io/linuxserver.io/radarr:5.7.0
     restart: unless-stopped
     environment:
       - PGID=1000
