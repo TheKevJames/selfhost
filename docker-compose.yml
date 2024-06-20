@@ -1,5 +1,3 @@
-version: '3'
-
 secrets:
   jira_auth_token:
     file: ./mosura/jira_auth_token

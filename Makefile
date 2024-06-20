@@ -6,28 +6,21 @@ else
 	COMPOSE := docker compose
 endif
 
-ifeq ($(UNAME_S),Linux)
-	COMPOSE_FLAGS := -f docker-compose.yml
-endif
-ifeq ($(UNAME_S),Darwin)
-	COMPOSE_FLAGS := -f docker-compose.yml -f docker-compose.osx.yml
-endif
-
 .PHONY: help up down ps pull
 help:
 	@echo "Wrapper for docker-compose usage"
 
 down:
-	$(COMPOSE) $(COMPOSE_FLAGS) down
+	$(COMPOSE) down
 ps:
-	$(COMPOSE) $(COMPOSE_FLAGS) ps
+	$(COMPOSE) ps
 pull:
-	$(COMPOSE) $(COMPOSE_FLAGS) pull $(SERVICE)
+	$(COMPOSE) pull $(SERVICE)
 restart:
-	$(COMPOSE) $(COMPOSE_FLAGS) restart $(SERVICE)
+	$(COMPOSE) restart $(SERVICE)
 start:
-	$(COMPOSE) $(COMPOSE_FLAGS) start $(SERVICE)
+	$(COMPOSE) start $(SERVICE)
 stop:
-	$(COMPOSE) $(COMPOSE_FLAGS) stop $(SERVICE)
+	$(COMPOSE) stop $(SERVICE)
 up:
-	$(COMPOSE) $(COMPOSE_FLAGS) up -d --remove-orphans $(SERVICE)
+	$(COMPOSE) up -d --remove-orphans $(SERVICE)
