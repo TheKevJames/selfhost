@@ -118,7 +118,7 @@ services:
 
   prowlarr:
     container_name: prowlarr
-    image: quay.io/linuxserver.io/prowlarr:1.26.1
+    image: quay.io/linuxserver.io/prowlarr:1.27.0
     restart: unless-stopped
     environment:
       - PGID=1000
