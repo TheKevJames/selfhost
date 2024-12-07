@@ -4,12 +4,14 @@ caddy/*
 cloudflared/*
 !cloudflared/config.yml
 homepage/logs/*
+jellyfin/.aspnet/*
+jellyfin/.cache/*
 jellyfin/cache/*
 jellyfin/data/data/*
 !jellyfin/data/data/playlists
 jellyfin/data/metadata/*
 jellyfin/data/plugins/configurations/Jellyfin.Plugin.OpenSubtitles.xml
-jellyfin/data/plugins/Open Subtitles_19.0.0.0/*
+jellyfin/data/plugins/Open Subtitles*
 jellyfin/data/transcodes/*
 jellyfin/log/*
 mosura/*
