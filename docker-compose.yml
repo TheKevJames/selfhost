@@ -66,7 +66,7 @@ services:
 
   jellyfin:
     container_name: jellyfin
-    image: quay.io/linuxserver.io/jellyfin:10.10.3
+    image: quay.io/linuxserver.io/jellyfin:10.10.4
     ports:
       - 1900:1900/udp
       - 7359:7359/udp
