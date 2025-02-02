@@ -29,7 +29,7 @@ services:
   # TODO: consider https://github.com/linuxserver/docker-mods/tree/universal-cloudflared
   cloudflared:
     container_name: cloudflared
-    image: docker.io/cloudflare/cloudflared:2025.1.0@sha256:3247f3ef49eda23244b8aa5583f82b7c3880b0d057e1172d0e818f5e678d9f27
+    image: docker.io/cloudflare/cloudflared:2025.1.1@sha256:bc2b3edd9eb0257a1a1fc58113e97426afe524e04b898173cd7df01442bcb4b3
     command: tunnel run
     restart: unless-stopped
     volumes:
