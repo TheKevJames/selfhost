@@ -173,7 +173,7 @@ services:
 
   syncthing:
     container_name: syncthing
-    image: quay.io/linuxserver.io/syncthing:1.29.3
+    image: quay.io/linuxserver.io/syncthing:1.29.4
     ports:
       - 8384:8384
       - 22000:22000/tcp
