@@ -89,6 +89,11 @@ http://mosura.thekev.in {
     reverse_proxy mosura:8080
 }
 
+http://n8n.thekev.in {
+    authorize with meonly
+    reverse_proxy n8n:5678
+}
+
 http://prowlarr.thekev.in {
     authorize with meonly
     reverse_proxy prowlarr:9696

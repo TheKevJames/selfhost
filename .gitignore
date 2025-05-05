@@ -15,6 +15,7 @@ jellyfin/data/plugins/Open Subtitles*
 jellyfin/data/transcodes/*
 jellyfin/log/*
 mosura/*
+n8n/data/*
 pihole/*
 prowlarr/*
 !prowlarr/config.xml

@@ -103,6 +103,23 @@ services:
     volumes:
       - ./mosura:/data:Z
 
+  n8n:
+    container_name: n8n
+    image: docker.n8n.io/n8nio/n8n:1.91.1
+    ports:
+      - 5678:5678/tcp
+    restart: unless-stopped
+    environment:
+      - GENERIC_TIMEZONE=UTC
+      - N8N_HOST=n8n.thekev.in
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://n8n.thekev.in/
+    volumes:
+      - ./n8n/data:/home/node/.n8n
+      - ./n8n/config:/files
+
   pihole:
     container_name: pihole
     image: docker.io/pihole/pihole:2025.04.0
