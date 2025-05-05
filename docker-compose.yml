@@ -110,10 +110,12 @@ services:
       - 5678:5678/tcp
     restart: unless-stopped
     environment:
-      - GENERIC_TIMEZONE=UTC
+      - GENERIC_TIMEZONE=Etc/UTC
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
       - N8N_HOST=n8n.thekev.in
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
+      - N8N_RUNNERS_ENABLED=true
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.thekev.in/
     volumes:

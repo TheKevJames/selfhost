@@ -234,14 +234,8 @@ TODOs
 * deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
 * deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
 * deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
-* deploy a webscrape notifier / task dag and migrate from github release tracker:
-  * full ifttt: `huginn <https://github.com/huginn/huginn>`_
-  * full ifttt: `munin <http://munin-monitoring.org/>`_
-  * full ifttt: `leon <https://getleon.ai/>`_
-  * only webscrape: `changedetection <https://github.com/dgtlmoon/changedetection.io>`_
-  * only webscrape: `kibitzr <https://kibitzr.github.io/>`_
-  * get past cloudflare: `flaresolverr <https://github.com/FlareSolverr/FlareSolverr>`_
-  * or rss integration: `all github thingies have .atom feeds <https://github.com/BurntSushi/ripgrep/releases.atom>`_
+* n8n automations:
+  * sync work and home gcal
 * configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
 * deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
 * backup photos from Google:

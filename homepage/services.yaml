@@ -51,6 +51,12 @@
         container: unpackerr
 
 - Information:
+    - Mosura:
+        href: https://mosura.thekev.in/
+        description: Task Management Frontend
+        icon: mdi-jira
+        server: local
+        container: mosura
     - Fava:
         href: https://fava.thekev.in/
         description: Beancount Web View
@@ -76,12 +82,12 @@
         container: cloudflared
 
 - Services:
-    - Mosura:
-        href: https://mosura.thekev.in/
-        description: Task Management Frontend
-        icon: mdi-jira
+    - N8N:
+        href: https://n8n.thekev.in
+        description: Workflow Automation
+        icon: n8n
         server: local
-        container: mosura
+        container: n8n
     - Caddy:
         href: https://auth.thekev.in/
         description: Secure Reverse Proxy
