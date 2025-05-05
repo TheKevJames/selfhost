@@ -18,6 +18,8 @@ services:
   caddy:
     container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
+    ports:
+      - 2019:2019/tcp
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
     restart: unless-stopped
     env_file:
@@ -59,6 +61,8 @@ services:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v1.2.0
     restart: unless-stopped
+    env_file:
+      - ./secrets/homepage.env
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=home.thekev.in
     volumes:
@@ -72,7 +76,7 @@ services:
     ports:
       - 1900:1900/udp
       - 7359:7359/udp
-      - 8096:8096
+      - 8096:8096/tcp
     restart: unless-stopped
     environment:
       - PGID=1000
@@ -106,8 +110,6 @@ services:
   n8n:
     container_name: n8n
     image: docker.n8n.io/n8nio/n8n:1.91.1
-    ports:
-      - 5678:5678/tcp
     restart: unless-stopped
     environment:
       - GENERIC_TIMEZONE=Etc/UTC
@@ -141,6 +143,8 @@ services:
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:1.35.1
     restart: unless-stopped
+    ports:
+      - 9696:9696/tcp
     environment:
       - PGID=1000
       - PUID=1000
@@ -153,6 +157,8 @@ services:
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-4.5.5
     restart: unless-stopped
+    ports:
+      - 8089:8080/tcp
     environment:
       - PGID=1000
       - PUID=1000
@@ -166,6 +172,8 @@ services:
     container_name: radarr
     image: quay.io/linuxserver.io/radarr:5.22.4
     restart: unless-stopped
+    ports:
+      - 7878:7878/tcp
     environment:
       - PGID=1000
       - PUID=1000
@@ -180,6 +188,8 @@ services:
     container_name: sonarr
     image: quay.io/linuxserver.io/sonarr:4.0.14
     restart: unless-stopped
+    ports:
+      - 8989:8989/tcp
     environment:
       - PGID=1000
       - PUID=1000

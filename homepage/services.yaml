@@ -24,12 +24,22 @@
         icon: radarr
         server: local
         container: radarr
+        widget:
+          type: radarr
+          url: http://192.168.1.75:7878
+          key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
+          enableQueue: false
     - Sonarr:
         href: https://sonarr.thekev.in/
         description: TV Show Collection Manager
         icon: sonarr
         server: local
         container: sonarr
+        widget:
+          type: sonarr
+          url: http://192.168.1.75:8989
+          key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
+          enableQueue: false
 
 - Torrents:
     - qBittorrent:
@@ -38,12 +48,22 @@
         icon: qbittorrent
         server: local
         container: qbittorrent
+        widget:
+          type: qbittorrent
+          url: http://192.168.1.75:8089
+          username: "{{HOMEPAGE_VAR_QBITTORRENT_USER}}"
+          password: "{{HOMEPAGE_VAR_QBITTORRENT_PASS}}"
+          enableLeechProgress: false
     - Prowlarr:
         href: https://prowlarr.thekev.in/
         description: Indexer Manager
         icon: prowlarr
         server: local
         container: prowlarr
+        widget:
+          type: prowlarr
+          url: http://192.168.1.75:9696
+          key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
     - Unpackerr:
         description: Archive Auto-Extraction
         icon: mdi-archive-sync
@@ -66,11 +86,16 @@
 
 - Networking:
     - Pi-Hole:
-        href: http://192.168.1.75:8888/
+        href: http://192.168.1.75:8888/admin/
         description: Pi-Hole Admin Portal
         icon: pi-hole
         server: local
         container: pihole
+        widget:
+          type: pihole
+          url: http://192.168.1.75:8888
+          version: 6
+          key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
     - Router:
         href: http://192.168.1.1/
         description: Router Admin Portal
@@ -80,6 +105,11 @@
         icon: cloudflare-zero-trust
         server: local
         container: cloudflared
+        widget:
+          type: cloudflared
+          accountid: "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT}}"
+          tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL}}"
+          key: "{{HOMEPAGE_VAR_CLOUDFLARE_KEY}}"
 
 - Services:
     - N8N:
@@ -94,6 +124,9 @@
         icon: caddy
         server: local
         container: caddy
+        widget:
+          type: caddy
+          url: http://192.168.1.75:2019
     - Syncthing:
         href: http://192.168.1.75:8384/
         description: Syncthing
