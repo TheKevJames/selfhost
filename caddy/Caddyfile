@@ -57,6 +57,7 @@
 
         authorization policy meonly {
             set auth url https://auth.thekev.in/
+            inject headers with claims
 
             acl rule {
                 comment allow thekev admins
@@ -82,6 +83,11 @@ http://fava.thekev.in {
     reverse_proxy fava:5000
 }
 
+http://grafana.thekev.in {
+    authorize with meonly
+    reverse_proxy grafana:3000
+}
+
 http://home.thekev.in {
     reverse_proxy homepage:3000
 }
@@ -94,6 +100,11 @@ http://mosura.thekev.in {
 http://n8n.thekev.in {
     authorize with meonly
     reverse_proxy n8n:5678
+}
+
+http://prometheus.thekev.in {
+    authorize with meonly
+    reverse_proxy prometheus:9090
 }
 
 http://prowlarr.thekev.in {

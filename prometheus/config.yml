@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+- job_name: default
+  static_configs:
+  - targets:
+    - 192.168.1.75:9091  # atc1441-exporter
+    - caddy:2019
+    - cloudflared:20241
+    - grafana:3000
+    - jellyfin:8096
+    - n8n:5678
+    - node-exporter:9100
+    - prometheus:9090
+  metric_relabel_configs:
+  - source_labels: [__name__]
+    regex: '^(dotnet_.*|go_.*|net_.*)$'
+    action: drop

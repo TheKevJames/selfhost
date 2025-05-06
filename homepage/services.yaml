@@ -1,15 +1,21 @@
 ---
-- Control:
+- Information:
     - Website:
         href: https://thekev.in/
         description: Website
         icon: mdi-post-outline
-    - Homepage:
-        href: https://home.thekev.in/
-        description: Homepage
-        icon: mdi-home-circle
+    - Mosura:
+        href: https://mosura.thekev.in/
+        description: Task Management Frontend
+        icon: mdi-jira
         server: local
-        container: homepage
+        container: mosura
+    - Fava:
+        href: https://fava.thekev.in/
+        description: Beancount Web View
+        icon: mdi-finance
+        server: local
+        container: fava
 
 - Media:
     - Jellyfin:
@@ -70,19 +76,39 @@
         server: local
         container: unpackerr
 
-- Information:
-    - Mosura:
-        href: https://mosura.thekev.in/
-        description: Task Management Frontend
-        icon: mdi-jira
+- Monitoring:
+    - Homepage:
+        href: https://home.thekev.in/
+        description: Homepage
+        icon: mdi-home-circle
         server: local
-        container: mosura
-    - Fava:
-        href: https://fava.thekev.in/
-        description: Beancount Web View
-        icon: mdi-finance
+        container: homepage
+    - Grafana:
+        href: https://grafana.thekev.in/
+        description: Data Visualization Platform
+        icon: grafana
         server: local
-        container: fava
+        container: grafana
+        # TODO: how enable widget with proxy auth?
+    - Prometheus:
+        href: https://prometheus.thekev.in/
+        description: Monitoring TSDB
+        icon: prometheus
+        server: local
+        container: prometheus
+        widget:
+          type: prometheus
+          url: http://192.168.1.75:9090
+    - Node Exporter:
+        description: Monitoring Agent for Node Stats
+        icon: mdi-memory
+        server: local
+        container: node-exporter
+    - ATC1441 Exporter:
+        description: Monitoring Agent for ATC1441 Sensors
+        icon: mdi-thermometer
+        server: local
+        container: atc1441-exporter
 
 - Networking:
     - Pi-Hole:

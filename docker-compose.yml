@@ -15,13 +15,23 @@ secrets:
     file: ./mosura/jira_team
 
 services:
+  atc1441-exporter:
+    container_name: atc1441-exporter
+    image: thekevjames/atc1441-exporter:latest
+    command: --port=9091 /app/config.ini
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    volumes:
+      - ./atc1441/config.ini:/app/config.ini:Z
+
   caddy:
     container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
-    ports:
-      - 2019:2019/tcp
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
     restart: unless-stopped
+    ports:
+      - 2019:2019/tcp
     env_file:
       - ./secrets/google.env
     volumes:
@@ -32,7 +42,7 @@ services:
   cloudflared:
     container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2025.4.0@sha256:522827fe6220249d72ade9a85cf5bdcc52c18ef1d13c7a3bb7480f56a0fd36e6
-    command: tunnel run
+    command: tunnel --metrics 0.0.0.0:20241 run
     restart: unless-stopped
     volumes:
       - ./cloudflared:/home/nonroot/.cloudflared:Z
@@ -57,6 +67,16 @@ services:
     volumes:
       - /mnt/4tb/sync/finance:/data/finance
 
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:12.0.0
+    restart: unless-stopped
+    ports:
+      - 3000:3000/tcp
+    volumes:
+      - ./grafana:/etc/grafana:Z
+      - grafana:/var/lib/grafana
+
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v1.2.0
@@ -70,14 +90,15 @@ services:
       - /mnt/4tb:/mnt/4tb
       - ./homepage:/app/config:Z
 
+  # TODO: https://github.com/rebelcore/jellyfin_exporter
   jellyfin:
     container_name: jellyfin
     image: quay.io/linuxserver.io/jellyfin:10.10.7
+    restart: unless-stopped
     ports:
       - 1900:1900/udp
       - 7359:7359/udp
       - 8096:8096/tcp
-    restart: unless-stopped
     environment:
       - PGID=1000
       - PUID=1000
@@ -114,6 +135,8 @@ services:
     environment:
       - GENERIC_TIMEZONE=Etc/UTC
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
+      - N8N_METRICS=true
+      - N8N_METRICS_INCLUDE_QUEUE_METRICS=true
       - N8N_HOST=n8n.thekev.in
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
@@ -124,14 +147,20 @@ services:
       - ./n8n/data:/home/node/.n8n
       - ./n8n/config:/files
 
+  node-exporter:
+    container_name: node-exporter
+    image: quay.io/prometheus/node-exporter:v1.9.1
+    restart: unless-stopped
+
+  # TODO: https://github.com/eko/pihole-exporter
   pihole:
     container_name: pihole
     image: docker.io/pihole/pihole:2025.04.0
+    restart: unless-stopped
     ports:
       - 53:53/tcp
       - 53:53/udp
       - 8888:80
-    restart: unless-stopped
     environment:
       - DNSMASQ_LISTENING=all
       - TZ=Etc/UTC
@@ -139,6 +168,21 @@ services:
       - ./pihole/config:/etc/pihole:Z
       - ./pihole/dnsmasq:/etc/dnsmasq.d:Z
 
+  prometheus:
+    container_name: prometheus
+    image: quay.io/prometheus/prometheus:v3.3.1
+    command: |
+      --config.file=/etc/prometheus/config.yml
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.retention.size=128MB
+    restart: unless-stopped
+    ports:
+      - 9090:9090/tcp
+    volumes:
+      - ./prometheus:/etc/prometheus:Z
+      - prometheus:/prometheus
+
+  # TODO: https://github.com/thecfu/scraparr
   prowlarr:
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:1.35.1
@@ -153,6 +197,7 @@ services:
     volumes:
       - ./prowlarr:/config:Z
 
+  # TODO: https://github.com/esanchezm/prometheus-qbittorrent-exporter or https://github.com/martabal/qbittorrent-exporter
   qbittorrent:
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-4.5.5
@@ -200,15 +245,16 @@ services:
       - /mnt/4tb/shows:/data/media/shows
       - ./sonarr:/config:Z
 
+  # TODO: how can we scrape :8384/metrics with auth enabled?
   syncthing:
     container_name: syncthing
     image: quay.io/linuxserver.io/syncthing:1.29.5
+    restart: unless-stopped
     ports:
       - 8384:8384
       - 22000:22000/tcp
       - 22000:22000/udp
       - 21027:21027/udp
-    restart: unless-stopped
     environment:
       - PGID=1000
       - PUID=1000
@@ -230,3 +276,9 @@ services:
     volumes:
       - /mnt/1tb/torrents:/data/torrents
       - ./unpackerr:/config:Z
+
+# TODO: either turn these into folders on disk or turn disk folders into docker volumes
+# So long as there's a backup/recovery path, docker volumes are probably more convenient
+volumes:
+  grafana: {}
+  prometheus: {}
