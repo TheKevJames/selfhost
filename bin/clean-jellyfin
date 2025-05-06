@@ -67,11 +67,11 @@ else
                 <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/./gm') \
                 <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB1" \) | grep -vEi "$IGNORE_FILES" -) \
             | sed 's/\(.*\)/"\1"/g' \
-            | xargs -t echo
+            | xargs -n1 echo
         grep -vFf \
                 <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/-thumb./gm') \
                 <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB2*" \) | grep -Ei ".jpg|.jpeg|.png|.svg|.webp" -) \
             | sed 's/\(.*\)/"\1"/g' \
-            | xargs -t echo
+            | xargs -n1 echo
     fi
 fi
