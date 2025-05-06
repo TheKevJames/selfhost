@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# This script was based on the excellent work of maru801 from this repo:
+# https://github.com/maru801/jellyfin-scripts
+
+DRY_RUN="${1:?usage: $0 [--dry-run|--no-dry-run] LIBRARY}"
+LIBRARY="${2:?usage: $0 [--dry-run|--no-dry-run] LIBRARY}"
+
+DELETE_GLOB1=.nfo
+DELETE_GLOB2=-thumb
+
+IGNORE_FILES="album.nfo|artist.nfo|movie.nfo|season.nfo|tvshow.nfo|VIDEO_TS.nfo"
+IGNORE_FOLDER=".zfs"
+
+VIDEO_EXT1=.mkv
+VIDEO_EXT2=.mk3d
+VIDEO_EXT3=.mp4
+VIDEO_EXT4=.m4v
+VIDEO_EXT5=.mov
+VIDEO_EXT6=.qt
+VIDEO_EXT7=.asf
+VIDEO_EXT8=.wmv
+VIDEO_EXT9=.avi
+VIDEO_EXT10=.mxf
+VIDEO_EXT11=.m2p
+VIDEO_EXT12=.ps
+VIDEO_EXT13=.ts
+VIDEO_EXT14=.tsv
+VIDEO_EXT15=.m2ts
+VIDEO_EXT16=.mts
+VIDEO_EXT17=.vob
+VIDEO_EXT18=.evo
+VIDEO_EXT19=.3gp
+VIDEO_EXT20=.3g2
+VIDEO_EXT21=.f4v
+VIDEO_EXT22=.flv
+VIDEO_EXT23=.ogv
+VIDEO_EXT24=.ogx
+VIDEO_EXT25=.webm
+VIDEO_EXT26=.rmvb
+VIDEO_EXT27=.divx
+VIDEO_EXT28=.xvid
+VIDEO_EXT29=.mpg
+
+if [ "$DRY_RUN" == "--no-dry-run" ]; then
+    echo "Running in WILL ACTUALLY DELETE THINGS mode."
+    echo "Cleaning library: ${LIBRARY}"
+    read -rp "Proceed? [yN] " userExitChoice
+    if [ "$userExitChoice" == "y" ]; then
+        grep -vFf \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/./gm') \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB1" \) | grep -vEi "$IGNORE_FILES" -) \
+            | sed 's/\(.*\)/"\1"/g' \
+            | xargs -t rm -vf
+        grep -vFf \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/-thumb./gm') \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB2*" \) | grep -Ei ".jpg|.jpeg|.png|.svg|.webp" -) \
+            | sed 's/\(.*\)/"\1"/g' \
+            | xargs -t rm -vf
+    fi
+else
+    echo "Running in dry-run mode."
+    echo "Cleaning library: ${LIBRARY}"
+    read -rp "Proceed? [yN] " userExitChoice
+    if [ "$userExitChoice" == "y" ]; then
+        echo "Script will delete the following files:"
+        grep -vFf \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/./gm') \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB1" \) | grep -vEi "$IGNORE_FILES" -) \
+            | sed 's/\(.*\)/"\1"/g' \
+            | xargs -t echo
+        grep -vFf \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$VIDEO_EXT1" -o -iname "*$VIDEO_EXT2" -o -iname "*$VIDEO_EXT3" -o -iname "*$VIDEO_EXT4" -o -iname "*$VIDEO_EXT5" -o -iname "*$VIDEO_EXT6" -o -iname "*$VIDEO_EXT7" -o -iname "*$VIDEO_EXT8" -o -iname "*$VIDEO_EXT9" -o -iname "*$VIDEO_EXT10" -o -iname "*$VIDEO_EXT11" -o -iname "*$VIDEO_EXT12" -o -iname "*$VIDEO_EXT13" -o -iname "*$VIDEO_EXT14" -o -iname "*$VIDEO_EXT15" -o -iname "*$VIDEO_EXT16" -o -iname "*$VIDEO_EXT17" -o -iname "*$VIDEO_EXT18" -o -iname "*$VIDEO_EXT19" -o -iname "*$VIDEO_EXT20" -o -iname "*$VIDEO_EXT21" -o -iname "*$VIDEO_EXT22" -o -iname "*$VIDEO_EXT23" -o -iname "*$VIDEO_EXT24" -o -iname "*$VIDEO_EXT25" -o -iname "*$VIDEO_EXT26" -o -iname "*$VIDEO_EXT27" -o -iname "*$VIDEO_EXT28" -o -iname "*$VIDEO_EXT29" \) -exec basename {} \; | sed 's/\.[^.]*$/-thumb./gm') \
+                <(find "${LIBRARY}"/* -iname $IGNORE_FOLDER -prune -o -type f \( -iname "*$DELETE_GLOB2*" \) | grep -Ei ".jpg|.jpeg|.png|.svg|.webp" -) \
+            | sed 's/\(.*\)/"\1"/g' \
+            | xargs -t echo
+    fi
+fi
