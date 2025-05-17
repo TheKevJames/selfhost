@@ -1,13 +1,15 @@
 {
-  "extends": ["github>thekevjames/tools:personal"],
-  "packageRules": [
-    {
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": [
-        "^cloudflare/cloudflared",
-      ],
-      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
-      "automerge": true
-    },
-  ],
+    "extends": [
+        "github>thekevjames/tools:personal",
+        "github>thekevjames/tools//renovate/version-as-app.json5",
+    ],
+    "packageRules": [
+        {
+            "matchDatasources": ["docker"],
+            "matchPackagePatterns": [
+                "^docker.io/cloudflare/cloudflared",
+            ],
+            "automerge": true,
+        },
+    ],
 }
