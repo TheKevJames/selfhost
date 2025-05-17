@@ -1,15 +1,17 @@
 {
-    "extends": [
-        "github>thekevjames/tools:personal",
-        "github>thekevjames/tools//renovate/version-as-app.json5",
+    extends: [
+        'github>thekevjames/tools:personal',
+        'github>thekevjames/tools//renovate/version-as-app.json5',
     ],
-    "packageRules": [
+    packageRules: [
         {
-            "matchDatasources": ["docker"],
-            "matchPackagePatterns": [
-                "^docker.io/cloudflare/cloudflared",
+            matchDatasources: [
+                'docker',
             ],
-            "automerge": true,
+            automerge: true,
+            matchPackageNames: [
+                '/^docker.io/cloudflare/cloudflared/',
+            ],
         },
     ],
 }
