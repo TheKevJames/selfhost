@@ -24,3 +24,7 @@ stop:
 	$(COMPOSE) stop $(SERVICE)
 up:
 	$(COMPOSE) up -d --remove-orphans $(SERVICE)
+
+clean:
+	docker system prune -a
+	docker volume prune

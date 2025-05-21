@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XbmcMetadataOptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserId>403a3cdfa2e54ea1a3d6eacce8082c51</UserId>
+  <ReleaseDateFormat>yyyy-MM-dd</ReleaseDateFormat>
+  <SaveImagePathsInNfo>false</SaveImagePathsInNfo>
+  <EnablePathSubstitution>true</EnablePathSubstitution>
+  <EnableExtraThumbsDuplication>false</EnableExtraThumbsDuplication>
+</XbmcMetadataOptions>

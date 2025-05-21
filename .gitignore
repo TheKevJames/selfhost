@@ -7,12 +7,7 @@ homepage/logs/*
 jellyfin/.aspnet/*
 jellyfin/.cache/*
 jellyfin/cache/*
-jellyfin/data/data/*
-!jellyfin/data/data/playlists
-jellyfin/data/metadata/*
-jellyfin/data/plugins/configurations/Jellyfin.Plugin.OpenSubtitles.xml
-jellyfin/data/plugins/Open Subtitles*
-jellyfin/data/transcodes/*
+jellyfin/data/*
 jellyfin/log/*
 mosura/*
 n8n/data/*

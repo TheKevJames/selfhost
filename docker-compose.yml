@@ -17,9 +17,11 @@ secrets:
 services:
   atc1441-exporter:
     container_name: atc1441-exporter
-    image: quay.io/thekevjames/atc1441-exporter:0.1.0
+    image: quay.io/thekevjames/atc1441-exporter:0.1.8
     command: --port=9091 /app/config.ini
     restart: unless-stopped
+    environment:
+      - DEBUG=true
     network_mode: host
     privileged: true
     volumes:
@@ -108,6 +110,10 @@ services:
       - /mnt/4tb/movies:/data/media/movies
       - /mnt/4tb/shows:/data/media/shows
       - ./jellyfin:/config:Z
+      # https://github.com/linuxserver/docker-jellyfin/blob/master/root/etc/s6-overlay/s6-rc.d/svc-jellyfin/run
+      - jellyfin:/config/data
+      - /config/cache
+      - /config/log
 
   mosura:
     container_name: mosura
@@ -279,6 +285,8 @@ services:
 
 # TODO: either turn these into folders on disk or turn disk folders into docker volumes
 # So long as there's a backup/recovery path, docker volumes are probably more convenient
+# Example volume-based backup usage: https://jellyfin.org/docs/general/administration/backup-and-restore/
 volumes:
+  jellyfin: {}
   grafana: {}
   prometheus: {}
