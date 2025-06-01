@@ -81,7 +81,7 @@ services:
 
   homepage:
     container_name: homepage
-    image: ghcr.io/gethomepage/homepage:v1.3.0
+    image: ghcr.io/gethomepage/homepage:v1.3.2
     restart: unless-stopped
     env_file:
       - ./secrets/homepage.env
