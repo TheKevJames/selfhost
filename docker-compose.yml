@@ -161,7 +161,7 @@ services:
   # TODO: https://github.com/eko/pihole-exporter
   pihole:
     container_name: pihole
-    image: docker.io/pihole/pihole:2025.05.1
+    image: docker.io/pihole/pihole:2025.06.2
     restart: unless-stopped
     ports:
       - 53:53/tcp
