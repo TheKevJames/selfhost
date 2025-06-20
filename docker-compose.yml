@@ -237,7 +237,7 @@ services:
 
   sonarr:
     container_name: sonarr
-    image: quay.io/linuxserver.io/sonarr:4.0.14
+    image: quay.io/linuxserver.io/sonarr:4.0.15
     restart: unless-stopped
     ports:
       - 8989:8989/tcp
