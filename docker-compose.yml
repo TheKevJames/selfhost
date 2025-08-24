@@ -191,7 +191,7 @@ services:
   # TODO: https://github.com/thecfu/scraparr
   prowlarr:
     container_name: prowlarr
-    image: quay.io/linuxserver.io/prowlarr:1.37.0
+    image: quay.io/linuxserver.io/prowlarr:2.0.5
     restart: unless-stopped
     ports:
       - 9696:9696/tcp
