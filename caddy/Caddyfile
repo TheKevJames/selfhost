@@ -78,6 +78,11 @@ http://auth.thekev.in {
     authenticate with myportal
 }
 
+http://bazarr.thekev.in {
+    authorize with meonly
+    reverse_proxy bazarr:6767
+}
+
 http://fava.thekev.in {
     authorize with meonly
     reverse_proxy fava:5000

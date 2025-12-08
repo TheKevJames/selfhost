@@ -46,6 +46,15 @@
           url: http://192.168.1.75:8989
           key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
           enableQueue: false
+    - Bazarr:
+        href: https://bazarr.thekev.in/
+        description: Subtitle Manager
+        icon: bazarr
+        container: bazarr
+        widget:
+          type: bazarr
+          url: http://192.168.1.75:6767
+          key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
 
 - Torrents:
     - qBittorrent:

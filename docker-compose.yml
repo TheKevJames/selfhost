@@ -39,8 +39,8 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - /mnt/4tb/movies:/movies
-      - /mnt/4tb/shows:/tv
+      - /mnt/4tb/movies:/data/media/movies
+      - /mnt/4tb/shows:/data/media/shows
       - ./bazarr:/config:Z
 
   caddy:
