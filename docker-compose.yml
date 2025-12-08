@@ -27,6 +27,22 @@ services:
     volumes:
       - ./atc1441/config.ini:/app/config.ini:Z
 
+  bazarr:
+    container_name: bazarr
+    image: quay.io/linuxserver.io/bazarr:1.5.3
+    restart: unless-stopped
+    ports:
+      - 6767:6767/tcp
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Etc/UTC
+      - UMASK=002
+    volumes:
+      - /mnt/4tb/movies:/movies
+      - /mnt/4tb/shows:/tv
+      - ./bazarr:/config:Z
+
   caddy:
     container_name: caddy
     image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
