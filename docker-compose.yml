@@ -21,7 +21,7 @@ services:
     command: --port=9091 /app/config.ini
     restart: unless-stopped
     environment:
-      - DEBUG=true
+      - DEBUG=false
     network_mode: host
     privileged: true
     volumes:
@@ -283,6 +283,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
+      - /mnt/4tb/backup:/data/backup
       - /mnt/4tb/sync:/data/sync
       - ./syncthing:/config:Z
 
