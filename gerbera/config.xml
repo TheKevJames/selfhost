@@ -71,7 +71,7 @@
 
     <autoscan use-inotify="yes">
 
-    <directory location="/mnt/content" mode="inotify" 
+    <directory location="/mnt/content" mode="inotify"
                recursive="yes" hidden-files="no"/>
 
     </autoscan>
@@ -229,15 +229,15 @@
     </mappings>
     <resources>
       <fanart>
-	<add-dir name="." pattern="*" mime="image/*"/>
-	<add-file name="folder.jpg"/>
+        <add-dir name="." pattern="*" mime="image/*"/>
+        <add-file name="folder.jpg"/>
       </fanart>
       <subtitle>
         <add-dir name="." pattern="%filename%*" ext="srt"/>
       </subtitle>
       <resource>
         <add-dir name="." pattern="%filename%*" ext="srt"/>
-	<add-dir name="." pattern="*" mime="image/*"/>
+        <add-dir name="." pattern="*" mime="image/*"/>
       </resource>
     </resources>
   </import>
