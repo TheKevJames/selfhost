@@ -39,9 +39,9 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
+      - ./bazarr:/config:Z
       - /mnt/4tb/movies:/data/media/movies
       - /mnt/4tb/shows:/data/media/shows
-      - ./bazarr:/config:Z
 
   caddy:
     container_name: caddy
@@ -84,6 +84,22 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/4tb/sync/finance:/data/finance
+
+  gerbera:
+    container_name: gerbera
+    image: gerbera/gerbera:3.0.0
+    command: gerbera -p 49152 -c /etc/gerbera/config.xml
+    restart: unless-stopped
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Etc/UTC
+    network_mode: host
+    volumes:
+      - ./gerbera:/etc/gerbera:Z
+      - /mnt/4tb/movies:/content/movies:ro
+      - /mnt/4tb/shows:/content/shows:ro
+      - gerbera:/var/run/gerbera
 
   grafana:
     container_name: grafana
@@ -304,6 +320,7 @@ services:
 # So long as there's a backup/recovery path, docker volumes are probably more convenient
 # Example volume-based backup usage: https://jellyfin.org/docs/general/administration/backup-and-restore/
 volumes:
+  gerbera: {}
   jellyfin: {}
   grafana: {}
   prometheus: {}

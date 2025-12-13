@@ -88,6 +88,11 @@ http://fava.thekev.in {
     reverse_proxy fava:5000
 }
 
+http://gerbera.thekev.in {
+    authorize with meonly
+    reverse_proxy gerbera:49152
+}
+
 http://grafana.thekev.in {
     authorize with meonly
     reverse_proxy grafana:3000

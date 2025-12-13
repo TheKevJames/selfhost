@@ -131,10 +131,12 @@
           url: http://192.168.1.75:8888
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
-    - Router:
-        href: http://192.168.1.1/
-        description: Router Admin Portal
-        icon: router
+    - Gerbera:
+        href: https://gerbera.thekev.in/
+        description: UPnP Server
+        icon: gerbera
+        server: local
+        container: gerbera
     - Cloudflared:
         description: DNS Tunnel
         icon: cloudflare-zero-trust
@@ -145,6 +147,10 @@
           accountid: "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT}}"
           tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL}}"
           key: "{{HOMEPAGE_VAR_CLOUDFLARE_KEY}}"
+    - Router:
+        href: http://192.168.1.1/
+        description: Router Admin Portal
+        icon: router
 
 - Services:
     - N8N:
