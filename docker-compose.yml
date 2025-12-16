@@ -67,7 +67,7 @@ services:
 
   docker-socket-proxy:
     container_name: docker-socket-proxy
-    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.1
+    image: ghcr.io/tecnativa/docker-socket-proxy:v0.4.2
     restart: unless-stopped
     environment:
       - CONTAINERS=1
