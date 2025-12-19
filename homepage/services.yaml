@@ -132,7 +132,7 @@
           version: 6
           key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
     - Gerbera:
-        href: https://gerbera.thekev.in/
+        href: http://192.168.1.75:49152/
         description: UPnP Server
         icon: gerbera
         server: local
