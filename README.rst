@@ -76,7 +76,7 @@ repo::
 
     # start images
     $ make pull
-    $ make up -d
+    $ make up
 
 If this if the first time setup on a new machine and you want to migrate off a
 previous one, using rsync on the relevant app directory should do the trick
@@ -234,8 +234,6 @@ TODOs
 * deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
 * deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
 * deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
-* n8n automations:
-  * sync work and home gcal
 * configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
 * deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
 * backup photos from Google:
@@ -244,6 +242,9 @@ TODOs
 * configure `notifications <https://github.com/caronc/apprise>`_
 * monitor:
   * `hard drives <https://github.com/AnalogJ/scrutiny>`_
+  * phone storage
+  * dropbox storage
+  * syncthing storage
   * and "everything else" via prometheus/grafana
 * manage `music <https://lidarr.audio/>`_
 * optimize `transcoding of tv shows and movies <https://home.tdarr.io/>`_
@@ -263,6 +264,7 @@ TODOs
   * also `mirror to gitlab <https://docs.gitlab.com/ee/user/project/repository/mirror/index.html>`_?
   * also mirror to sourcehut?
   * `mirroring script <https://github.com/beefsack/git-mirror>`_
+  * or maybe use `forgejo <https://forgejo.org/>`_ and `mirror this way <https://forgejo.org/docs/latest/user/repo-mirror/>`_
 
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual

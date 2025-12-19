@@ -50,6 +50,7 @@
         href: https://bazarr.thekev.in/
         description: Subtitle Manager
         icon: bazarr
+        server: local
         container: bazarr
         widget:
           type: bazarr
