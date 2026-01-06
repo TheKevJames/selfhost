@@ -286,7 +286,7 @@ services:
   # TODO: how can we scrape :8384/metrics with auth enabled?
   syncthing:
     container_name: syncthing
-    image: quay.io/linuxserver.io/syncthing:2.0.12
+    image: quay.io/linuxserver.io/syncthing:2.0.13
     restart: unless-stopped
     ports:
       - 8384:8384
