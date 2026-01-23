@@ -180,6 +180,7 @@ services:
       - N8N_PROTOCOL=https
       - N8N_RUNNERS_ENABLED=true
       - NODE_ENV=production
+      - NODES_EXCLUDE="[]"
       - WEBHOOK_URL=https://n8n.thekev.in/
     volumes:
       - ./n8n/data:/home/node/.n8n
