@@ -6,10 +6,9 @@ else
 	COMPOSE := docker compose
 endif
 
-.PHONY: help up down ps pull
-help:
-	@echo "Wrapper for docker-compose usage"
+.PHONY: up down ps pull init update
 
+# docker compose convenience
 down:
 	$(COMPOSE) down
 ps:
@@ -25,6 +24,18 @@ stop:
 up:
 	$(COMPOSE) up -d --remove-orphans $(SERVICE)
 
+# misc commands
+init:
+	sudo cp sys/daemon.json /etc/docker/daemon.json
+	sudo systemctl restart docker
+
+update:
+	sudo apt update -y
+	sudo apt upgrade -y
+	make pull
+	make up
+
 clean:
 	docker system prune -a
 	docker volume prune
+	sudo apt autoremove

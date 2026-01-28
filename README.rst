@@ -74,6 +74,9 @@ repo::
     $ bin/cloudflare-expose foo.example.com
     $ bin/cloudflare-expose bar.example.com
 
+    # configure docker
+    $ make init
+
     # start images
     $ make pull
     $ make up
@@ -134,13 +137,9 @@ Updates
 
 To update the various components::
 
-    sudo apt update -y
-    sudo apt upgrade -y
-
     cd ~/src/experiments/selfhost
     git pull
-    make pull
-    make up -d
+    make update
 
 External Drives
 ---------------
