@@ -45,7 +45,7 @@
             acl rule {
                 comment allow mosura users
                 match roles mosura/user
-                allow stop log warn
+                allow stop
             }
 
             acl rule {
@@ -62,7 +62,7 @@
             acl rule {
                 comment allow thekev admins
                 match roles thekev/admin
-                allow stop log warn
+                allow stop
             }
 
             acl rule {

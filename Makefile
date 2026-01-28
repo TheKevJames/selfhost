@@ -6,7 +6,7 @@ else
 	COMPOSE := docker compose
 endif
 
-.PHONY: up down ps pull init update
+.PHONY: down ps pull restart start stop up logs logsf init update clean
 
 # docker compose convenience
 down:
@@ -23,6 +23,10 @@ stop:
 	$(COMPOSE) stop $(SERVICE)
 up:
 	$(COMPOSE) up -d --remove-orphans $(SERVICE)
+logs:
+	$(COMPOSE) logs $(SERVICE)
+logsf:
+	$(COMPOSE) logs -f $(SERVICE)
 
 # misc commands
 init:
