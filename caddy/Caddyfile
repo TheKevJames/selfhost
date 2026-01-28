@@ -103,7 +103,6 @@ http://mosura.thekev.in {
 }
 
 http://n8n.thekev.in {
-    authorize with meonly
     reverse_proxy n8n:5678
 }
 
