@@ -12,6 +12,8 @@ jellyfin/data/*
 jellyfin/log/*
 mosura/*
 n8n/data/*
+n8n/files/*
+!n8n/files/.gitkeep
 pihole/*
 prowlarr/*
 !prowlarr/config.xml

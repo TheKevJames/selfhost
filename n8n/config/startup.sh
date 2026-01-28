@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+# TODO: note that this script is currently unused, but I'm temporarily keeping
+# it around in case I need to run nmap/etc in the main n8n container again.
+
+echo "Installing apk-tools..."
+mkdir /tmp/apk
+pushd /tmp/apk
+wget $(head -n1 /etc/apk/repositories)/$(cat /etc/apk/arch) -O arch
+wget $(head -n1 /etc/apk/repositories)/$(cat /etc/apk/arch)/$(grep apk-tools-static arch | sed 's/.*">//' | sed 's/<.*//') -O apk-tools.apk
+tar -zxvf apk-tools.apk
+./sbin/apk.static add apk-tools
+popd
+rm -rf /tmp/apk
+
+echo "Installing nmap..."
+apk add --no-cache nmap
