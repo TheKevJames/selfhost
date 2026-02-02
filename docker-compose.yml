@@ -30,7 +30,7 @@ services:
 
   bazarr:
     container_name: bazarr
-    image: quay.io/linuxserver.io/bazarr:1.5.4
+    image: quay.io/linuxserver.io/bazarr:1.5.5
     restart: unless-stopped
     ports:
       - 6767:6767/tcp
