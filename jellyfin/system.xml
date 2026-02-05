@@ -6,7 +6,7 @@
   <EnableMetrics>false</EnableMetrics>
   <EnableNormalizedItemByNameIds>true</EnableNormalizedItemByNameIds>
   <IsPortAuthorized>true</IsPortAuthorized>
-  <QuickConnectAvailable>false</QuickConnectAvailable>
+  <QuickConnectAvailable>true</QuickConnectAvailable>
   <EnableCaseSensitiveItemIds>true</EnableCaseSensitiveItemIds>
   <DisableLiveTvChannelUserDataName>true</DisableLiveTvChannelUserDataName>
   <MetadataPath>/config/data/metadata</MetadataPath>
