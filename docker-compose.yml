@@ -197,7 +197,7 @@ services:
 
   n8n-runners:
     container_name: n8n-runners
-    image: docker.io/n8nio/runners:2.7.1
+    image: docker.io/n8nio/runners:2.7.2
     restart: unless-stopped
     environment:
       - N8N_RUNNERS_AUTH_TOKEN=no-need-to-be-secret
