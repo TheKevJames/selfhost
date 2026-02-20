@@ -78,6 +78,21 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
+  dolce:
+    container_name: dolce
+    image: dangrie158/dolce:v4.0.2
+    restart: unless-stopped
+    env_file:
+      - ./secrets/dolce.env
+    environment:
+      # TODO: get socket proxy to work
+      # - DOCKER_HOST=docker-socket-proxy:2375
+      # - DOCKER_TRANSPORT=tcp
+      # TODO: tune this. https://dangrie158.github.io/dolce/latest/configuration/#event-selection
+      - DOLCE_EVENTS=start,die,kill,oom,stop,pause,unpause,health_status
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
   fava:
     container_name: fava
     image: quay.io/thekevjames/fava:1.30.12
