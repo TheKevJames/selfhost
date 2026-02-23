@@ -19,7 +19,6 @@ services:
     container_name: atc1441-exporter
     image: quay.io/thekevjames/atc1441-exporter:0.1.8
     command: --port=9091 /app/config.ini
-    # TODO: send notif whenever image restarts
     restart: unless-stopped
     environment:
       - DEBUG=false
