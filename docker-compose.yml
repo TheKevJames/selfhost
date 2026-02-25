@@ -183,7 +183,7 @@ services:
 
   n8n:
     container_name: n8n
-    image: docker.n8n.io/n8nio/n8n:2.10.0
+    image: docker.n8n.io/n8nio/n8n:2.10.1
     restart: unless-stopped
     environment:
       - GENERIC_TIMEZONE=Etc/UTC
@@ -210,7 +210,7 @@ services:
 
   n8n-runners:
     container_name: n8n-runners
-    image: docker.io/n8nio/runners:2.10.0
+    image: docker.io/n8nio/runners:2.10.1
     restart: unless-stopped
     environment:
       - N8N_RUNNERS_AUTH_TOKEN=no-need-to-be-secret
