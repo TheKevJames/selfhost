@@ -242,7 +242,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: quay.io/prometheus/prometheus:v3.9.1
+    image: quay.io/prometheus/prometheus:v3.10.0
     command: |
       --config.file=/etc/prometheus/config.yml
       --storage.tsdb.path=/prometheus
