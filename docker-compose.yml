@@ -167,17 +167,12 @@ services:
     restart: unless-stopped
     environment:
       - MOSURA_APPDATA=/data
-      - MOSURA_HEADER_USER_EMAIL=X-Token-User-Email
       - MOSURA_LOG_LEVEL=INFO
       - MOSURA_PORT=8080
     secrets:
       - jira_auth_token
       - jira_auth_user
       - jira_domain
-      - jira_label_okr
-      - jira_other_projects
-      - jira_project
-      - jira_team
     volumes:
       - ./mosura:/data:Z
 
