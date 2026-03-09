@@ -26,7 +26,7 @@ up:
 logs:
 	$(COMPOSE) logs $(SERVICE)
 logsf:
-	$(COMPOSE) logs -f $(SERVICE)
+	$(COMPOSE) logs -f --tail=30 $(SERVICE)
 
 # misc commands
 init:

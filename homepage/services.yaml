@@ -24,6 +24,12 @@
         icon: jellyfin
         server: local
         container: jellyfin
+    - Immich:
+        href: https://immich.thekev.in/
+        description: Photo Collection Manager
+        icon: immich
+        server: local
+        container: immich-server
     - Radarr:
         href: https://radarr.thekev.in/
         description: Movie Collection Manager
@@ -175,3 +181,18 @@
         icon: syncthing
         server: local
         container: syncthing
+    - Immich Machine Learning:
+        description: Immich Machine Learning
+        icon: immich
+        server: local
+        container: immich-machine-learning
+    - Immich Redis:
+        description: Key-Value Cache for Immich
+        icon: redis
+        server: local
+        container: immich-redis
+    - Immich Postgres:
+        description: SQL Database for Immich
+        icon: postgres
+        server: local
+        container: immich-postgres

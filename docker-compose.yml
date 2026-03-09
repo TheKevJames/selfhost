@@ -5,14 +5,6 @@ secrets:
     file: ./mosura/jira_auth_user
   jira_domain:
     file: ./mosura/jira_domain
-  jira_label_okr:
-    file: ./mosura/jira_label_okr
-  jira_other_projects:
-    file: ./mosura/jira_other_projects
-  jira_project:
-    file: ./mosura/jira_project
-  jira_team:
-    file: ./mosura/jira_team
 
 services:
   atc1441-exporter:
@@ -138,6 +130,69 @@ services:
       - /mnt/1tb:/mnt/1tb
       - /mnt/4tb:/mnt/4tb
       - ./homepage:/app/config:Z
+
+  immich-machine-learning:
+    container_name: immich-machine-learning
+    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
+    # Example tag: ${IMMICH_VERSION:-release}-cuda
+    image: ghcr.io/immich-app/immich-machine-learning:v2.5.6
+    # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
+    #   file: hwaccel.ml.yml
+    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
+    restart: always
+    user: '1000:1000'
+    env_file:
+      - immich/config.env
+      - secrets/immich.env
+    volumes:
+      - model-cache:/cache
+    healthcheck:
+      disable: false
+
+  immich-postgres:
+    container_name: immich-postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23
+    restart: always
+    environment:
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    env_file:
+      - immich/config.env
+      - secrets/immich.env
+    volumes:
+      - ./immich/postgres:/var/lib/postgresql/data
+    shm_size: 128mb
+    healthcheck:
+      disable: false
+
+  immich-redis:
+    container_name: immich-redis
+    image: docker.io/valkey/valkey:9@sha256:546304417feac0874c3dd576e0952c6bb8f06bb4093ea0c9ca303c73cf458f63
+    restart: always
+    healthcheck:
+      test: redis-cli ping || exit 1
+
+  immich-server:
+    container_name: immich-server
+    image: ghcr.io/immich-app/immich-server:v2.5.6
+    # extends:
+    #   file: hwaccel.transcoding.yml
+    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
+    restart: always
+    user: '1000:1000'
+    ports:
+      - '2283:2283'
+    env_file:
+      - immich/config.env
+      - secrets/immich.env
+    volumes:
+      - /mnt/4tb/sync/library:/data
+      - /mnt/4tb/sync/library-bigfiles:/mnt/bigfiles:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - immich-postgres
+      - immich-redis
+    healthcheck:
+      disable: false
 
   # TODO: https://github.com/rebelcore/jellyfin_exporter
   jellyfin:
@@ -353,3 +408,4 @@ volumes:
   jellyfin: {}
   grafana: {}
   prometheus: {}
+  model-cache: {}

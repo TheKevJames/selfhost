@@ -33,7 +33,7 @@
             }
 
             transform user {
-                suffix match email @dialpad.com
+                suffix match email kjames@dialpad.com
                 action add role mosura/user
             }
         }
@@ -95,6 +95,10 @@ http://grafana.thekev.in {
 
 http://home.thekev.in {
     reverse_proxy homepage:3000
+}
+
+http://immich.thekev.in {
+    reverse_proxy immich-server:2283
 }
 
 http://mosura.thekev.in {

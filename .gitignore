@@ -5,6 +5,7 @@ caddy/*
 cloudflared/*
 !cloudflared/config.yml
 homepage/logs/*
+immich/postgres/*
 jellyfin/.aspnet/*
 jellyfin/.cache/*
 jellyfin/cache/*
