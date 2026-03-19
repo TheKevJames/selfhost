@@ -185,8 +185,8 @@ services:
       - immich/config.env
       - secrets/immich.env
     volumes:
-      - /mnt/4tb/sync/library:/data
-      - /mnt/4tb/sync/library-bigfiles:/mnt/bigfiles:ro
+      - /mnt/4tb/backup/library:/data
+      - /mnt/4tb/backup/library-bigfiles:/mnt/bigfiles:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - immich-postgres
