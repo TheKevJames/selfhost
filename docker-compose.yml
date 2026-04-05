@@ -197,7 +197,7 @@ services:
   # TODO: https://github.com/rebelcore/jellyfin_exporter
   jellyfin:
     container_name: jellyfin
-    image: quay.io/linuxserver.io/jellyfin:10.11.7
+    image: quay.io/linuxserver.io/jellyfin:10.11.8
     restart: unless-stopped
     ports:
       - 7359:7359/udp
