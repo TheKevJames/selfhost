@@ -108,16 +108,6 @@ services:
       - /mnt/4tb/shows:/content/shows:ro
       - gerbera:/var/run/gerbera
 
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:12.4.3
-    restart: unless-stopped
-    ports:
-      - 3000:3000/tcp
-    volumes:
-      - ./grafana:/etc/grafana:Z
-      - grafana:/var/lib/grafana
-
   homepage:
     container_name: homepage
     image: ghcr.io/gethomepage/homepage:v1.12.3
@@ -151,7 +141,7 @@ services:
 
   immich-postgres:
     container_name: immich-postgres
-    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3
     restart: always
     environment:
       POSTGRES_INITDB_ARGS: '--data-checksums'
@@ -231,6 +221,34 @@ services:
     volumes:
       - ./mosura:/data:Z
 
+  netdata:
+    container_name: netdata
+    image: netdata/netdata:v2.9.0
+    restart: unless-stopped
+    init: true
+    ports:
+      - 19999:19999
+    environment:
+      - DOCKER_HOST=docker-socket-proxy:2375
+    cap_add:
+      - SYS_ADMIN
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - ./netdata:/etc/netdata:Z
+      - netdata-cache:/var/cache/netdata
+      - netdata-lib:/var/lib/netdata
+      - /:/host/root:ro,rslave
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /etc/passwd:/host/etc/passwd:ro
+      - /proc:/host/proc:ro
+      - /run/dbus:/run/dbus:ro
+      - /sys:/host/sys:ro
+      - /var/log:/host/var/log:ro
+
   n8n:
     container_name: n8n
     image: docker.n8n.io/n8nio/n8n:2.18.3
@@ -269,11 +287,6 @@ services:
     depends_on:
       - n8n
 
-  node-exporter:
-    container_name: node-exporter
-    image: quay.io/prometheus/node-exporter:v1.11.1
-    restart: unless-stopped
-
   # TODO: https://github.com/eko/pihole-exporter
   pihole:
     container_name: pihole
@@ -289,20 +302,6 @@ services:
     volumes:
       - ./pihole/config:/etc/pihole:Z
       - ./pihole/dnsmasq:/etc/dnsmasq.d:Z
-
-  prometheus:
-    container_name: prometheus
-    image: quay.io/prometheus/prometheus:v3.11.2
-    command: |
-      --config.file=/etc/prometheus/config.yml
-      --storage.tsdb.path=/prometheus
-      --storage.tsdb.retention.size=128MB
-    restart: unless-stopped
-    ports:
-      - 9090:9090/tcp
-    volumes:
-      - ./prometheus:/etc/prometheus:Z
-      - prometheus:/prometheus
 
   # TODO: https://github.com/thecfu/scraparr
   prowlarr:
@@ -406,6 +405,6 @@ services:
 volumes:
   gerbera: {}
   jellyfin: {}
-  grafana: {}
-  prometheus: {}
   model-cache: {}
+  netdata-cache: {}
+  netdata-lib: {}

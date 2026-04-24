@@ -99,27 +99,12 @@
         icon: mdi-home-circle
         server: local
         container: homepage
-    - Grafana:
-        href: https://grafana.thekev.in/
-        description: Data Visualization Platform
-        icon: grafana
+    - Netdata:
+        href: https://netdata.thekev.in/
+        description: Realtime Infrastructure Monitoring
+        icon: netdata
         server: local
-        container: grafana
-        # TODO: how enable widget with proxy auth?
-    - Prometheus:
-        href: https://prometheus.thekev.in/
-        description: Monitoring TSDB
-        icon: prometheus
-        server: local
-        container: prometheus
-        widget:
-          type: prometheus
-          url: http://192.168.1.75:9090
-    - Node Exporter:
-        description: Monitoring Agent for Node Stats
-        icon: mdi-memory
-        server: local
-        container: node-exporter
+        container: netdata
     - ATC1441 Exporter:
         description: Monitoring Agent for ATC1441 Sensors
         icon: mdi-thermometer

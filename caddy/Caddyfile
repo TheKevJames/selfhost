@@ -88,11 +88,6 @@ http://fava.thekev.in {
     reverse_proxy fava:5000
 }
 
-http://grafana.thekev.in {
-    authorize with meonly
-    reverse_proxy grafana:3000
-}
-
 http://home.thekev.in {
     reverse_proxy homepage:3000
 }
@@ -106,13 +101,13 @@ http://mosura.thekev.in {
     reverse_proxy mosura:8080
 }
 
-http://n8n.thekev.in {
-    reverse_proxy n8n:5678
+http://netdata.thekev.in {
+    authorize with meonly
+    reverse_proxy netdata:19999
 }
 
-http://prometheus.thekev.in {
-    authorize with meonly
-    reverse_proxy prometheus:9090
+http://n8n.thekev.in {
+    reverse_proxy n8n:5678
 }
 
 http://prowlarr.thekev.in {
