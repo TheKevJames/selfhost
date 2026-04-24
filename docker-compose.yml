@@ -290,7 +290,7 @@ services:
   # TODO: https://github.com/eko/pihole-exporter
   pihole:
     container_name: pihole
-    image: docker.io/pihole/pihole:2026.04.0
+    image: docker.io/pihole/pihole:2026.04.1
     restart: unless-stopped
     ports:
       - 53:53/tcp
