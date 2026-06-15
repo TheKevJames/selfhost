@@ -12,6 +12,11 @@ jellyfin/cache/*
 jellyfin/data/*
 jellyfin/log/*
 mosura/*
+netdata/.container-hostname
+netdata/.environment
+netdata/.install-type
+netdata/edit-config
+netdata/orig
 n8n/data/*
 n8n/files/*
 !n8n/files/.gitkeep
