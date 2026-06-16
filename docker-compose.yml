@@ -321,7 +321,7 @@ services:
   # TODO: https://github.com/esanchezm/prometheus-qbittorrent-exporter or https://github.com/martabal/qbittorrent-exporter
   qbittorrent:
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent:release-5.2.1
+    image: ghcr.io/hotio/qbittorrent:release-5.2.2
     restart: unless-stopped
     ports:
       - 8089:8080/tcp
