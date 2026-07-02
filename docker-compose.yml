@@ -369,7 +369,6 @@ services:
       - /mnt/4tb/movies:/data/media/movies
       - ./data/radarr:/config:Z
 
-  # Single exporter for the *arr suite (prowlarr, radarr, sonarr, bazarr).
   scraparr:
     container_name: scraparr
     image: ghcr.io/thecfu/scraparr:3.0.3

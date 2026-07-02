@@ -110,6 +110,21 @@
         icon: mdi-thermometer
         server: local
         container: atc1441-exporter
+    - Jellyfin Exporter:
+        description: Metrics Exporter for Jellyfin
+        icon: jellyfin
+        server: local
+        container: jellyfin-exporter
+    - qBittorrent Exporter:
+        description: Metrics Exporter for qBittorrent
+        icon: qbittorrent
+        server: local
+        container: qbittorrent-exporter
+    - Scraparr:
+        description: Metrics Exporter for the *arr Suite
+        icon: sh-scraparr
+        server: local
+        container: scraparr
 
 - Networking:
     - Pi-Hole:
