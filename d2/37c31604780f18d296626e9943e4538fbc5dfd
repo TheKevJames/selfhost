@@ -1,0 +1,20 @@
+config/homepage/services.yaml
+  s_35b2eddc6a17c1::t_35ff10379bef97 113-124,126-127
+  s_35b2eddc6a17c1::t_c9abcfb1e5aa49 125
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "d237c31604780f18d296626e9943e4538fbc5dfd",
+  "prompts": {},
+  "sessions": {
+    "s_35b2eddc6a17c1": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f237b-6848-788a-b05b-658ace327906",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
