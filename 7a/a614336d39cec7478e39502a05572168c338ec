@@ -1,0 +1,29 @@
+.gitignore
+  s_35b2eddc6a17c1::t_75c82a8e7157c3 9
+config/netdata/go.d/pihole.conf.example
+  s_35b2eddc6a17c1::t_6472ad312587e6 1-14
+README.rst
+  s_35b2eddc6a17c1::t_fbaab3ceb92303 70-85,171-193
+  s_35b2eddc6a17c1::t_13e2624016b406 194
+config/netdata/go.d/prometheus.conf
+  s_35b2eddc6a17c1::t_2f738e16bfab8a 12,15-21
+docker-compose.yml
+  s_35b2eddc6a17c1::t_df1c9585573b9f 8-9,207-217,260-261,345-355,372-388
+  s_35b2eddc6a17c1::t_4ea7f1bb9cdd79 389
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "7aa614336d39cec7478e39502a05572168c338ec",
+  "prompts": {},
+  "sessions": {
+    "s_35b2eddc6a17c1": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f237b-6848-788a-b05b-658ace327906",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
