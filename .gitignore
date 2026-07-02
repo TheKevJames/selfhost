@@ -1,36 +1,35 @@
-# TODO: split config/data folders, consider putting data folders in volumes
-bazarr/*
-caddy/*
-!caddy/Caddyfile
-cloudflared/*
-!cloudflared/config.yml
-homepage/logs/*
-immich/postgres/*
-jellyfin/.aspnet/*
-jellyfin/.cache/*
-jellyfin/cache/*
-jellyfin/data/*
-jellyfin/log/*
-mosura/*
-netdata/.container-hostname
-netdata/.environment
-netdata/.install-type
-netdata/edit-config
-netdata/orig
-n8n/data/*
-n8n/files/*
-!n8n/files/.gitkeep
-pihole/*
-prowlarr/*
-!prowlarr/config.xml
-qbittorrent/cache/*
-qbittorrent/config/qBittorrent-data.conf
-qbittorrent/config/lockfile
-qbittorrent/config/rss/storage.lock
-qbittorrent/data/*
-radarr/*
-!radarr/config.xml
+# Persistence is split into ./config (tracked config) and ./data (runtime
+# state; the single rsync backup target). See BACKUP.md.
+
+# ./config/ is tracked; ignore only the regenerable runtime artifacts some apps
+# write into their config mount.
+/config/caddy/*
+!/config/caddy/Caddyfile
+/config/homepage/logs/
+/config/netdata/.container-hostname
+/config/netdata/.environment
+/config/netdata/.install-type
+/config/netdata/edit-config
+/config/netdata/orig
+
+# ./data/ is runtime state: ignore everything, but keep the directory structure
+# (**/) so the specific app-managed config files tracked in place stay tracked.
+/data/**
+!/data/**/
+!/data/cloudflared/config.yml
+!/data/gerbera/config.xml
+!/data/jellyfin/*.xml
+!/data/jellyfin/logging.default.json
+!/data/jellyfin/.jellyfin-config
+!/data/n8n/data/.gitkeep
+!/data/n8n/files/.gitkeep
+!/data/prowlarr/config.xml
+!/data/radarr/config.xml
+!/data/sonarr/config.xml
+!/data/qbittorrent/config/qBittorrent.conf
+!/data/qbittorrent/config/categories.json
+!/data/qbittorrent/config/watched_folders.json
+!/data/qbittorrent/config/rss/feeds.json
+
+# Secrets: separate encrypted backup channel, never committed.
 secrets/*
-sonarr/*
-!sonarr/config.xml
-syncthing/*
