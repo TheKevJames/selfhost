@@ -1,5 +1,5 @@
 # Persistence is split into ./config (tracked config) and ./data (runtime
-# state; the single rsync backup target). See BACKUP.md.
+# state; the single rsync backup target).
 
 # ./config/ is tracked; ignore only the regenerable runtime artifacts some apps
 # write into their config mount.

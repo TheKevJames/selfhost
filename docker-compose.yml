@@ -399,7 +399,7 @@ services:
       - /mnt/1tb/torrents:/data/torrents
       - ./config/unpackerr:/config:Z
 
-# Persistent app state lives under ./data (see BACKUP.md); these named volumes
+# Persistent app state lives under ./data; these named volumes
 # hold only regenerable caches / runtime scratch and are intentionally excluded
 # from backups.
 volumes:

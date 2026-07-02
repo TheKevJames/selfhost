@@ -82,7 +82,7 @@ repo::
     $ make up
 
 Persistence is organized into three locations, which keeps backup and restore
-simple (see ``BACKUP.md`` for the full breakdown):
+simple:
 
 * ``config/`` -- hand-authored, git-tracked configuration; restored by cloning
   this repo. A few app-managed config files that apps store alongside their
