@@ -70,7 +70,10 @@ repo::
     # metrics: credentials for the exporters/collectors that feed netdata
     # (see "Metrics" below for how each token is routed)
     $ echo 'JELLYFIN_TOKEN="..."'      >> secrets/jellyfin.env       # Jellyfin API key
-    $ echo 'QBITTORRENT_API_KEY="..."' >> secrets/qbittorrent.env    # qBittorrent >= 5.2 API key
+    $ cat >> secrets/qbittorrent.env <<'EOF'                        # WebUI login (avoids a plaintext API key in qBittorrent.conf)
+    QBITTORRENT_USERNAME=...
+    QBITTORRENT_PASSWORD=...
+    EOF
     $ cat >> secrets/scraparr.env <<'EOF'
     BAZARR_API_KEY=...
     PROWLARR_API_KEY=...
@@ -180,8 +183,11 @@ do not speak Prometheus natively get a small sidecar exporter:
   Jellyfin API key in ``secrets/jellyfin.env``.
 * **prowlarr / radarr / sonarr / bazarr** -- one ``scraparr`` container on
   ``:7100`` exports the whole \*arr suite; API keys in ``secrets/scraparr.env``.
-* **qbittorrent** -- ``qbittorrent-exporter`` (martabal) on ``:8090``; API key
-  in ``secrets/qbittorrent.env``.
+* **qbittorrent** -- ``qbittorrent-exporter`` (martabal) on ``:8090``. Auth uses
+  the WebUI username/password (``secrets/qbittorrent.env``) rather than a
+  generated API key, so no plaintext token is written into the tracked
+  ``qBittorrent.conf``; the compose file sets ``QBITTORRENT_COOKIE_NAME`` to the
+  5.2+ session cookie ``QBT_SID_<WebUI-port>``.
 * **syncthing** -- exposes ``/metrics`` natively on ``:8384``; netdata scrapes
   it with the Syncthing API key supplied as a bearer token via the
   ``syncthing_metrics_token`` docker secret.

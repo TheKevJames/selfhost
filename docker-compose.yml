@@ -348,6 +348,10 @@ services:
     restart: unless-stopped
     environment:
       - QBITTORRENT_BASE_URL=http://qbittorrent:8080
+      # Authenticate with username/password rather than a generated API key, so
+      # no plaintext token is written into the tracked qBittorrent.conf. The
+      # 5.2+ session cookie is QBT_SID_<WebUI\Port> (8080 here).
+      - QBITTORRENT_COOKIE_NAME=QBT_SID_8080
     env_file:
       - ./secrets/qbittorrent.env
     depends_on:
