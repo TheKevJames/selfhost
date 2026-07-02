@@ -1,0 +1,19 @@
+.gitignore
+  s_94eaf5bca32a06::t_d2ad81a56056fe 1-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "bb0b1da6809e0a8320293fbfb34b1cccd62c9a38",
+  "prompts": {},
+  "sessions": {
+    "s_94eaf5bca32a06": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f2330-6d7c-7f9c-b3ce-1175ec7b52e2",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
