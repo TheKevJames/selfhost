@@ -295,22 +295,14 @@ credentials: "guest:".
 TODOs
 -----
 
-* use syncthing folder to hold migratable state?
+* backup ``./data`` to a syncthing folder (maybe ``backup``?)
+  * backup ``./secrets`` as well?
 * deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
 * deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
 * deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
 * configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
 * deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
-* backup photos from Google:
-  * consider adding a tagger such as `digikam <https://www.digikam.org/>`_ to embed metadata
-  * consider a simple frontend (photoprism is way too much)
-* configure `notifications <https://github.com/caronc/apprise>`_
-* monitor:
-  * `hard drives <https://github.com/AnalogJ/scrutiny>`_
-  * phone storage
-  * dropbox storage
-  * syncthing storage
-  * and "everything else" via prometheus/grafana
+* monitor cloud storage limits (dropbox, google, anything else?)
 * manage `music <https://lidarr.audio/>`_
 * optimize `transcoding of tv shows and movies <https://home.tdarr.io/>`_
 * selfhost `location sharing <https://github.com/bilde2910/Hauk>`_
