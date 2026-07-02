@@ -1,10 +1,10 @@
 secrets:
   jira_auth_token:
-    file: ./mosura/jira_auth_token
+    file: ./secrets/jira_auth_token
   jira_auth_user:
-    file: ./mosura/jira_auth_user
+    file: ./secrets/jira_auth_user
   jira_domain:
-    file: ./mosura/jira_domain
+    file: ./secrets/jira_domain
 
 services:
   atc1441-exporter:
@@ -17,7 +17,7 @@ services:
     network_mode: host
     privileged: true
     volumes:
-      - ./atc1441/config.ini:/app/config.ini:Z
+      - ./config/atc1441/config.ini:/app/config.ini:Z
 
   bazarr:
     container_name: bazarr
@@ -31,7 +31,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - ./bazarr:/config:Z
+      - ./data/bazarr:/config:Z
       - /mnt/4tb/movies:/data/media/movies
       - /mnt/4tb/shows:/data/media/shows
 
@@ -45,7 +45,7 @@ services:
     env_file:
       - ./secrets/google.env
     volumes:
-      - ./caddy:/config/caddy:Z
+      - ./config/caddy:/config/caddy:Z
 
   # TODO: configure ssh tunneling
   # TODO: consider https://github.com/linuxserver/docker-mods/tree/universal-cloudflared
@@ -55,7 +55,7 @@ services:
     command: tunnel --metrics 0.0.0.0:20241 run
     restart: unless-stopped
     volumes:
-      - ./cloudflared:/home/nonroot/.cloudflared:Z
+      - ./data/cloudflared:/home/nonroot/.cloudflared:Z
 
   docker-socket-proxy:
     container_name: docker-socket-proxy
@@ -103,7 +103,7 @@ services:
       - TZ=Etc/UTC
     network_mode: host
     volumes:
-      - ./gerbera:/etc/gerbera:Z
+      - ./data/gerbera:/etc/gerbera:Z
       - /mnt/4tb/movies:/content/movies:ro
       - /mnt/4tb/shows:/content/shows:ro
       - gerbera:/var/run/gerbera
@@ -119,7 +119,7 @@ services:
     volumes:
       - /mnt/1tb:/mnt/1tb
       - /mnt/4tb:/mnt/4tb
-      - ./homepage:/app/config:Z
+      - ./config/homepage:/app/config:Z
 
   immich-machine-learning:
     container_name: immich-machine-learning
@@ -132,7 +132,7 @@ services:
     restart: always
     user: '1000:1000'
     env_file:
-      - immich/config.env
+      - config/immich/config.env
       - secrets/immich.env
     volumes:
       - model-cache:/cache
@@ -146,10 +146,10 @@ services:
     environment:
       POSTGRES_INITDB_ARGS: '--data-checksums'
     env_file:
-      - immich/config.env
+      - config/immich/config.env
       - secrets/immich.env
     volumes:
-      - ./immich/postgres:/var/lib/postgresql/data
+      - ./data/immich/postgres:/var/lib/postgresql/data
     shm_size: 128mb
     healthcheck:
       disable: false
@@ -172,7 +172,7 @@ services:
     ports:
       - '2283:2283'
     env_file:
-      - immich/config.env
+      - config/immich/config.env
       - secrets/immich.env
     volumes:
       - /mnt/4tb/backup/library:/data
@@ -200,9 +200,9 @@ services:
     volumes:
       - /mnt/4tb/movies:/data/media/movies
       - /mnt/4tb/shows:/data/media/shows
-      - ./jellyfin:/config:Z
+      - ./data/jellyfin:/config:Z
       # https://github.com/linuxserver/docker-jellyfin/blob/master/root/etc/s6-overlay/s6-rc.d/svc-jellyfin/run
-      - jellyfin:/config/data
+      # jellyfin's DB lives at /config/data, now under the ./data/jellyfin bind mount
       - /config/cache
       - /config/log
 
@@ -219,7 +219,7 @@ services:
       - jira_auth_user
       - jira_domain
     volumes:
-      - ./mosura:/data:Z
+      - ./data/mosura:/data:Z
 
   netdata:
     container_name: netdata
@@ -236,7 +236,7 @@ services:
     security_opt:
       - apparmor:unconfined
     volumes:
-      - ./netdata:/etc/netdata:Z
+      - ./config/netdata:/etc/netdata:Z
       - netdata-cache:/var/cache/netdata
       - netdata-lib:/var/lib/netdata
       - /:/host/root:ro,rslave
@@ -270,11 +270,11 @@ services:
       - NODES_EXCLUDE="[]"
       - WEBHOOK_URL=https://n8n.thekev.in/
     volumes:
-      - ./n8n/config:/files
-      - ./n8n/data:/home/node/.n8n
+      - ./config/n8n:/files
+      - ./data/n8n/data:/home/node/.n8n
       # TODO: backup crontab
-      # */1 * * * * cp /proc/net/arp /home/kevin/src/personal/selfhost/n8n/files/host.arp
-      - ./n8n/files:/home/node/.n8n-files
+      # */1 * * * * cp /proc/net/arp /home/kevin/src/personal/selfhost/data/n8n/files/host.arp
+      - ./data/n8n/files:/home/node/.n8n-files
 
   n8n-runners:
     container_name: n8n-runners
@@ -300,8 +300,8 @@ services:
       - DNSMASQ_LISTENING=all
       - TZ=Etc/UTC
     volumes:
-      - ./pihole/config:/etc/pihole:Z
-      - ./pihole/dnsmasq:/etc/dnsmasq.d:Z
+      - ./data/pihole/config:/etc/pihole:Z
+      - ./data/pihole/dnsmasq:/etc/dnsmasq.d:Z
 
   # TODO: https://github.com/thecfu/scraparr
   prowlarr:
@@ -316,7 +316,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - ./prowlarr:/config:Z
+      - ./data/prowlarr:/config:Z
 
   # TODO: https://github.com/esanchezm/prometheus-qbittorrent-exporter or https://github.com/martabal/qbittorrent-exporter
   qbittorrent:
@@ -332,7 +332,7 @@ services:
       - UMASK=002
     volumes:
       - /mnt/1tb/torrents:/data/torrents
-      - ./qbittorrent:/config:Z
+      - ./data/qbittorrent:/config:Z
 
   radarr:
     container_name: radarr
@@ -348,7 +348,7 @@ services:
     volumes:
       - /mnt/1tb/torrents:/data/torrents
       - /mnt/4tb/movies:/data/media/movies
-      - ./radarr:/config:Z
+      - ./data/radarr:/config:Z
 
   sonarr:
     container_name: sonarr
@@ -364,7 +364,7 @@ services:
     volumes:
       - /mnt/1tb/torrents:/data/torrents
       - /mnt/4tb/shows:/data/media/shows
-      - ./sonarr:/config:Z
+      - ./data/sonarr:/config:Z
 
   # TODO: how can we scrape :8384/metrics with auth enabled?
   syncthing:
@@ -384,7 +384,7 @@ services:
     volumes:
       - /mnt/4tb/backup:/data/backup
       - /mnt/4tb/sync:/data/sync
-      - ./syncthing:/config:Z
+      - ./data/syncthing:/config:Z
 
   unpackerr:
     container_name: unpackerr
@@ -397,14 +397,13 @@ services:
       - UMASK=002
     volumes:
       - /mnt/1tb/torrents:/data/torrents
-      - ./unpackerr:/config:Z
+      - ./config/unpackerr:/config:Z
 
-# TODO: either turn these into folders on disk or turn disk folders into docker volumes
-# So long as there's a backup/recovery path, docker volumes are probably more convenient
-# Example volume-based backup usage: https://jellyfin.org/docs/general/administration/backup-and-restore/
+# Persistent app state lives under ./data (see BACKUP.md); these named volumes
+# hold only regenerable caches / runtime scratch and are intentionally excluded
+# from backups.
 volumes:
   gerbera: {}
-  jellyfin: {}
   model-cache: {}
   netdata-cache: {}
   netdata-lib: {}
