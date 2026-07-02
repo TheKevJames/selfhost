@@ -1,0 +1,21 @@
+config/immich/config.env
+  s_94eaf5bca32a06::t_757b1ac776fb2e 4
+docker-compose.yml
+  s_94eaf5bca32a06::t_55ce737645621e 3,5,7,20,34,48,58,106,122,135,149,152,175,203,205,222,239,273-274,276-277,303-304,319,335,351,367,387,400,402-404
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "f65ccf4cb13539bfe4f6c31a3f48d74477f7104a",
+  "prompts": {},
+  "sessions": {
+    "s_94eaf5bca32a06": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f2330-6d7c-7f9c-b3ce-1175ec7b52e2",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
