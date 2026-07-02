@@ -67,6 +67,22 @@ repo::
     $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
     $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
 
+    # metrics: credentials for the exporters/collectors that feed netdata
+    # (see "Metrics" below for how each token is routed)
+    $ echo 'JELLYFIN_TOKEN="..."'      >> secrets/jellyfin.env       # Jellyfin API key
+    $ echo 'QBITTORRENT_API_KEY="..."' >> secrets/qbittorrent.env    # qBittorrent >= 5.2 API key
+    $ cat >> secrets/scraparr.env <<'EOF'
+    BAZARR_API_KEY=...
+    PROWLARR_API_KEY=...
+    RADARR_API_KEY=...
+    SONARR_API_KEY=...
+    EOF
+    $ printf '%s' '...' > secrets/syncthing_metrics_token          # Syncthing GUI API key
+    # Pi-hole uses netdata's native collector; its config carries the password
+    # so it is gitignored -- create it from the committed example:
+    $ cp config/netdata/go.d/pihole.conf.example config/netdata/go.d/pihole.conf
+    $ $EDITOR config/netdata/go.d/pihole.conf   # set the Pi-hole web password
+
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
     # modify data/cloudflared/config.yml with the new UUID
@@ -151,6 +167,30 @@ Pi-Hole
     dig -4 example.com | grep SERVER
     dig -6 example.com | grep SERVER
     # the SERVER should be using the IPv4 and IPv6 addresses you found earlier
+
+Metrics
+~~~~~~~
+
+All metrics funnel into netdata. netdata scrapes Prometheus endpoints via its
+built-in go.d ``prometheus`` collector (``config/netdata/go.d/prometheus.conf``),
+reaching each target by container name on the default compose network. Apps that
+do not speak Prometheus natively get a small sidecar exporter:
+
+* **jellyfin** -- ``jellyfin-exporter`` (rebelcore) on ``:9594``; needs a
+  Jellyfin API key in ``secrets/jellyfin.env``.
+* **prowlarr / radarr / sonarr / bazarr** -- one ``scraparr`` container on
+  ``:7100`` exports the whole \*arr suite; API keys in ``secrets/scraparr.env``.
+* **qbittorrent** -- ``qbittorrent-exporter`` (martabal) on ``:8090``; API key
+  in ``secrets/qbittorrent.env``.
+* **syncthing** -- exposes ``/metrics`` natively on ``:8384``; netdata scrapes
+  it with the Syncthing API key supplied as a bearer token via the
+  ``syncthing_metrics_token`` docker secret.
+* **pihole** -- uses netdata's native ``pihole`` collector (Pi-hole API v6), not
+  a sidecar. Its config lives at ``config/netdata/go.d/pihole.conf`` and is
+  gitignored because it holds the Pi-hole password.
+
+The netdata dashboard (``:19999``) shows each job under *Nodes -> go.d /
+prometheus*; ``docker logs netdata`` surfaces any job that fails to scrape.
 
 Updates
 -------

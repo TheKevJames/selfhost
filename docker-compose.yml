@@ -5,6 +5,8 @@ secrets:
     file: ./secrets/jira_auth_user
   jira_domain:
     file: ./secrets/jira_domain
+  syncthing_metrics_token:
+    file: ./secrets/syncthing_metrics_token
 
 services:
   atc1441-exporter:
@@ -47,7 +49,6 @@ services:
     volumes:
       - ./config/caddy:/config/caddy:Z
 
-  # TODO: configure ssh tunneling
   cloudflared:
     container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2026.6.1@sha256:6d91c121b803126f7a5344005d17a9324788fc09d305b6e2560ec6040a7ae283
@@ -78,7 +79,6 @@ services:
       # TODO: get socket proxy to work
       # - DOCKER_HOST=docker-socket-proxy:2375
       # - DOCKER_TRANSPORT=tcp
-      # TODO: tune this. https://dangrie158.github.io/dolce/latest/configuration/#event-selection
       - DOLCE_EVENTS=start,die,kill,oom,stop,pause,unpause,health_status
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -183,7 +183,6 @@ services:
     healthcheck:
       disable: false
 
-  # TODO: https://github.com/rebelcore/jellyfin_exporter
   jellyfin:
     container_name: jellyfin
     image: quay.io/linuxserver.io/jellyfin:10.11.11
@@ -204,6 +203,17 @@ services:
       # jellyfin's DB lives at /config/data, now under the ./data/jellyfin bind mount
       - /config/cache
       - /config/log
+
+  jellyfin-exporter:
+    container_name: jellyfin-exporter
+    image: docker.io/rebelcore/jellyfin-exporter:v1.5.2
+    restart: unless-stopped
+    environment:
+      - JELLYFIN_ADDRESS=http://jellyfin:8096
+    env_file:
+      - ./secrets/jellyfin.env
+    depends_on:
+      - jellyfin
 
   mosura:
     container_name: mosura
@@ -247,6 +257,8 @@ services:
       - /run/dbus:/run/dbus:ro
       - /sys:/host/sys:ro
       - /var/log:/host/var/log:ro
+    secrets:
+      - syncthing_metrics_token
 
   n8n:
     container_name: n8n
@@ -286,7 +298,6 @@ services:
     depends_on:
       - n8n
 
-  # TODO: https://github.com/eko/pihole-exporter
   pihole:
     container_name: pihole
     image: docker.io/pihole/pihole:2026.06.0
@@ -302,7 +313,6 @@ services:
       - ./data/pihole/config:/etc/pihole:Z
       - ./data/pihole/dnsmasq:/etc/dnsmasq.d:Z
 
-  # TODO: https://github.com/thecfu/scraparr
   prowlarr:
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:2.4.0
@@ -317,7 +327,6 @@ services:
     volumes:
       - ./data/prowlarr:/config:Z
 
-  # TODO: https://github.com/esanchezm/prometheus-qbittorrent-exporter or https://github.com/martabal/qbittorrent-exporter
   qbittorrent:
     container_name: qbittorrent
     image: ghcr.io/hotio/qbittorrent:release-5.2.2
@@ -332,6 +341,17 @@ services:
     volumes:
       - /mnt/1tb/torrents:/data/torrents
       - ./data/qbittorrent:/config:Z
+
+  qbittorrent-exporter:
+    container_name: qbittorrent-exporter
+    image: ghcr.io/martabal/qbittorrent-exporter:v2.0.1
+    restart: unless-stopped
+    environment:
+      - QBITTORRENT_BASE_URL=http://qbittorrent:8080
+    env_file:
+      - ./secrets/qbittorrent.env
+    depends_on:
+      - qbittorrent
 
   radarr:
     container_name: radarr
@@ -349,6 +369,24 @@ services:
       - /mnt/4tb/movies:/data/media/movies
       - ./data/radarr:/config:Z
 
+  # Single exporter for the *arr suite (prowlarr, radarr, sonarr, bazarr).
+  scraparr:
+    container_name: scraparr
+    image: ghcr.io/thecfu/scraparr:3.0.3
+    restart: unless-stopped
+    environment:
+      - BAZARR_URL=http://bazarr:6767
+      - PROWLARR_URL=http://prowlarr:9696
+      - RADARR_URL=http://radarr:7878
+      - SONARR_URL=http://sonarr:8989
+    env_file:
+      - ./secrets/scraparr.env
+    depends_on:
+      - bazarr
+      - prowlarr
+      - radarr
+      - sonarr
+
   sonarr:
     container_name: sonarr
     image: quay.io/linuxserver.io/sonarr:4.0.19
@@ -365,7 +403,6 @@ services:
       - /mnt/4tb/shows:/data/media/shows
       - ./data/sonarr:/config:Z
 
-  # TODO: how can we scrape :8384/metrics with auth enabled?
   syncthing:
     container_name: syncthing
     image: quay.io/linuxserver.io/syncthing:2.1.1

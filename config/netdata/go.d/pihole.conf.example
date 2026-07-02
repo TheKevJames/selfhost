@@ -1,0 +1,14 @@
+## Native netdata Pi-hole collector (Pi-hole API v6+).
+## https://github.com/netdata/netdata/tree/master/src/go/plugin/go.d/collector/pihole
+##
+## This example is committed; the real config carries the Pi-hole web/app
+## password, which is a credential and must never be committed. On the deploy
+## host, copy this file to `pihole.conf` (gitignored) and fill in the password:
+##
+##   cp config/netdata/go.d/pihole.conf.example config/netdata/go.d/pihole.conf
+##   $EDITOR config/netdata/go.d/pihole.conf
+
+jobs:
+  - name: pihole
+    url: 'http://pihole'
+    password: 'YOUR_PIHOLE_WEB_PASSWORD'

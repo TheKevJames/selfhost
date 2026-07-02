@@ -6,6 +6,7 @@
 /config/caddy/*
 !/config/caddy/Caddyfile
 /config/homepage/logs/
+/config/netdata/go.d/pihole.conf
 /config/netdata/.container-hostname
 /config/netdata/.environment
 /config/netdata/.install-type
