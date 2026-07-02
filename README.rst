@@ -67,9 +67,9 @@ repo::
     $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
     $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
 
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
-    $ docker run --rm -it -v $PWD/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
-    # modify cloudflared/config.yml with the new UUID
+    $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
+    $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
+    # modify data/cloudflared/config.yml with the new UUID
     $ bin/cloudflare-expose example.com
     $ bin/cloudflare-expose foo.example.com
     $ bin/cloudflare-expose bar.example.com
@@ -81,15 +81,35 @@ repo::
     $ make pull
     $ make up
 
-If this if the first time setup on a new machine and you want to migrate off a
-previous one, using rsync on the relevant app directory should do the trick
-(before you start the relevant pod, but after shutting it down on the old
-host!)::
+Persistence is organized into three locations, which keeps backup and restore
+simple (see ``BACKUP.md`` for the full breakdown):
 
-    rsync -aP oldhost:~/src/personal/selfhost/foobar/ foobar
+* ``config/`` -- hand-authored, git-tracked configuration; restored by cloning
+  this repo. A few app-managed config files that apps store alongside their
+  runtime state instead live under ``data/`` but stay git-tracked in place.
+* ``data/`` -- all runtime state (databases, indexes, tunnel credentials). This
+  is the single directory to back up; rsync it to your backup target::
 
-If you did this, you may need to force Jellyfin to re-init by modifying
-``jellyfin/system.xml`` to have::
+      rsync -aHAX --delete data/ backup-host:/backups/selfhost/data/
+
+* ``secrets/`` -- env-file credentials, backed up on a separate (encrypted)
+  channel::
+
+      rsync -aHAX --delete secrets/ encrypted-host:/backups/selfhost/secrets/
+
+To migrate onto a new machine (or restore from backup), stop the stack on the
+old host, then clone this repo and pull the state back down (before you ``make
+up``)::
+
+    rsync -aP oldhost:~/src/personal/selfhost/data/    data/
+    rsync -aP oldhost:~/src/personal/selfhost/secrets/ secrets/
+
+Because ``data/`` already contains the cloudflared tunnel credentials, a
+restore does not need the ``tunnel login`` / ``tunnel create`` steps above --
+those are only for standing up a brand-new tunnel.
+
+If you migrated Jellyfin, you may need to force it to re-init by modifying
+``data/jellyfin/system.xml`` to have::
 
     <IsStartupWizardCompleted>false</IsStartupWizardCompleted>
 
