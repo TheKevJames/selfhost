@@ -1,0 +1,19 @@
+README.rst
+  s_94eaf5bca32a06::t_4cc6c790206b82 70-72,84-85,87-91,93-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "a9f1db5484c23b9ff4226eb4d21f48cb159fbcb1",
+  "prompts": {},
+  "sessions": {
+    "s_94eaf5bca32a06": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f2330-6d7c-7f9c-b3ce-1175ec7b52e2",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
