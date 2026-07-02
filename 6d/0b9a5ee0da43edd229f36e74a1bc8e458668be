@@ -1,0 +1,23 @@
+README.rst
+  s_94eaf5bca32a06::t_fc51fc746b0093 85
+.gitignore
+  s_94eaf5bca32a06::t_240a62a34c11dc 2
+docker-compose.yml
+  s_94eaf5bca32a06::t_223e802a25b355 402
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "6d0b9a5ee0da43edd229f36e74a1bc8e458668be",
+  "prompts": {},
+  "sessions": {
+    "s_94eaf5bca32a06": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f2330-6d7c-7f9c-b3ce-1175ec7b52e2",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
