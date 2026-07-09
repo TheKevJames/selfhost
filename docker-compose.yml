@@ -300,7 +300,7 @@ services:
 
   pihole:
     container_name: pihole
-    image: docker.io/pihole/pihole:2026.06.0
+    image: docker.io/pihole/pihole:2026.07.2
     restart: unless-stopped
     ports:
       - 53:53/tcp
