@@ -1,0 +1,32 @@
+Makefile
+  s_26bdaef7944e54::t_16f9eb612a9223 9
+  s_88066f525c9329::t_a8632402c7cf3e 35-36
+.gitattributes
+  s_26bdaef7944e54::t_732e8f2ee24ef3 1-7
+README.rst
+  s_26bdaef7944e54::t_8c11faf2e244e4 96
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "6b38e5ce18228211133d0f66b3179756b5568eff",
+  "prompts": {},
+  "sessions": {
+    "s_26bdaef7944e54": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f6245-eee4-757b-857c-9763179bbd71",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    },
+    "s_88066f525c9329": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019f61c2-e266-7cd8-a62d-9897c34de788",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
