@@ -63,6 +63,7 @@ services:
     restart: unless-stopped
     environment:
       - CONTAINERS=1
+      - INFO=1
       - POST=0
       - SERVICES=0
       - TASKS=0
@@ -76,9 +77,8 @@ services:
     env_file:
       - ./secrets/dolce.env
     environment:
-      # TODO: get socket proxy to work
-      # - DOCKER_HOST=docker-socket-proxy:2375
-      # - DOCKER_TRANSPORT=tcp
+      - DOCKER_HOST=docker-socket-proxy:2375
+      - DOCKER_TRANSPORT=tcp
       - DOLCE_EVENTS=start,die,kill,oom,stop,pause,unpause,health_status
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
