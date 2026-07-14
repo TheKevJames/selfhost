@@ -6,7 +6,7 @@ else
 	COMPOSE := docker compose
 endif
 
-.PHONY: down ps pull restart start stop up logs logsf init update clean
+.PHONY: down ps pull restart start stop up logs logsf setup init update clean
 
 # docker compose convenience
 down:
@@ -32,6 +32,8 @@ logsf:
 init:
 	sudo cp sys/daemon.json /etc/docker/daemon.json
 	sudo systemctl restart docker
+	git config filter.qbt-strip.clean "sed '/^Cookies=@Invalid()[[:space:]]*$$/d'"
+	git add --renormalize data/qbittorrent/config/qBittorrent.conf
 
 update:
 	sudo apt update -y

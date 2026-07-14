@@ -1,0 +1,7 @@
+# qBittorrent owns qBittorrent.conf at runtime and rewrites the
+# [Network]\Cookies key as an empty QVariant ("@Invalid()") whenever its cookie
+# store is empty, causing that line to flicker in/out of diffs. Strip it via a
+# clean filter so the committed form stays stable. The filter must be
+# configured per checkout (git will not load filters from a repo); see the
+# "init" target in the Makefile / the Setup section in README.rst.
+/data/qbittorrent/config/qBittorrent.conf filter=qbt-strip

@@ -93,7 +93,7 @@ repo::
     $ bin/cloudflare-expose foo.example.com
     $ bin/cloudflare-expose bar.example.com
 
-    # configure docker
+    # configure docker and one-off configs
     $ make init
 
     # start images
