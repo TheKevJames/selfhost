@@ -105,6 +105,11 @@
         icon: netdata
         server: local
         container: netdata
+    - Dolce:
+        description: Docker Container Event Notifications
+        icon: mdi-bell-alert
+        server: local
+        container: dolce
     - ATC1441 Exporter:
         description: Monitoring Agent for ATC1441 Sensors
         icon: mdi-thermometer
@@ -181,6 +186,8 @@
         icon: syncthing
         server: local
         container: syncthing
+
+- Internal:
     - Immich Machine Learning:
         description: Immich Machine Learning
         icon: immich
@@ -196,3 +203,13 @@
         icon: postgres
         server: local
         container: immich-postgres
+    - Docker Socket Proxy:
+        description: Restricted Docker API Proxy
+        icon: mdi-docker
+        server: local
+        container: docker-socket-proxy
+    - N8N Runners:
+        description: N8N Task Runner
+        icon: n8n
+        server: local
+        container: n8n-runners
