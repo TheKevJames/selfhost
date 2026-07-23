@@ -315,7 +315,7 @@ services:
 
   prowlarr:
     container_name: prowlarr
-    image: quay.io/linuxserver.io/prowlarr:2.4.0
+    image: quay.io/linuxserver.io/prowlarr:2.5.2
     restart: unless-stopped
     ports:
       - 9696:9696/tcp
