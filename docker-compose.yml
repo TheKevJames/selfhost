@@ -375,7 +375,7 @@ services:
 
   scraparr:
     container_name: scraparr
-    image: ghcr.io/thecfu/scraparr:3.0.3
+    image: ghcr.io/thecfu/scraparr:3.1.0
     restart: unless-stopped
     environment:
       - BAZARR_URL=http://bazarr:6767
