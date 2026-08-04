@@ -129,6 +129,8 @@ services:
     #   file: hwaccel.ml.yml
     #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     restart: always
+    cpus: 0.5
+    cpu_shares: 256
     user: '1000:1000'
     env_file:
       - config/immich/config.env
@@ -410,6 +412,8 @@ services:
     container_name: syncthing
     image: quay.io/linuxserver.io/syncthing:2.1.2
     restart: unless-stopped
+    cpus: 0.5
+    cpu_shares: 256
     ports:
       - 8384:8384
       - 22000:22000/tcp
