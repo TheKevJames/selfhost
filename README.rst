@@ -48,6 +48,21 @@ where your default swapfile lives on an SD card::
     sudo dphys-swapfile swapon
     sudo poweroff --reboot
 
+Or, when not running on a Raspbian-like::
+
+    sudo fallocate -l 3G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=3072
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+If your swap partition lives on a eMMC or SD card, you should also considering
+lowering your swapiness (to prefer reclaiming cache over paging, and reduce
+wear)::
+
+    echo 'vm.swappiness=20' | sudo tee /etc/sysctl.d/99-swappiness.conf
+    sudo sysctl --system
+
 Now, install your container manager::
 
     curl -fsSL https://get.docker.com -o get-docker.sh
