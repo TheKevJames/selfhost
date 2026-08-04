@@ -96,6 +96,8 @@ services:
     image: gerbera/gerbera:3.2.1
     command: gerbera -p 49152 -c /etc/gerbera/config.xml
     restart: unless-stopped
+    cpus: 0.5
+    cpu_shares: 768
     environment:
       - PGID=1000
       - PUID=1000
@@ -413,7 +415,7 @@ services:
     image: quay.io/linuxserver.io/syncthing:2.1.2
     restart: unless-stopped
     cpus: 0.5
-    cpu_shares: 256
+    cpu_shares: 512
     ports:
       - 8384:8384
       - 22000:22000/tcp
