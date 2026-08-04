@@ -1,0 +1,14 @@
+README.rst
+  h_b8efbacaba1c31 51-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "48ee65ce8ea9e02b7741df0b968f3733a4a87173",
+  "prompts": {},
+  "humans": {
+    "h_b8efbacaba1c31": {
+      "author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
