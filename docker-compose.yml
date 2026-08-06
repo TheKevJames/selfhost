@@ -270,6 +270,9 @@ services:
     restart: unless-stopped
     environment:
       - GENERIC_TIMEZONE=Etc/UTC
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=1000
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
       - N8N_METRICS=true
       - N8N_METRICS_INCLUDE_QUEUE_METRICS=true
