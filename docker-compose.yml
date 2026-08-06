@@ -387,9 +387,16 @@ services:
     restart: unless-stopped
     environment:
       - BAZARR_URL=http://bazarr:6767
+      - BAZARR_INTERVAL=300
       - PROWLARR_URL=http://prowlarr:9696
+      - PROWLARR_INTERVAL=300
       - RADARR_URL=http://radarr:7878
+      - RADARR_INTERVAL=300
       - SONARR_URL=http://sonarr:8989
+      - SONARR_INTERVAL=300
+      # Skips the per-series episode-file walk (one API call per series each scrape),
+      # which is the dominant CPU cost of scraping Sonarr.
+      - SONARR_EPISODE_QUALITY_STATS=false
     env_file:
       - ./secrets/scraparr.env
     depends_on:
