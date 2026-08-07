@@ -1,0 +1,19 @@
+Makefile
+  s_24250b89117568::t_8e7caf075f5ddf 35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "ea6fd3acaea49f77b0d84c0c38982997d71048cf",
+  "prompts": {},
+  "sessions": {
+    "s_24250b89117568": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fdca2-3942-741f-8166-96c63871c58a",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
