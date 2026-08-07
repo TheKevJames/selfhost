@@ -1,0 +1,14 @@
+config/immich/config.env
+  h_b8efbacaba1c31 17-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "9323528714b9b422f773e3ff4c01a2a64dd7271e",
+  "prompts": {},
+  "humans": {
+    "h_b8efbacaba1c31": {
+      "author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
