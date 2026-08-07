@@ -1,0 +1,14 @@
+docker-compose.yml
+  h_b8efbacaba1c31 135
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "5c6cfd19b478f1bccbdc58b27f1f3e8eeb414e7f",
+  "prompts": {},
+  "humans": {
+    "h_b8efbacaba1c31": {
+      "author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
