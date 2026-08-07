@@ -80,6 +80,10 @@ services:
       - DOCKER_HOST=docker-socket-proxy:2375
       - DOCKER_TRANSPORT=tcp
       - DOLCE_EVENTS=start,die,kill,oom,stop,pause,unpause,health_status
+      # MULTIPLIER=1 keeps the notification delay flat at MIN_TIMEOUT instead of
+      # exponentially backing off into hours-long batches during event bursts.
+      - DOLCE_MULTIPLIER=1
+      - DOLCE_MIN_TIMEOUT=10
       - TZ=Etc/UTC
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
