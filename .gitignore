@@ -19,6 +19,11 @@
 !/data/**/
 !/data/cloudflared/config.yml
 !/data/gerbera/config.xml
+# Postgres creates this as 0700 owned by the container UID, so letting git
+# descend into this fails with EACCESS. Ignoring this is strictly to speed up
+# git operations and silence the error. TODO: consider changing the container
+# details to use the correct uid instead.
+/data/immich/postgres/
 !/data/jellyfin/*.xml
 !/data/jellyfin/logging.default.json
 !/data/jellyfin/.jellyfin-config
