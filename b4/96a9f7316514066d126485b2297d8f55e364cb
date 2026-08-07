@@ -1,0 +1,19 @@
+docker-compose.yml
+  s_0acebc826ee35e::t_e9ede7687c5b5d 83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "b496a9f7316514066d126485b2297d8f55e364cb",
+  "prompts": {},
+  "sessions": {
+    "s_0acebc826ee35e": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fd767-359f-72e0-bb3b-2f15f467c6fd",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
