@@ -32,7 +32,7 @@ logsf:
 init:
 	sudo cp sys/daemon.json /etc/docker/daemon.json
 	sudo systemctl restart docker
-	git config filter.qbt-strip.clean "sed '/^Cookies=@Invalid()[[:space:]]*$$/d'"
+	git config filter.qbt-strip.clean "sed -e '/^Cookies=@Invalid()[[:space:]]*$$/d' -e 's/^Session\\\\UseAlternativeGlobalSpeedLimit=.*/Session\\\\UseAlternativeGlobalSpeedLimit=false/'"
 	git add --renormalize data/qbittorrent/config/qBittorrent.conf
 
 update:
