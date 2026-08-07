@@ -80,6 +80,7 @@ services:
       - DOCKER_HOST=docker-socket-proxy:2375
       - DOCKER_TRANSPORT=tcp
       - DOLCE_EVENTS=start,die,kill,oom,stop,pause,unpause,health_status
+      - TZ=Etc/UTC
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
