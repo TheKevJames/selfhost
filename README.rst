@@ -71,9 +71,18 @@ Now, install your container manager::
     sudo groupadd docker
     sudo usermod -aG docker $USER  # then logout / login
 
+    sudo usermod -aG systemd-journal $USER  # if you want sudo-less journald access
+    sudo usermod -aG adm $USER  # if you want sudo-less /var/log access
+
     # on OSX, use colima for your Docker VM backend to avoid needing Docker for
     # OSX:
     https://github.com/abiosoft/colima
+
+You may also want to set up NTP. This is especially necessary if this machine
+will be handling any auth, as handshakes will fail if your clock drifts too far
+out of sync::
+
+    sudo apt install ntp
 
 Once you've got a container manager, you can spin up everything defined in this
 repo::
@@ -151,12 +160,6 @@ There are also some manual steps which you may want to do included below.
 
 * syncthing: visit the web UI and share any folders
 * pihole: ``docker logs pihole | grep random`` to get your password
-
-You may also want to set up NTP. This is especially necessary if this machine
-will be handling any auth, as handshakes will fail if your clock drifts too far
-out of sync::
-
-    sudo apt install ntp
 
 Syncthing
 ~~~~~~~~~
