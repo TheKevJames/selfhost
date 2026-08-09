@@ -317,21 +317,6 @@ services:
     depends_on:
       - n8n
 
-  pihole:
-    container_name: pihole
-    image: docker.io/pihole/pihole:2026.07.2
-    restart: unless-stopped
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 8888:80
-    environment:
-      - DNSMASQ_LISTENING=all
-      - TZ=Etc/UTC
-    volumes:
-      - ./data/pihole/config:/etc/pihole:Z
-      - ./data/pihole/dnsmasq:/etc/dnsmasq.d:Z
-
   prowlarr:
     container_name: prowlarr
     image: quay.io/linuxserver.io/prowlarr:2.5.2

@@ -105,10 +105,6 @@ repo::
     SONARR_API_KEY=...
     EOF
     $ printf '%s' '...' > secrets/syncthing_metrics_token          # Syncthing GUI API key
-    # Pi-hole uses netdata's native collector; its config carries the password
-    # so it is gitignored -- create it from the committed example:
-    $ cp config/netdata/go.d/pihole.conf.example config/netdata/go.d/pihole.conf
-    $ $EDITOR config/netdata/go.d/pihole.conf   # set the Pi-hole web password
 
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
@@ -159,35 +155,11 @@ If you migrated Jellyfin, you may need to force it to re-init by modifying
 There are also some manual steps which you may want to do included below.
 
 * syncthing: visit the web UI and share any folders
-* pihole: ``docker logs pihole | grep random`` to get your password
 
 Syncthing
 ~~~~~~~~~
 
 Visit ``:8384`` and set up any relevant shares.
-
-Pi-Hole
-~~~~~~~
-
-::
-
-    # grab your admin password, configure settings in the web ui
-    docker logs pihole | grep random
-
-    # verify it works
-    dig -4 @NODEIPv4 example.com
-    # NODEIPv6=$( ip -6 addr show | awk '/global/ {print $2}'
-    dig -4 @NODEIPv6 example.com
-
-    # make your router/hosts/etc use pihole dns
-    # https://docs.pi-hole.net/main/post-install/
-    # note that if you want fallback DNS addresses, I like Cloudflare:
-    #   1.1.1.1, 1.0.0.1
-    #   2606:4700:4700::1111, 2606:4700:4700::1001
-    # verify it's configured:
-    dig -4 example.com | grep SERVER
-    dig -6 example.com | grep SERVER
-    # the SERVER should be using the IPv4 and IPv6 addresses you found earlier
 
 Metrics
 ~~~~~~~
@@ -209,9 +181,6 @@ do not speak Prometheus natively get a small sidecar exporter:
 * **syncthing** -- exposes ``/metrics`` natively on ``:8384``; netdata scrapes
   it with the Syncthing API key supplied as a bearer token via the
   ``syncthing_metrics_token`` docker secret.
-* **pihole** -- uses netdata's native ``pihole`` collector (Pi-hole API v6), not
-  a sidecar. Its config lives at ``config/netdata/go.d/pihole.conf`` and is
-  gitignored because it holds the Pi-hole password.
 * **ping** -- netdata's native ``ping`` collector (``config/netdata/go.d/ping.conf``)
   samples RTT + packet loss to the LAN gateway and the internet. Paired with the
   native ``net.*`` (interface throughput) and ``nf_conntrack`` charts, it shows
@@ -348,7 +317,7 @@ TODOs
   * `mirroring script <https://github.com/beefsack/git-mirror>`_
   * or maybe use `forgejo <https://forgejo.org/>`_ and `mirror this way <https://forgejo.org/docs/latest/user/repo-mirror/>`_
 * create jellyfin playlists for shows/movies with non-standard viewing orders, eg. `babylon 5 <https://www.b5tv.com/threads/jms-viewing-order.11675/>`_, `bsg <https://torrentday.cool/details.php?id=2272345>`_, `stargate <https://www.gateworld.net/news/2021/04/stargate-watch-order-three-ways-enjoy-entire-franchise/>`_
-* consider pihole -> technitium
+* consider re-introducing pihole, or an alternative such as technitium
 
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual

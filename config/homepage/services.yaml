@@ -132,17 +132,6 @@
         container: scraparr
 
 - Networking:
-    - Pi-Hole:
-        href: http://192.168.1.75:8888/admin/
-        description: Pi-Hole Admin Portal
-        icon: pi-hole
-        server: local
-        container: pihole
-        widget:
-          type: pihole
-          url: http://192.168.1.75:8888
-          version: 6
-          key: "{{HOMEPAGE_VAR_PIHOLE_KEY}}"
     - Gerbera:
         href: http://192.168.1.75:49152/
         description: UPnP Server
