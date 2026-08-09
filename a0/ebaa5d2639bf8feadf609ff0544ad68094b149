@@ -1,0 +1,23 @@
+config/netdata/go.d/ping.conf
+  s_228a924319ddfe::t_c7fad2a6eec20d 1-34
+config/netdata/health.d/ping-bufferbloat.conf
+  s_228a924319ddfe::t_9b5f9378caadea 1-33
+README.rst
+  s_228a924319ddfe::t_fc68b2dff78fdf 215-221
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "a0ebaa5d2639bf8feadf609ff0544ad68094b149",
+  "prompts": {},
+  "sessions": {
+    "s_228a924319ddfe": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fe6e0-4363-7a41-9946-ad978b6a1803",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
