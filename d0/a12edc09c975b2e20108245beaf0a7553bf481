@@ -1,0 +1,27 @@
+sys/jellyfin-log-alert.timer
+  s_febbeb4353e091::t_932eef02054eaf 1-10
+Makefile
+  s_febbeb4353e091::t_2db0d7a3800687 9,32,35-36,40-45
+bin/jellyfin-log-alert
+  s_febbeb4353e091::t_90536193adef71 34,36-37
+  s_febbeb4353e091::t_ed60e7ee0ae42f 1-24,26-33,35,38-46,49-54,57,66-69,76-80,87-89,97-99,107-109,112-114
+  s_febbeb4353e091::t_7d042692d60935 25,47-48,55-56,58-65,70-75,81-86,90-96,100-106,110-111
+sys/jellyfin-log-alert.service
+  s_febbeb4353e091::t_23baa273667628 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "d0a12edc09c975b2e20108245beaf0a7553bf481",
+  "prompts": {},
+  "sessions": {
+    "s_febbeb4353e091": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "019fe6b0-4e7e-75e9-9082-4918a03b9c4b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
