@@ -1,0 +1,11 @@
+[Unit]
+Description=Jellyfin client-connectivity log alerter (clustered WS/socket errors -> Discord)
+After=docker.service
+Wants=docker.service
+
+[Service]
+Type=oneshot
+User=@USER@
+# Creates /var/lib/jellyfin-log-alert owned by User and exports $STATE_DIRECTORY.
+StateDirectory=jellyfin-log-alert
+ExecStart=@REPO@/bin/jellyfin-log-alert
