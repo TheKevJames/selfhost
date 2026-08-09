@@ -212,6 +212,13 @@ do not speak Prometheus natively get a small sidecar exporter:
 * **pihole** -- uses netdata's native ``pihole`` collector (Pi-hole API v6), not
   a sidecar. Its config lives at ``config/netdata/go.d/pihole.conf`` and is
   gitignored because it holds the Pi-hole password.
+* **ping** -- netdata's native ``ping`` collector (``config/netdata/go.d/ping.conf``)
+  samples RTT + packet loss to the LAN gateway and the internet. Paired with the
+  native ``net.*`` (interface throughput) and ``nf_conntrack`` charts, it shows
+  WAN bufferbloat -- latency spiking while the uplink saturates -- which is the
+  leading suspect for clients failing WiFi connectivity checks. Runs in
+  unprivileged (UDP) mode (``privileged: no``) because the container lacks
+  ``CAP_NET_RAW``; this relies on the host's ``net.ipv4.ping_group_range``.
 
 The netdata dashboard (``:19999``) shows each job under *Nodes -> go.d /
 prometheus*; ``docker logs netdata`` surfaces any job that fails to scrape.
