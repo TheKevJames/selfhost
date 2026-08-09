@@ -213,6 +213,12 @@ services:
       # jellyfin's DB lives at /config/data, now under the ./data/jellyfin bind mount
       - /config/cache
       - /config/log
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8096/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
 
   jellyfin-exporter:
     container_name: jellyfin-exporter

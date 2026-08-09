@@ -1,0 +1,10 @@
+# Overrides for netdata's stock health_alarm_notify.conf. alarm-notify.sh
+# sources the stock file first and this one second, so we only set the Discord
+# bits here rather than copying the full ~1300-line stock config.
+#
+# Deploy: copy this file to health_alarm_notify.conf (gitignored) alongside it
+# and fill in DISCORD_WEBHOOK_URL.
+
+SEND_DISCORD="YES"
+DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/XXXXXXXX/YYYYYYYY"
+DEFAULT_RECIPIENT_DISCORD="alarms"
