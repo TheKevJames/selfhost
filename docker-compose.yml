@@ -250,6 +250,7 @@ services:
     container_name: netdata
     image: netdata/netdata:v2.11.0
     restart: unless-stopped
+    cpu_shares: 1152
     init: true
     ports:
       - 19999:19999
