@@ -90,7 +90,7 @@ services:
 
   fava:
     container_name: fava
-    image: quay.io/thekevjames/fava:1.30.15
+    image: quay.io/thekevjames/fava:1.30.16
     command: /data/finance/index.beancount
     restart: unless-stopped
     volumes:
