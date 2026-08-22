@@ -1,0 +1,23 @@
+docker-compose.yml
+  s_603f97653e238f::t_f5e20ae7455621 259-260
+config/homepage/services.yaml
+  s_603f97653e238f::t_13a61c6c3b9ebe 41,52,63,75,87,171
+config/netdata/go.d/prometheus.conf
+  s_603f97653e238f::t_bc686b03a8de45 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.23",
+  "base_commit_sha": "c8fbdf4539ec45e9803dea2a523813ef03019982",
+  "prompts": {},
+  "sessions": {
+    "s_603f97653e238f": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0298b-ba32-7c89-9681-73501a486125",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": null
+    }
+  }
+}
