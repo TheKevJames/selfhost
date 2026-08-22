@@ -38,7 +38,7 @@
         container: radarr
         widget:
           type: radarr
-          url: http://192.168.1.75:7878
+          url: http://radarr:7878
           key: "{{HOMEPAGE_VAR_RADARR_KEY}}"
           enableQueue: false
     - Sonarr:
@@ -49,7 +49,7 @@
         container: sonarr
         widget:
           type: sonarr
-          url: http://192.168.1.75:8989
+          url: http://sonarr:8989
           key: "{{HOMEPAGE_VAR_SONARR_KEY}}"
           enableQueue: false
     - Bazarr:
@@ -60,7 +60,7 @@
         container: bazarr
         widget:
           type: bazarr
-          url: http://192.168.1.75:6767
+          url: http://bazarr:6767
           key: "{{HOMEPAGE_VAR_BAZARR_KEY}}"
 
 - Torrents:
@@ -72,7 +72,7 @@
         container: qbittorrent
         widget:
           type: qbittorrent
-          url: http://192.168.1.75:8089
+          url: http://qbittorrent:8080
           username: "{{HOMEPAGE_VAR_QBITTORRENT_USER}}"
           password: "{{HOMEPAGE_VAR_QBITTORRENT_PASS}}"
           enableLeechProgress: false
@@ -84,7 +84,7 @@
         container: prowlarr
         widget:
           type: prowlarr
-          url: http://192.168.1.75:9696
+          url: http://prowlarr:9696
           key: "{{HOMEPAGE_VAR_PROWLARR_KEY}}"
     - Unpackerr:
         description: Archive Auto-Extraction
@@ -168,7 +168,7 @@
         container: caddy
         widget:
           type: caddy
-          url: http://192.168.1.75:2019
+          url: http://caddy:2019
     - Syncthing:
         href: http://192.168.1.75:8384/
         description: Syncthing
