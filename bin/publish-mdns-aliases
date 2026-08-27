@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Publishes per-service mDNS (.local) aliases pointing at this host, so LAN
+# clients can reach services by name (e.g. jellyfin.local) instead of a
+# hardcoded IP. avahi-utils ships no CNAME publisher, so we register address
+# records via `avahi-publish -a` and derive the host IP at runtime -- keeping
+# the repo IP-free and self-healing across DHCP address changes.
+set -euo pipefail
+
+CONF="${1:?usage: publish-mdns-aliases <conf>}"
+IP="$(ip -4 route get 1.1.1.1 | awk '{print $7; exit}')"
+
+pids=()
+trap 'kill "${pids[@]}" 2>/dev/null || true' EXIT
+
+while read -r name; do
+    [[ -z "$name" || "$name" == \#* ]] && continue
+    # -R: suppress the reverse PTR; this host already owns the IP's PTR.
+    avahi-publish -a -R "${name}.local" "$IP" &
+    pids+=("$!")
+done < "$CONF"
+
+# If any publisher drops (e.g. avahi restart), exit so systemd restarts us
+# and the IP is re-derived.
+wait -n "${pids[@]}"

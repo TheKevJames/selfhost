@@ -19,7 +19,7 @@
 
 - Media:
     - Jellyfin:
-        href: http://192.168.1.75:8096/
+        href: http://jellyfin.local:8096/
         description: Media Server
         icon: jellyfin
         server: local
@@ -133,7 +133,7 @@
 
 - Networking:
     - Gerbera:
-        href: http://192.168.1.75:49152/
+        href: http://gerbera.local:49152/
         description: UPnP Server
         icon: gerbera
         server: local
@@ -170,7 +170,7 @@
           type: caddy
           url: http://caddy:2019
     - Syncthing:
-        href: http://192.168.1.75:8384/
+        href: http://syncthing.local:8384/
         description: Syncthing
         icon: syncthing
         server: local

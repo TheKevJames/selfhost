@@ -1,0 +1,13 @@
+[Unit]
+Description=Publish per-service mDNS (.local) aliases for LAN access
+After=avahi-daemon.service
+BindsTo=avahi-daemon.service
+
+[Service]
+User=@USER@
+ExecStart=@REPO@/bin/publish-mdns-aliases @REPO@/sys/mdns-aliases.conf
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
