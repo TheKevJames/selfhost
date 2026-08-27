@@ -1,0 +1,28 @@
+bin/publish-mdns-aliases
+  s_603f97653e238f::t_97b1a531c362ac 1-24
+sys/mdns-aliases.conf
+  s_603f97653e238f::t_c99bf3c1e386c1 1-4
+Makefile
+  s_603f97653e238f::t_100c3006df64fe 9,32,46-51
+  s_603f97653e238f::t_2eac521e7df002 52
+sys/mdns-aliases.service
+  s_603f97653e238f::t_fa300d1b854c48 1-13
+config/homepage/services.yaml
+  s_603f97653e238f::t_2ab913416e14f4 22,136,173
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.24",
+  "base_commit_sha": "bb392ff210e25a3ebdd39e579dea8d23418aa8d1",
+  "prompts": {},
+  "sessions": {
+    "s_603f97653e238f": {
+      "agent_id": {
+        "tool": "pi",
+        "id": "01a0298b-ba32-7c89-9681-73501a486125",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Kevin James <KevinJames@thekev.in>"
+    }
+  }
+}
