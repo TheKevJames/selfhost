@@ -1,0 +1,11 @@
+[Unit]
+Description=Off-site restic backup to Backblaze B2
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+# Creates /var/lib/backup owned by User and exports $STATE_DIRECTORY (lock file).
+StateDirectory=backup
+ExecStart=@REPO@/bin/backup backup

@@ -126,15 +126,11 @@ simple:
 * ``config/`` -- hand-authored, git-tracked configuration; restored by cloning
   this repo. A few app-managed config files that apps store alongside their
   runtime state instead live under ``data/`` but stay git-tracked in place.
-* ``data/`` -- all runtime state (databases, indexes, tunnel credentials). This
-  is the single directory to back up; rsync it to your backup target::
+* ``data/`` -- all runtime state (databases, indexes, tunnel credentials).
+* ``secrets/`` -- env-file credentials.
 
-      rsync -aHAX --delete data/ backup-host:/backups/selfhost/data/
-
-* ``secrets/`` -- env-file credentials, backed up on a separate (encrypted)
-  channel::
-
-      rsync -aHAX --delete secrets/ encrypted-host:/backups/selfhost/secrets/
+Both ``data/`` and ``secrets/`` are captured by the off-site backup (see
+`Backups`_), which encrypts client-side so they share one repository.
 
 To migrate onto a new machine (or restore from backup), stop the stack on the
 old host, then clone this repo and pull the state back down (before you ``make
@@ -160,6 +156,58 @@ Syncthing
 ~~~~~~~~~
 
 Visit ``:8384`` and set up any relevant shares.
+
+Backups
+~~~~~~~
+
+The irreplaceable data set is pushed nightly to Backblaze B2 with `restic
+<https://restic.net/>`_ (encrypted + deduplicated + snapshotted client-side).
+Sources and exclusions live in ``config/restic/{includes,excludes}.txt``;
+``bin/backup`` runs the backup, prune, and integrity check, and alerts to
+Discord on failure via the same webhook as the other alerters.
+
+What is covered: Immich's originals and its daily SQL dumps
+(``library/backups/``), the non-synced ``library-bigfiles``/``untracked``
+collections, the Syncthing ``sync`` tree, and this repo's ``data/`` and
+``secrets/``. Regenerable Immich derivatives (``encoded-video/``, ``thumbs/``)
+and the live Postgres cluster are excluded -- Immich's dumps are the DB backup,
+so Postgres is never stopped. Re-downloadable media (``movies``, ``shows``,
+``torrents``) is intentionally not backed up.
+
+First-time setup:
+
+#. In the Backblaze console, create a private B2 bucket and an application key
+   scoped to it.
+#. Generate a strong repository password and store it somewhere durable and
+   off-box (a lost password means an unrecoverable repo)::
+
+       openssl rand -base64 32
+
+#. Write the credentials (``secrets/`` is git-ignored). ``bin/backup`` sources
+   this file with bash, so single-quote every value to disable shell expansion::
+
+       cat >> secrets/restic.env <<'EOF'
+       RESTIC_REPOSITORY='b2:YOUR_BUCKET:restic'
+       RESTIC_PASSWORD='...'          # the value generated above
+       B2_ACCOUNT_ID='...'            # application keyID
+       B2_ACCOUNT_KEY='...'           # applicationKey
+       EOF
+
+#. Install restic, the systemd timers, and create the repo::
+
+       make init-backup
+       bin/backup init
+
+#. Kick off the first snapshot (large; run it in ``tmux``)::
+
+       bin/backup backup
+
+The daily timer runs at 04:00 (after Immich's 02:00 dump) and a weekly check
+re-reads 5% of the repository to catch bit rot early. To restore, point restic
+at the repo and browse snapshots::
+
+    bin/backup restic snapshots
+    bin/backup restic restore latest --target /tmp/restore --include /mnt/4tb/sync
 
 Metrics
 ~~~~~~~
@@ -289,8 +337,6 @@ credentials: "guest:".
 TODOs
 -----
 
-* backup ``./data`` to a syncthing folder (maybe ``backup``?)
-  * backup ``./secrets`` as well?
 * deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
 * deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
 * deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_

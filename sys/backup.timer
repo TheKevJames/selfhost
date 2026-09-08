@@ -1,0 +1,10 @@
+[Unit]
+Description=Run the off-site backup daily (after Immich's 02:00 DB dump)
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+RandomizedDelaySec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,12 @@
+# Source paths for the off-site restic backup (see bin/backup). One path per
+# line. The repo's own data/ and secrets/ are appended at runtime by bin/backup
+# so this file stays free of the host-specific home directory.
+#
+# NOTE: /mnt/4tb/backup/library is Immich's storage. It is backed up whole and
+# the regenerable derivatives are dropped via config/restic/excludes.txt; the
+# daily SQL dumps under library/backups/ ride along as the DB backup.
+/mnt/4tb/backup/library
+/mnt/4tb/backup/library-bigfiles
+/mnt/4tb/backup/library-bigfiles-chris
+/mnt/4tb/backup/untracked
+/mnt/4tb/sync

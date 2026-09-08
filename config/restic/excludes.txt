@@ -1,0 +1,11 @@
+# Exclude patterns for the off-site restic backup (see bin/backup).
+
+# Regenerable Immich derivatives -- rebuilt from the originals on demand, so
+# there is no point paying to store them off-site.
+/mnt/4tb/backup/library/encoded-video
+/mnt/4tb/backup/library/thumbs
+
+# Live Postgres cluster: unsafe to snapshot hot and unreadable to this user
+# (0700, owned by the container UID). Immich's daily dumps in
+# library/backups/ are the consistent DB backup, so the raw cluster is dropped.
+**/data/immich/postgres

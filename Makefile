@@ -6,7 +6,7 @@ else
 	COMPOSE := docker compose
 endif
 
-.PHONY: down ps pull restart start stop up logs logsf setup init init-git init-timers init-mdns update clean
+.PHONY: down ps pull restart start stop up logs logsf setup init init-git init-timers init-mdns init-backup update clean
 
 # docker compose convenience
 down:
@@ -29,7 +29,7 @@ logsf:
 	$(COMPOSE) logs -f --tail=30 $(SERVICE)
 
 # misc commands
-init: init-git init-timers init-mdns
+init: init-backup init-git init-timers init-mdns
 	sudo cp sys/daemon.json /etc/docker/daemon.json
 	sudo systemctl restart docker
 
@@ -49,6 +49,16 @@ init-mdns:
 	sed -e 's|@REPO@|$(CURDIR)|g' -e 's|@USER@|$(shell id -un)|g' sys/mdns-aliases.service | sudo tee /etc/systemd/system/mdns-aliases.service >/dev/null
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now mdns-aliases.service
+
+init-backup:
+	sudo apt install -y --no-install-recommends restic
+	sudo restic self-update
+	for u in backup backup-check; do \
+		sed -e 's|@REPO@|$(CURDIR)|g' -e 's|@USER@|$(shell id -un)|g' sys/$$u.service | sudo tee /etc/systemd/system/$$u.service >/dev/null; \
+		sudo cp sys/$$u.timer /etc/systemd/system/$$u.timer; \
+	done
+	sudo systemctl daemon-reload
+	sudo systemctl enable --now backup.timer backup-check.timer
 
 update:
 	sudo apt update -y

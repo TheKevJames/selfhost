@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# Off-site backup of the irreplaceable data set to Backblaze B2 via restic.
+#
+# Backed up (config/restic/includes.txt + this repo's data/ and secrets/):
+# Immich originals and its daily SQL dumps, the non-synced
+# library-bigfiles/untracked collections, the Syncthing `sync` tree, and this
+# repo's runtime state and credentials. Regenerable Immich derivatives
+# (encoded-video/, thumbs/) and the live Postgres cluster are excluded -- see
+# config/restic/excludes.txt -- because Immich's dumps under library/backups/
+# are the real DB backup, so Postgres never has to stop.
+#
+# restic encrypts client-side, so a single repo safely holds secrets/ alongside
+# everything else (superseding the old "separate encrypted channel" split).
+#
+# Subcommands: backup (default) | check | init | restic <args...>
+set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
+STATE_DIR="${STATE_DIRECTORY:-/var/lib/backup}"
+
+INCLUDES="$REPO_DIR/config/restic/includes.txt"
+EXCLUDES="$REPO_DIR/config/restic/excludes.txt"
+RESTIC_ENV="$REPO_DIR/secrets/restic.env"
+DISCORD_ENV="$REPO_DIR/secrets/dolce.env"
+
+log() { printf 'backup: %s\n' "$*" >&2; }
+
+[[ -r "$RESTIC_ENV" ]] || { log "cannot read env file: $RESTIC_ENV"; exit 1; }
+set -a
+# shellcheck source=/dev/null
+. "$RESTIC_ENV"
+set +a
+: "${RESTIC_REPOSITORY:?not set in $RESTIC_ENV}"
+: "${RESTIC_PASSWORD:?not set in $RESTIC_ENV}"
+
+# Posts to the same Discord webhook dolce/jellyfin-log-alert use; silent no-op
+# when the webhook is unavailable so a missing alert never masks the exit code.
+alert() {
+    [[ -r "$DISCORD_ENV" ]] || return 0
+    local DISCORD_WEBHOOK="" msg=$1
+    # shellcheck source=/dev/null
+    . "$DISCORD_ENV"
+    [[ -n "${DISCORD_WEBHOOK:-}" ]] || return 0
+    msg="${msg:0:1900}"
+    msg=${msg//\\/\\\\}; msg=${msg//\"/\\\"}; msg=${msg//$'\r'/}; msg=${msg//$'\n'/\\n}
+    curl -fsS -H 'Content-Type: application/json' -X POST \
+        -d "{\"content\":\"$msg\"}" "$DISCORD_WEBHOOK" >/dev/null || true
+}
+
+run_backup() {
+    local targets
+    targets="$(mktemp)"
+    cat "$INCLUDES" > "$targets"
+    printf '%s\n%s\n' "$REPO_DIR/data" "$REPO_DIR/secrets" >> "$targets"
+    restic backup --verbose --tag scheduled \
+        --files-from "$targets" --exclude-file "$EXCLUDES"
+    rm -f "$targets"
+    restic forget --prune \
+        --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 3
+}
+
+# Verifies repository structure and re-reads a rolling 5% of the packs, so bit
+# rot on B2 surfaces within ~20 weeks instead of at restore time.
+run_check() { restic check --read-data-subset=5%; }
+
+mkdir -p "$STATE_DIR"
+exec 9>"$STATE_DIR/lock"
+flock -n 9 || { log "another run holds the lock, skipping"; exit 0; }
+
+cmd="${1:-backup}"
+case "$cmd" in
+    backup) action=run_backup ;;
+    check)  action=run_check ;;
+    init)   restic init; exit 0 ;;
+    restic) shift; exec restic "$@" ;;
+    *) log "usage: backup [backup|check|init|restic <args...>]"; exit 2 ;;
+esac
+
+logf="$(mktemp)"
+trap 'rm -f "$logf"' EXIT
+set +e
+"$action" 2>&1 | tee "$logf"
+rc=${PIPESTATUS[0]}
+set -e
+if [[ "$rc" -ne 0 ]]; then
+    alert "❌ **backup ${cmd} failed** on $(hostname)"$'\n'"$(tail -n 20 "$logf")"
+    log "$cmd failed (rc=$rc)"
+    exit "$rc"
+fi
+log "$cmd ok"

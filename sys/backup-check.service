@@ -1,0 +1,10 @@
+[Unit]
+Description=Verify the off-site restic repository (structure + 5% data re-read)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+StateDirectory=backup
+ExecStart=@REPO@/bin/backup check
