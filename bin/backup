@@ -17,7 +17,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
-STATE_DIR="${STATE_DIRECTORY:-/var/lib/backup}"
+# systemd sets STATE_DIRECTORY (StateDirectory=) to /var/lib/backup owned by
+# this user; fall back to a user-writable dir for manual runs (init, first
+# backup) so they don't need root to create the lock dir.
+STATE_DIR="${STATE_DIRECTORY:-${XDG_STATE_HOME:-$HOME/.local/state}/backup}"
 
 INCLUDES="$REPO_DIR/config/restic/includes.txt"
 EXCLUDES="$REPO_DIR/config/restic/excludes.txt"
