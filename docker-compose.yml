@@ -11,7 +11,7 @@ secrets:
 services:
   atc1441-exporter:
     container_name: atc1441-exporter
-    image: quay.io/thekevjames/atc1441-exporter:0.1.8
+    image: quay.io/thekevjames/atc1441-exporter:0.1.9
     command: --port=9091 /app/config.ini
     restart: unless-stopped
     environment:
