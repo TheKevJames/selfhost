@@ -248,7 +248,7 @@ services:
 
   netdata:
     container_name: netdata
-    image: netdata/netdata:v2.11.0
+    image: netdata/netdata:v2.11.1
     restart: unless-stopped
     cpu_shares: 1152
     init: true
