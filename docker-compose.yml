@@ -98,7 +98,7 @@ services:
 
   gerbera:
     container_name: gerbera
-    image: gerbera/gerbera:3.2.1
+    image: gerbera/gerbera:3.3.0
     command: gerbera -p 49152 -c /etc/gerbera/config.xml
     restart: unless-stopped
     cpus: 0.5
