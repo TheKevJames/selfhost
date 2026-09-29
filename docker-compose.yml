@@ -336,7 +336,7 @@ services:
 
   qbittorrent:
     container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent:release-5.2.3
+    image: ghcr.io/hotio/qbittorrent:release-5.2.4
     restart: unless-stopped
     ports:
       - 8089:8080/tcp
