@@ -15,4 +15,6 @@
   <InstanceName>Prowlarr</InstanceName>
   <UpdateMechanism>Docker</UpdateMechanism>
   <AnalyticsEnabled>False</AnalyticsEnabled>
+  <AllowedHosts></AllowedHosts>
+  <TrustedNetworks></TrustedNetworks>
 </Config>

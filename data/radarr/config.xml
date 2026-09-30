@@ -15,4 +15,6 @@
   <UpdateMechanism>Docker</UpdateMechanism>
   <AnalyticsEnabled>False</AnalyticsEnabled>
   <AuthenticationRequired>Enabled</AuthenticationRequired>
+  <AllowedHosts></AllowedHosts>
+  <TrustedNetworks></TrustedNetworks>
 </Config>
