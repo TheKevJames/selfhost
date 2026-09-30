@@ -1,4 +1,5 @@
 {
+  "data-root": "/mnt/ssd/docker",
   "log-driver": "json-file",
   "log-opts": {
     "max-size": "5m",

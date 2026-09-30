@@ -31,6 +31,8 @@ logsf:
 # misc commands
 init: init-backup init-git init-timers init-mdns
 	sudo cp sys/daemon.json /etc/docker/daemon.json
+	sudo install -D -m 0644 sys/docker-ssd.conf /etc/systemd/system/docker.service.d/ssd.conf
+	sudo systemctl daemon-reload
 	sudo systemctl restart docker
 
 init-git:
