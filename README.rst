@@ -249,43 +249,6 @@ To update the various components::
     git pull
     make update
 
-Internal SSD
-------------
-
-Boxes that boot from an SD/eMMC card wear it out with the write-heavy workloads
-running here (Postgres, the \*arr SQLite databases, Docker's overlay2 churn,
-swap, logs). Where such a box has a blank internal SSD, ``bin/migrate-ssd``
-relocates that state onto it, leaving the SD card for the OS/boot only:
-
-* Docker root ``/var/lib/docker`` -> ``/mnt/ssd/docker`` via the daemon
-  ``data-root`` (``sys/daemon.json``), gated on the mount by
-  ``sys/docker-ssd.conf``
-* ``~/src`` (this repo and its ``data/``) -> ``/mnt/ssd/src`` (fstab bind-mount)
-* ``/var/log`` -> ``/mnt/ssd/var-log`` (fstab bind-mount)
-* swap -> an 8 GiB ``/mnt/ssd/swapfile`` (the SD-backed swap is disabled)
-
-The script runs as idempotent, individually invokable phases with a confirmation
-gate before each destructive step. It *copies* (rsync) and renames the SD
-originals aside as ``*.old``; nothing is deleted until the explicit ``reclaim``
-phase, which you run only after a reboot proves the new wiring survives a cold
-boot::
-
-    sudo bin/migrate-ssd status   # inspect current state, change nothing
-    sudo bin/migrate-ssd all      # preflight..verify, gated per phase
-    sudo reboot
-    sudo bin/migrate-ssd verify   # confirm the layout after cold boot
-    sudo bin/migrate-ssd reclaim  # delete the *.old originals, free the SD
-
-``sudo bin/migrate-ssd rollback`` reverts the wiring while the ``*.old``
-originals still exist. The target disk is resolved by hardware identity (a blank
-internal SATA, non-rotational disk), not a kernel name like ``/dev/sda``, so a
-reordered USB drive can't be wiped by mistake.
-
-Because ``sys/daemon.json`` pins ``data-root`` to ``/mnt/ssd/docker``, every
-Docker host provisioned from this repo is assumed to have an SSD mounted at
-``/mnt/ssd`` (``make init`` installs both the daemon config and the mount-gating
-drop-in). Run ``bin/migrate-ssd`` before ``make init`` on a fresh box.
-
 External Drives
 ---------------
 
