@@ -14,7 +14,7 @@
   <InstanceName>Radarr</InstanceName>
   <UpdateMechanism>Docker</UpdateMechanism>
   <AnalyticsEnabled>False</AnalyticsEnabled>
-  <AuthenticationRequired>Enabled</AuthenticationRequired>
+  <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
   <AllowedHosts></AllowedHosts>
   <TrustedNetworks></TrustedNetworks>
 </Config>
