@@ -39,7 +39,7 @@ services:
 
   caddy:
     container_name: caddy
-    image: quay.io/thekevjames/caddy-security:2.7.6-1.1.22
+    image: quay.io/thekevjames/caddy-security:2.11.4-1.3.0
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
     restart: unless-stopped
     ports:
