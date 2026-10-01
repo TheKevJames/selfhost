@@ -11,5 +11,20 @@
             ],
             "automerge": true,
         },
+        // the caddy-security image tag joins two semvers: the caddy version and
+        // the caddy-security plugin version (eg. 2.7.6-1.1.22). default docker
+        // versioning locks the plugin version as a compatibility suffix, so no
+        // updates are ever proposed. track caddy as a normal major.minor.patch
+        // semver and the plugin's minor/patch as build/revision. regex
+        // versioning only exposes five numeric slots, so the plugin's major is
+        // held as `compatibility` (locked -- plugin major bumps must be done by
+        // hand) to leave the five slots free for the rest.
+        {
+            "matchDatasources": ["docker"],
+            "matchPackageNames": [
+                "/^quay.io/thekevjames/caddy-security$/",
+            ],
+            "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>\\d+)\\.(?<build>\\d+)\\.(?<revision>\\d+)$",
+        },
     ],
 }
