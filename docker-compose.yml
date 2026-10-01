@@ -123,8 +123,10 @@ services:
     environment:
       - HOMEPAGE_ALLOWED_HOSTS=home.thekev.in
     volumes:
+      - /mnt/ssd:/mnt/ssd
       - /mnt/1tb:/mnt/1tb
       - /mnt/4tb:/mnt/4tb
+      - /mnt/8tb:/mnt/8tb
       - ./config/homepage:/app/config:Z
 
   immich-machine-learning:
