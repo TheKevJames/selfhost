@@ -170,9 +170,10 @@ What is covered: Immich's originals and its daily SQL dumps
 (``library/backups/``), the non-synced ``library-bigfiles``/``untracked``
 collections, the Syncthing ``sync`` tree, and this repo's ``data/`` and
 ``secrets/``. Regenerable Immich derivatives (``encoded-video/``, ``thumbs/``)
-and the live Postgres cluster are excluded -- Immich's dumps are the DB backup,
-so Postgres is never stopped. Re-downloadable media (``movies``, ``shows``,
-``torrents``) is intentionally not backed up.
+the live Postgres cluster and Caddy's auth-state runtime (``data/caddy/``) are
+excluded -- Immich's dumps are the DB backup, so Postgres is never stopped, and
+Caddy's state self-heals to a re-login on restore. Re-downloadable media
+(``movies``, ``shows``, ``torrents``) is intentionally not backed up.
 
 First-time setup:
 

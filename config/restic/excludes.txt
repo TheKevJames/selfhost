@@ -9,3 +9,8 @@
 # (0700, owned by the container UID). Immich's daily dumps in
 # library/backups/ are the consistent DB backup, so the raw cluster is dropped.
 **/data/immich/postgres
+
+# Caddy's encrypted auth-state runtime: 0700 owned by the container UID
+# (unreadable to the backup user) and self-heals to a fresh login on restore,
+# so there is nothing worth storing off-site.
+**/data/caddy

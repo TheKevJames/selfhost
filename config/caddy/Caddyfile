@@ -5,6 +5,10 @@
     admin :2019
 
     security {
+        state {
+            directory /data/caddy/state
+        }
+
         oauth identity provider google {
             realm google
             driver google

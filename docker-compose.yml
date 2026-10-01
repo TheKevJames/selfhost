@@ -48,6 +48,7 @@ services:
       - ./secrets/google.env
     volumes:
       - ./config/caddy:/config/caddy:Z
+      - ./data/caddy:/data/caddy:Z
 
   cloudflared:
     container_name: cloudflared

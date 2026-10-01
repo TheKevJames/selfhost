@@ -24,6 +24,10 @@
 # git operations and silence the error. TODO: consider changing the container
 # details to use the correct uid instead.
 /data/immich/postgres/
+# Caddy writes its encrypted auth-state runtime here as root 0700, so git
+# cannot descend into it (EACCES); it holds only regenerable session state and
+# its encryption key, nothing to track.
+/data/caddy/
 !/data/jellyfin/*.xml
 !/data/jellyfin/logging.default.json
 !/data/jellyfin/.jellyfin-config
