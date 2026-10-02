@@ -58,17 +58,6 @@ services:
     volumes:
       - ./data/cloudflared:/home/nonroot/.cloudflared:Z
 
-  dir2opds:
-    container_name: dir2opds
-    image: ghcr.io/dubyte/dir2opds:v1.11.0
-    command: dir2opds -dir /books -host 0.0.0.0 -port 8080
-    restart: unless-stopped
-    cpus: 0.5
-    ports:
-      - 8080:8080/tcp
-    volumes:
-      - /mnt/4tb/sync/books:/books:ro
-
   docker-socket-proxy:
     container_name: docker-socket-proxy
     image: ghcr.io/tecnativa/docker-socket-proxy:v0.5.0
