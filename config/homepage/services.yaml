@@ -138,6 +138,12 @@
         icon: gerbera
         server: local
         container: gerbera
+    - dir2opds:
+        href: http://books.local:8080/
+        description: OPDS Ebook Server
+        icon: mdi-book-open-page-variant
+        server: local
+        container: dir2opds
     - Cloudflared:
         description: DNS Tunnel
         icon: cloudflare-zero-trust
