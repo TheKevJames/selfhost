@@ -365,6 +365,8 @@ TODOs
   * or maybe use `forgejo <https://forgejo.org/>`_ and `mirror this way <https://forgejo.org/docs/latest/user/repo-mirror/>`_
 * create jellyfin playlists for shows/movies with non-standard viewing orders, eg. `babylon 5 <https://www.b5tv.com/threads/jms-viewing-order.11675/>`_, `bsg <https://torrentday.cool/details.php?id=2272345>`_, `stargate <https://www.gateworld.net/news/2021/04/stargate-watch-order-three-ways-enjoy-entire-franchise/>`_
 * consider re-introducing pihole, or an alternative such as technitium
+* consider running overseer
+* consider running an opds server
 
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual
