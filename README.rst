@@ -335,39 +335,6 @@ To connect on Windows, use File Explorer, right-click "This PC" and "Add a
 Network Drive". Then input "\\IP.ADDR\SHARE_NAME". You may need to input the
 credentials: "guest:".
 
-TODOs
------
-
-* deploy `bar assistant <https://github.com/karlomikus/bar-assistant>`_
-* deploy `a recipe tracker <https://github.com/awesome-selfhosted/awesome-selfhosted#recipe-management>`_, perhaps alongside a shopping list
-* deploy `an html render of my vimwiki <https://github.com/vimwiki/vimwiki#changing-wiki-syntax>`_
-* configure `voice control <https://rhasspy.readthedocs.io/en/latest/>`_
-* deploy a `feed reader <https://github.com/awesome-selfhosted/awesome-selfhosted#feed-readers>`_
-* monitor cloud storage limits (dropbox, google, anything else?)
-* manage `music <https://lidarr.audio/>`_
-* optimize `transcoding of tv shows and movies <https://home.tdarr.io/>`_
-* selfhost `location sharing <https://github.com/bilde2910/Hauk>`_
-* investigate `openhab hub as new aio dashboard <https://www.openhab.org/>`_
-* set up `chatbot <https://errbot.readthedocs.io/en/latest/>`_
-* selfhost `calendars and contacts <https://github.com/awesome-selfhosted/awesome-selfhosted#calendar--contacts---caldav-or-carddav-servers>`_, backup from Google
-* host calendar scheduling:
-  * `cal.com <https://cal.com/>`_
-  * `easyappointments <https://github.com/alextselegidis/easyappointments>`_
-* backup my bookmarks:
-  * `various options <https://github.com/awesome-selfhosted/awesome-selfhosted#bookmarks-and-link-sharing>`_
-  * `lnks <https://github.com/hamvocke/lnks>`_
-  * `sync from firefox <https://floccus.org/>`_
-* mirror repos to `gitea <https://about.gitea.com/>`_:
-  * check out `plugins <https://gitea.com/gitea/awesome-gitea>`_
-  * also `mirror to gitlab <https://docs.gitlab.com/ee/user/project/repository/mirror/index.html>`_?
-  * also mirror to sourcehut?
-  * `mirroring script <https://github.com/beefsack/git-mirror>`_
-  * or maybe use `forgejo <https://forgejo.org/>`_ and `mirror this way <https://forgejo.org/docs/latest/user/repo-mirror/>`_
-* create jellyfin playlists for shows/movies with non-standard viewing orders, eg. `babylon 5 <https://www.b5tv.com/threads/jms-viewing-order.11675/>`_, `bsg <https://torrentday.cool/details.php?id=2272345>`_, `stargate <https://www.gateworld.net/news/2021/04/stargate-watch-order-three-ways-enjoy-entire-franchise/>`_
-* consider re-introducing pihole, or an alternative such as technitium
-* consider running overseer
-* consider running an opds server
-
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual
 .. _Raspbian OS Lite x64: https://www.raspberrypi.com/software/
