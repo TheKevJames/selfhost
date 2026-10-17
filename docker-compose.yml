@@ -225,7 +225,7 @@ services:
 
   jellyfin-exporter:
     container_name: jellyfin-exporter
-    image: docker.io/rebelcore/jellyfin-exporter:v1.5.2
+    image: docker.io/rebelcore/jellyfin-exporter:v1.5.3
     restart: unless-stopped
     environment:
       - JELLYFIN_ADDRESS=http://jellyfin:8096
