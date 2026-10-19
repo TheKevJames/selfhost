@@ -1,0 +1,170 @@
+#!/usr/bin/env bash
+# Mirrors one Immich album into a Google Photos album for the Nest Hub's Photo
+# Frame, which can only display Google Photos albums. The Photos Library API
+# only lets an app write to albums it created, so rclone owns the Google album
+# and this script stages the Immich album's files for `rclone sync`.
+#
+# rclone can only compare names on Google Photos, so a file's name must change
+# exactly when its bytes do: unedited assets are <asset-id>.<ext>, edited ones
+# <asset-id>-<hash of the Immich edit list>.<ext>, which is what makes a crop
+# or rotation re-upload. Google Photos deduplicates identical bytes into the
+# existing media item *and keeps its first-upload name forever*, so re-uploading
+# the same bytes under a different name makes rclone remove the photo it just
+# uploaded; verify_album turns that into a loud failure instead of a silent
+# hourly flip-flop. The API cannot delete media: anything removed or replaced
+# leaves the album but stays in the Google Photos library.
+set -euo pipefail
+shopt -s inherit_errexit nullglob
+
+PROG=photo-frame-sync
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
+# systemd sets STATE_DIRECTORY (StateDirectory=); fall back to a user-writable
+# dir for manual runs.
+STATE_DIR="${STATE_DIRECTORY:-${XDG_STATE_HOME:-$HOME/.local/state}/$PROG}"
+STAGING_DIR="$STATE_DIR/staging"
+# Downloads land outside the synced dir so a partial file is never uploaded;
+# same filesystem as staging so the final rename is atomic.
+TMP_DIR="$STATE_DIR/tmp"
+
+CONFIG_ENV="${PHOTO_FRAME_CONFIG:-$REPO_DIR/config/photo-frame/config.env}"
+SECRETS_ENV="${PHOTO_FRAME_SECRETS:-$REPO_DIR/secrets/photo-frame.env}"
+RCLONE_CONFIG="${PHOTO_FRAME_RCLONE_CONFIG:-$REPO_DIR/secrets/rclone.conf}"
+RCLONE_REMOTE=frame
+
+# shellcheck source-path=SCRIPTDIR
+. "$SCRIPT_DIR/lib/alert.sh"
+
+log() { printf '%s: %s\n' "$PROG" "$*" >&2; }
+
+for env_file in "$CONFIG_ENV" "$SECRETS_ENV"; do
+    [[ -r "$env_file" ]] || { log "cannot read env file: $env_file"; exit 1; }
+    # shellcheck source=/dev/null
+    . "$env_file"
+done
+: "${IMMICH_URL:?not set in $CONFIG_ENV}"
+: "${IMMICH_ALBUM_ID:?not set in $CONFIG_ENV}"
+: "${GPHOTOS_ALBUM:?not set in $CONFIG_ENV}"
+: "${IMMICH_API_KEY:?not set in $SECRETS_ENV}"
+ALBUM_REMOTE="$RCLONE_REMOTE:album/$GPHOTOS_ALBUM"
+# rclone writes refreshed OAuth tokens back into its config.
+if [[ ! -w "$RCLONE_CONFIG" ]]; then
+    log "rclone config not writable: $RCLONE_CONFIG"
+    exit 1
+fi
+
+immich() {
+    local path=$1
+    shift
+    curl -fsS -H "x-api-key: $IMMICH_API_KEY" "$@" "$IMMICH_URL/api$path"
+}
+
+# Prints the album's image asset IDs, one per line.
+list_album() {
+    local cursor="" body page
+    while :; do
+        body="$(jq -nc --arg album "$IMMICH_ALBUM_ID" --arg cursor "$cursor" '
+            {filter: {albumIds: {any: [$album]}, type: {eq: "IMAGE"}}}
+            + {size: 1000}
+            + if $cursor == "" then {} else {cursor: $cursor} end')"
+        page="$(immich /search/metadata -X POST \
+            -H 'Content-Type: application/json' -d "$body")"
+        jq -r '.assets.items[].id' <<<"$page"
+        cursor="$(jq -r '.assets.nextCursor // empty' <<<"$page")"
+        [[ -n "$cursor" ]] || break
+    done
+}
+
+asset_key() {
+    local id=$1 edits
+    edits="$(immich "/assets/$id/edits" | jq -cS .edits)"
+    if [[ "$edits" == "[]" ]]; then
+        printf '%s\n' "$id"
+    else
+        printf '%s-%s\n' "$id" "$(sha256sum <<<"$edits" | cut -c1-12)"
+    fi
+}
+
+extension_for() {
+    case $1 in
+        image/jpeg) echo jpg ;;
+        image/*) echo "${1#image/}" ;;
+        *) log "unexpected content type: $1"; return 1 ;;
+    esac
+}
+
+stage() {
+    local id=$1 key=$2 tmp content_type ext
+    tmp="$(mktemp "$TMP_DIR/$id.XXXXXX")"
+    content_type="$(immich "/assets/$id/original?edited=true" \
+        -o "$tmp" -w '%{content_type}')"
+    ext="$(extension_for "${content_type%%;*}")"
+    mv -- "$tmp" "$STAGING_DIR/$key.$ext"
+    log "staged $key.$ext"
+}
+
+run_sync() {
+    local ids id key staged
+    local -A wanted=()
+    rm -rf -- "$TMP_DIR"
+    mkdir -p -- "$STAGING_DIR" "$TMP_DIR"
+
+    ids="$(list_album)"
+    if [[ -z "$ids" ]]; then
+        log "album $IMMICH_ALBUM_ID has no images; refusing to empty the frame"
+        return 1
+    fi
+
+    while read -r id; do
+        key="$(asset_key "$id")"
+        wanted[$key]=1
+        if ! compgen -G "$STAGING_DIR/$key.*" >/dev/null; then
+            stage "$id" "$key"
+        fi
+    done <<<"$ids"
+
+    for staged in "$STAGING_DIR"/*; do
+        key="$(basename -- "${staged%.*}")"
+        if [[ -z "${wanted[$key]:-}" ]]; then
+            rm -- "$staged"
+            log "unstaged $key"
+        fi
+    done
+
+    rclone --config "$RCLONE_CONFIG" -v sync "$STAGING_DIR" "$ALBUM_REMOTE"
+    verify_album
+}
+
+verify_album() {
+    local staged_names album_names diff_out
+    staged_names="$(cd -- "$STAGING_DIR" && printf '%s\n' * | sort)"
+    album_names="$(rclone --config "$RCLONE_CONFIG" lsf "$ALBUM_REMOTE" | sort)"
+    if ! diff_out="$(diff <(printf '%s\n' "$staged_names") \
+        <(printf '%s\n' "$album_names"))"; then
+        log "album differs from staging after sync (< staged, > album);" \
+            "Google Photos likely deduplicated an upload into an older name:"
+        printf '%s\n' "$diff_out" >&2
+        return 1
+    fi
+}
+
+mkdir -p "$STATE_DIR"
+exec 9>"$STATE_DIR/lock"
+flock -n 9 || { log "another run holds the lock, skipping"; exit 0; }
+
+logf="$(mktemp)"
+trap 'rm -f "$logf"' EXIT
+set +e
+# errexit must be re-enabled inside the pipeline, or a failed step would fall
+# through to `rclone sync` with an incomplete staging dir.
+(set -e; run_sync) 2>&1 | tee "$logf"
+rc=${PIPESTATUS[0]}
+set -e
+if [[ "$rc" -ne 0 ]]; then
+    # A failed alert must never mask the sync's own exit code.
+    summary="❌ **$PROG failed** on $(hostname)"
+    alert "$summary"$'\n'"$(tail -n 20 "$logf")" || true
+    log "sync failed (rc=$rc)"
+    exit "$rc"
+fi
+log "sync ok"
