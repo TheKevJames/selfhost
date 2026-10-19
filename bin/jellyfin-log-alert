@@ -25,17 +25,12 @@ STRONG_RE='SocketException \(110\)|TimingPipeFlusher'
 WEAK_RE='remote party closed the WebSocket|Lost [0-9]+ WebSocket'
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
-ENV_FILE="${DOLCE_ENV_FILE:-$REPO_DIR/secrets/dolce.env}"
+# shellcheck source-path=SCRIPTDIR
+. "$SCRIPT_DIR/lib/alert.sh"
 
 log() { printf 'jellyfin-log-alert: %s\n' "$*" >&2; }
 
-[[ -r "$ENV_FILE" ]] || { log "cannot read env file: $ENV_FILE"; exit 1; }
-set -a
-# shellcheck source=/dev/null
-. "$ENV_FILE"
-set +a
-: "${DISCORD_WEBHOOK:?DISCORD_WEBHOOK not set in $ENV_FILE}"
+alert_load_webhook || exit 1
 
 mkdir -p "$STATE_DIR"
 
@@ -94,21 +89,8 @@ printf -v msg '%s\n%s\n%s\n%s' \
     "Window: last ${WINDOW}. Client(s): ${clients}" \
     "Likely a client-side network/WiFi drop, not a server crash." \
     "Last: ${last_line}"
-msg="${msg:0:1900}"
 
-json_escape() {
-    local s=$1
-    s=${s//\\/\\\\}
-    s=${s//\"/\\\"}
-    s=${s//$'\r'/}
-    s=${s//$'\n'/\\n}
-    s=${s//$'\t'/\\t}
-    printf '%s' "$s"
-}
-
-curl -fsS -H 'Content-Type: application/json' -X POST \
-    -d "{\"content\":\"$(json_escape "$msg")\"}" \
-    "$DISCORD_WEBHOOK" >/dev/null || { log "discord POST failed"; exit 1; }
+alert "$msg" || { log "discord POST failed"; exit 1; }
 
 printf '%s\n' "$now" > "$last_alert_file"
 log "alert sent (strong=$strong_count weak=$weak_count clients=[$clients])"
