@@ -40,13 +40,14 @@ set +a
 : "${RESTIC_PASSWORD:?not set in $RESTIC_ENV}"
 
 run_backup() {
-    local targets
     targets="$(mktemp)"
+    # Runs inside the errexit subshell below, so this also fires when restic
+    # fails. Not `local`: the trap runs after the function has returned.
+    trap 'rm -f "$targets"' EXIT
     cat "$INCLUDES" > "$targets"
     printf '%s\n%s\n' "$REPO_DIR/data" "$REPO_DIR/secrets" >> "$targets"
     restic backup --verbose --tag scheduled \
         --files-from "$targets" --exclude-file "$EXCLUDES"
-    rm -f "$targets"
     restic forget --prune \
         --keep-daily 7 --keep-weekly 5 --keep-monthly 12 --keep-yearly 3
 }
@@ -71,7 +72,9 @@ esac
 logf="$(mktemp)"
 trap 'rm -f "$logf"' EXIT
 set +e
-"$action" 2>&1 | tee "$logf"
+# errexit must be re-enabled inside the pipeline, or a failed `restic backup`
+# would be masked by a successful `restic forget` and never alert.
+(set -e; "$action") 2>&1 | tee "$logf"
 rc=${PIPESTATUS[0]}
 set -e
 if [[ "$rc" -ne 0 ]]; then
