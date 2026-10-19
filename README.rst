@@ -386,4 +386,4 @@ credentials: "guest:".
 
 .. _set up networking: https://wiki.debian.org/NetworkConfiguration
 .. _Debian: https://www.debian.org/releases/stable/installmanual
-.. _Raspbian OS Lite x64: https://www.raspberrypi.com/software/
+.. _Raspbian OS Lite: https://www.raspberrypi.com/software/
