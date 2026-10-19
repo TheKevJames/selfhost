@@ -210,6 +210,55 @@ at the repo and browse snapshots::
     bin/backup restic snapshots
     bin/backup restic restore latest --target /tmp/restore --include /mnt/4tb/sync
 
+Photo Frame
+~~~~~~~~~~~
+
+The living-room Nest Hub's Photo Frame shows an Immich album. The Hub can only
+display Google Photos albums, so ``bin/photo-frame-sync`` (hourly timer)
+mirrors the album configured in ``config/photo-frame/config.env`` into a Google
+Photos album owned by rclone, and alerts to Discord on failure. Add or remove
+photos in Immich; crops and rotations made in Immich carry over too.
+
+Google Photos API caveats: uploads count against the Google account's storage
+at original quality, and nothing can be deleted through the API -- photos
+removed from the frame leave the album but stay in the Google Photos library.
+
+First-time setup:
+
+#. In the `Google Cloud console <https://console.cloud.google.com>`_ (as the
+   account linked to the Hub), create a project and enable the **Photos
+   Library API**. Under *Google Auth Platform*:
+
+   * *Audience*: External, then **Publish app** ("In production"; no
+     verification needed). Left in "Testing", refresh tokens expire after 7
+     days.
+   * *Data Access*: add the ``photoslibrary.appendonly``,
+     ``photoslibrary.readonly.appcreateddata`` and
+     ``photoslibrary.edit.appcreateddata`` scopes.
+   * *Clients*: create a **Desktop app** client (other types fail with
+     ``redirect_uri_mismatch``).
+
+#. In Immich (*Account Settings > API Keys*), create a key with
+   ``asset.read``, ``asset.download`` and ``asset.edit.get``::
+
+       echo "IMMICH_API_KEY='...'" > secrets/photo-frame.env
+
+#. On a machine with a browser, authorize rclone (note this prints the token
+   and client secret when it finishes), then copy the result to the server.
+   The file must stay writable: rclone saves refreshed tokens back into it::
+
+       rclone config create frame "google photos" \
+           client_id=... client_secret=... --config rclone.conf
+       scp rclone.conf SERVER:src/personal/selfhost/secrets/rclone.conf
+
+#. Install rclone/jq and the timer, then run a first sync::
+
+       make init-photo-frame
+       bin/photo-frame-sync
+
+#. In the Google Home app, open the Hub's *Photo Frame* settings, choose
+   *Google Photos* and select the album named by ``GPHOTOS_ALBUM``.
+
 Metrics
 ~~~~~~~
 

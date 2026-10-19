@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync the Immich photo-frame album to Google Photos hourly
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

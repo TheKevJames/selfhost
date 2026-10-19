@@ -1,0 +1,11 @@
+[Unit]
+Description=Mirror the Immich photo-frame album to Google Photos (Nest Hub Photo Frame)
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+# Creates /var/lib/photo-frame-sync owned by User and exports $STATE_DIRECTORY.
+StateDirectory=photo-frame-sync
+ExecStart=@REPO@/bin/photo-frame-sync

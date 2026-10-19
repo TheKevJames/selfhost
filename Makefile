@@ -6,7 +6,7 @@ else
 	COMPOSE := docker compose
 endif
 
-.PHONY: down ps pull restart start stop up logs logsf setup init init-git init-timers init-mdns init-backup update clean
+.PHONY: down ps pull restart start stop up logs logsf setup init init-git init-timers init-mdns init-backup init-photo-frame update clean
 
 # docker compose convenience
 down:
@@ -29,7 +29,7 @@ logsf:
 	$(COMPOSE) logs -f --tail=30 $(SERVICE)
 
 # misc commands
-init: init-backup init-git init-timers init-mdns
+init: init-backup init-git init-timers init-mdns init-photo-frame
 	sudo cp sys/daemon.json /etc/docker/daemon.json
 	sudo install -D -m 0644 sys/docker-ssd.conf /etc/systemd/system/docker.service.d/ssd.conf
 	sudo systemctl daemon-reload
@@ -61,6 +61,17 @@ init-backup:
 	done
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now backup.timer backup-check.timer
+
+# Debian's rclone predates the 2025 Google Photos API changes. Upgrade via the
+# upstream .deb rather than a bare binary swap: its higher package version stops
+# a later Debian security update from silently reinstalling the old binary.
+init-photo-frame:
+	sudo apt install -y --no-install-recommends jq rclone
+	sudo rclone selfupdate --package deb
+	sed -e 's|@REPO@|$(CURDIR)|g' -e 's|@USER@|$(shell id -un)|g' sys/photo-frame-sync.service | sudo tee /etc/systemd/system/photo-frame-sync.service >/dev/null
+	sudo cp sys/photo-frame-sync.timer /etc/systemd/system/photo-frame-sync.timer
+	sudo systemctl daemon-reload
+	sudo systemctl enable --now photo-frame-sync.timer
 
 update:
 	sudo apt update -y
