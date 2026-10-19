@@ -25,7 +25,9 @@ STATE_DIR="${STATE_DIRECTORY:-${XDG_STATE_HOME:-$HOME/.local/state}/backup}"
 INCLUDES="$REPO_DIR/config/restic/includes.txt"
 EXCLUDES="$REPO_DIR/config/restic/excludes.txt"
 RESTIC_ENV="$REPO_DIR/secrets/restic.env"
-DISCORD_ENV="$REPO_DIR/secrets/dolce.env"
+
+# shellcheck source-path=SCRIPTDIR
+. "$SCRIPT_DIR/lib/alert.sh"
 
 log() { printf 'backup: %s\n' "$*" >&2; }
 
@@ -36,20 +38,6 @@ set -a
 set +a
 : "${RESTIC_REPOSITORY:?not set in $RESTIC_ENV}"
 : "${RESTIC_PASSWORD:?not set in $RESTIC_ENV}"
-
-# Posts to the same Discord webhook dolce/jellyfin-log-alert use; silent no-op
-# when the webhook is unavailable so a missing alert never masks the exit code.
-alert() {
-    [[ -r "$DISCORD_ENV" ]] || return 0
-    local DISCORD_WEBHOOK="" msg=$1
-    # shellcheck source=/dev/null
-    . "$DISCORD_ENV"
-    [[ -n "${DISCORD_WEBHOOK:-}" ]] || return 0
-    msg="${msg:0:1900}"
-    msg=${msg//\\/\\\\}; msg=${msg//\"/\\\"}; msg=${msg//$'\r'/}; msg=${msg//$'\n'/\\n}
-    curl -fsS -H 'Content-Type: application/json' -X POST \
-        -d "{\"content\":\"$msg\"}" "$DISCORD_WEBHOOK" >/dev/null || true
-}
 
 run_backup() {
     local targets
@@ -87,7 +75,9 @@ set +e
 rc=${PIPESTATUS[0]}
 set -e
 if [[ "$rc" -ne 0 ]]; then
-    alert "❌ **backup ${cmd} failed** on $(hostname)"$'\n'"$(tail -n 20 "$logf")"
+    # A failed alert must never mask the backup's own exit code.
+    alert "❌ **backup ${cmd} failed** on $(hostname)"$'\n'"$(tail -n 20 "$logf")" \
+        || true
     log "$cmd failed (rc=$rc)"
     exit "$rc"
 fi
