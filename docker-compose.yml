@@ -234,21 +234,6 @@ services:
     depends_on:
       - jellyfin
 
-  mosura:
-    container_name: mosura
-    image: quay.io/thekevjames/mosura:latest
-    restart: unless-stopped
-    environment:
-      - MOSURA_APPDATA=/data
-      - MOSURA_LOG_LEVEL=INFO
-      - MOSURA_PORT=8080
-    secrets:
-      - jira_auth_token
-      - jira_auth_user
-      - jira_domain
-    volumes:
-      - ./data/mosura:/data:Z
-
   netdata:
     container_name: netdata
     image: netdata/netdata:v2.12.1
