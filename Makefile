@@ -29,7 +29,7 @@ logsf:
 	$(COMPOSE) logs -f --tail=30 $(SERVICE)
 
 # misc commands
-init: init-backup init-git init-timers init-mdns init-photo-frame
+init: init-backup init-git init-timers init-mdns init-photo-frame init-logrotate
 	sudo cp sys/daemon.json /etc/docker/daemon.json
 	sudo install -D -m 0644 sys/docker-ssd.conf /etc/systemd/system/docker.service.d/ssd.conf
 	sudo systemctl daemon-reload
@@ -73,6 +73,10 @@ init-photo-frame:
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now photo-frame-sync.timer
 
+init-logrotate:
+	sudo apt install -y --no-install-recommends logrotate
+	sudo cp sys/logrotate.conf /etc/logrotate.conf
+
 update:
 	sudo apt update -y
 	sudo apt upgrade -y
@@ -83,3 +87,4 @@ clean:
 	docker system prune -a
 	docker volume prune
 	sudo apt autoremove
+	sudo journalctl --vaccuum-time=30d
