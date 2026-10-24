@@ -87,4 +87,4 @@ clean:
 	docker system prune -a
 	docker volume prune
 	sudo apt autoremove
-	sudo journalctl --vaccuum-time=30d
+	sudo journalctl --vacuum-time=30d
