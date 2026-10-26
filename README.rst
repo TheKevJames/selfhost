@@ -105,6 +105,10 @@ repo::
     SONARR_API_KEY=...
     EOF
     $ printf '%s' '...' > secrets/syncthing_metrics_token          # Syncthing GUI API key
+    $ openssl rand -hex 16 > secrets/bookorbit_setup_bootstrap_token
+    $ openssl rand -hex 24 > secrets/bookorbit_postgres_password
+    $ openssl rand -hex 32 > secrets/bookorbit_jwt_secret
+    $ openssl rand -hex 32 > secrets/bookorbit_podcast_encryption_key
 
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
     $ docker run --rm -it -v $PWD/data/cloudflared:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create selfhost
