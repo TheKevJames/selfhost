@@ -1,18 +1,4 @@
 secrets:
-  bookorbit_jwt_secret:
-    file: ./secrets/gookorbit_jwt_secret
-  bookorbit_podcast_encryption_key:
-    file: ./secrets/bookorbit_podcast_encryption_key
-  bookorbit_setup_bootstrap_token:
-    file: ./secrets/bookorbit_setup_bootstrap_token
-  bookorbit_postgres_password:
-    file: ./secrets/bookorbit_postgres_password
-  jira_auth_token:
-    file: ./secrets/jira_auth_token
-  jira_auth_user:
-    file: ./secrets/jira_auth_user
-  jira_domain:
-    file: ./secrets/jira_domain
   syncthing_metrics_token:
     file: ./secrets/syncthing_metrics_token
 
@@ -52,25 +38,22 @@ services:
     init: true
     ports:
       - 3000:3000/tcp
+    env_file:
+      - ./secrets/bookorbit.env
+      - ./secrets/bookorbit_postgres.env
     environment:
       - APP_URL=https://bookorbit.thekev.in
       - BOOKS_HOST_PATH=/books
       - CLIENT_URL=https://bookorbit.thekev.in
-      - DISABLE_LOCAL_AUTH=false  # TODO: toggle on after initial setup?
-      - JWT_SECRET_FILE=bookorbit_jwt_secret
+      - DISABLE_LOCAL_AUTH=false  # TODO: defer auth to caddy
       - LIBRARY_BROWSE_ROOT=/books
       - NODE_ENV=production
       - NODE_MAX_OLD_SPACE_SIZE=2048
       - PGID=1000
-      - PODCAST_ENCRYPTION_KEY_FILE=bookorbit_podcast_encryption_key
       - PORT=3000
-      - POSTGRES_DB=bookorbit
       - POSTGRES_HOST=bookorbit-postgres
-      - POSTGRES_PASSWORD_FILE=bookorbit_postgres_password
       - POSTGRES_PORT=5432
-      - POSTGRES_USER=bookorbit
       - PUID=1000
-      - SETUP_BOOTSTRAP_TOKEN_FILE=bookorbit_setup_bootstrap_token
       - TZ=Etc/UTC
     depends_on:
       bookorbit-postgres:
@@ -78,11 +61,6 @@ services:
     volumes:
       - ./data/bookorbit/app:/data
       - /mnt/4tb/sync/books:/books
-    secrets:
-      - bookorbit_jwt_secret
-      - bookorbit_podcast_encryption_key
-      - bookorbit_postgres_password
-      - bookorbit_setup_bootstrap_token
     read_only: true
     tmpfs:
       - /tmp
@@ -102,15 +80,12 @@ services:
     container_name: bookorbit-postgres
     image: pgvector/pgvector:pg18
     restart: unless-stopped
+    env_file:
+      - ./secrets/bookorbit_postgres.env
     environment:
-      - POSTGRES_USER=bookorbit
-      - POSTGRES_PASSWORD_FILE=bookorbit_postgres_password
-      - POSTGRES_DB=bookorbit
       - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - ./data/bookorbit/db:/var/lib/postgresql/data
-    secrets:
-      - bookorbit_postgres_password
     healthcheck:
       test:
         ["CMD-SHELL", 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']

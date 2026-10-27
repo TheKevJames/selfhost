@@ -1,22 +1,4 @@
 ---
-- Information:
-    - Website:
-        href: https://thekev.in/
-        description: Website
-        icon: mdi-post-outline
-    - Mosura:
-        href: https://mosura.thekev.in/
-        description: Task Management Frontend
-        icon: mdi-jira
-        server: local
-        container: mosura
-    - Fava:
-        href: https://fava.thekev.in/
-        description: Beancount Web View
-        icon: mdi-finance
-        server: local
-        container: fava
-
 - Media:
     - Jellyfin:
         href: http://jellyfin.local:8096/
@@ -30,6 +12,20 @@
         icon: immich
         server: local
         container: immich-server
+    - BookOrbit:
+        href: https://bookorbit.thekev.in/
+        description: eBook Collection Manager
+        icon: bookorbit
+        server: local
+        container: bookorbit
+    - Fava:
+        href: https://fava.thekev.in/
+        description: Beancount Web View
+        icon: mdi-finance
+        server: local
+        container: fava
+
+- Operations:
     - Radarr:
         href: https://radarr.thekev.in/
         description: Movie Collection Manager
@@ -192,6 +188,11 @@
         icon: postgres
         server: local
         container: immich-postgres
+    - BookOrbit Postgres:
+        description: SQL Database for BookOrbit
+        icon: postgres
+        server: local
+        container: bookorbit-postgres
     - Docker Socket Proxy:
         description: Restricted Docker API Proxy
         icon: mdi-docker

@@ -1,7 +1,4 @@
 {
-    order authenticate before respond
-    order authorize before basicauth
-
     admin :2019
 
     security {
@@ -29,43 +26,21 @@
 
             transform user {
                 suffix match email @thekev.in
-                action add role thekev/admin
+                action add role authp/admin
             }
             transform user {
                 exact match email kevin.j.carruthers@gmail.com
-                action add role thekev/admin
-            }
-
-            transform user {
-                suffix match email kjames@dialpad.com
-                action add role mosura/user
-            }
-        }
-
-        authorization policy mosura {
-            set auth url https://auth.thekev.in/
-            inject headers with claims
-
-            acl rule {
-                comment allow mosura users
-                match roles mosura/user
-                allow stop
-            }
-
-            acl rule {
-                comment default deny
-                match any
-                deny log warn
+                action add role authp/admin
             }
         }
 
         authorization policy meonly {
-            set auth url https://auth.thekev.in/
+            set auth url https://auth.thekev.in/auth/oauth2/google
             inject headers with claims
 
             acl rule {
-                comment allow thekev admins
-                match roles thekev/admin
+                comment allow admins
+                match roles authp/admin
                 allow stop
             }
 
@@ -76,10 +51,18 @@
             }
         }
     }
+
+    servers {
+        trusted_proxies static private_ranges
+    }
 }
 
 http://auth.thekev.in {
     authenticate with myportal
+}
+
+http://bookorbit.thekev.in {
+    reverse_proxy bookorbit:3000
 }
 
 http://bazarr.thekev.in {
@@ -98,11 +81,6 @@ http://home.thekev.in {
 
 http://immich.thekev.in {
     reverse_proxy immich-server:2283
-}
-
-http://mosura.thekev.in {
-    authorize with mosura
-    reverse_proxy mosura:8080
 }
 
 http://netdata.thekev.in {
