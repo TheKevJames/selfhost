@@ -96,7 +96,7 @@ services:
 
   caddy:
     container_name: caddy
-    image: quay.io/thekevjames/caddy-security:2.11.7-1.5.0
+    image: quay.io/thekevjames/caddy-security:2.11.7-1.6.2
     command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
     restart: unless-stopped
     ports:
