@@ -35,7 +35,7 @@
         }
 
         authorization policy meonly {
-            set auth url https://auth.thekev.in/auth/oauth2/google
+            set auth url https://auth.thekev.in/
             inject headers with claims
 
             acl rule {
