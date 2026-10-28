@@ -5,9 +5,11 @@
 /mnt/4tb/backup/library/encoded-video
 /mnt/4tb/backup/library/thumbs
 
-# Live Postgres cluster: unsafe to snapshot hot and unreadable to this user
+# Live Postgres clusters: unsafe to snapshot hot and unreadable to this user
 # (0700, owned by the container UID). Immich's daily dumps in
 # library/backups/ are the consistent DB backup, so the raw cluster is dropped.
+# TODO: need to make regular backups of bookorbit db as well
+**/data/bookorbit/db
 **/data/immich/postgres
 
 # Caddy's encrypted auth-state runtime: 0700 owned by the container UID
