@@ -33,7 +33,7 @@ services:
 
   bookorbit:
     container_name: bookorbit
-    image: ghcr.io/bookorbit/bookorbit:3.5.0
+    image: ghcr.io/bookorbit/bookorbit:3.6.0
     restart: unless-stopped
     init: true
     ports:
