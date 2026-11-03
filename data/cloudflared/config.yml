@@ -2,6 +2,26 @@ tunnel: b5214e1c-d1c5-4bc0-8cf4-f7c82526555f
 credentials-file: /home/nonroot/.cloudflared/b5214e1c-d1c5-4bc0-8cf4-f7c82526555f.json
 
 ingress:
-  - hostname: "*.thekev.in"
-    service: http://caddy:80
+  - hostname: bazarr.thekev.in
+    service: http://bazarr:6767
+  - hostname: fava.thekev.in
+    service: http://fava:5000
+  - hostname: netdata.thekev.in
+    service: http://netdata:19999
+  - hostname: prowlarr.thekev.in
+    service: http://prowlarr:9696
+  - hostname: qbittorrent.thekev.in
+    service: http://qbittorrent:8080
+  - hostname: radarr.thekev.in
+    service: http://radarr:7878
+  - hostname: sonarr.thekev.in
+    service: http://sonarr:8989
+  - hostname: bookorbit.thekev.in
+    service: http://bookorbit:3000
+  - hostname: home.thekev.in
+    service: http://homepage:3000
+  - hostname: immich.thekev.in
+    service: http://immich-server:2283
+  - hostname: n8n.thekev.in
+    service: http://n8n:5678
   - service: http_status:404
