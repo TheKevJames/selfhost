@@ -3,8 +3,6 @@
 
 # ./config/ is tracked; ignore only the regenerable runtime artifacts some apps
 # write into their config mount.
-/config/caddy/*
-!/config/caddy/Caddyfile
 /config/homepage/logs/
 /config/netdata/health_alarm_notify.conf
 /config/netdata/.container-hostname
@@ -25,10 +23,6 @@
 # details to use the correct uid instead.
 /data/immich/postgres/
 /data/bookorbit/db/
-# Caddy writes its encrypted auth-state runtime here as root 0700, so git
-# cannot descend into it (EACCES); it holds only regenerable session state and
-# its encryption key, nothing to track.
-/data/caddy/
 !/data/jellyfin/*.xml
 !/data/jellyfin/logging.default.json
 !/data/jellyfin/.jellyfin-config

@@ -1,6 +1,130 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1090
 set -euo pipefail
 
-DOMAIN="${1:?usage: $0 DOMAIN}"
+DOMAIN="${1:?usage: $0 DOMAIN CONTAINER PORT [gated|ungated]}"
+CONTAINER="${2:?usage: $0 DOMAIN CONTAINER PORT [gated|ungated]}"
+PORT="${3:?usage: $0 DOMAIN CONTAINER PORT [gated|ungated]}"
+MODE="${4:-gated}"
 
-docker run --rm -it -v "${PWD}/data/cloudflared":/home/nonroot/.cloudflared "$(docker inspect cloudflared | awk -F' ' '/docker.io/ {print substr($2, 2, length($2)-3)}')" tunnel route dns selfhost "${DOMAIN}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
+SECRETS_ENV="${REPO_DIR}/secrets/cloudflare.env"
+
+[[ -r "${SECRETS_ENV}" ]] || { echo "cannot read ${SECRETS_ENV}" >&2; exit 1; }
+. "${SECRETS_ENV}"
+
+: "${CLOUDFLARE_API_TOKEN:?not set}"
+: "${CLOUDFLARE_ACCOUNT_ID:?not set}"
+: "${CLOUDFLARE_ZONE_ID:?not set}"
+
+CONFIG_YML="${REPO_DIR}/data/cloudflared/config.yml"
+
+log() { printf 'cloudflare-expose: %s\n' "$*" >&2; }
+
+# 1. Route DNS
+log "Routing DNS for ${DOMAIN}..."
+docker run --rm -it -v "${REPO_DIR}/data/cloudflared":/home/nonroot/.cloudflared "$(docker inspect cloudflared | awk -F' ' '/docker.io/ {print substr($2, 2, length($2)-3)}')" tunnel route dns selfhost "${DOMAIN}"
+
+# 2. Add Ingress Rule to data/cloudflared/config.yml above http_status:404
+log "Updating ingress in ${CONFIG_YML}..."
+if grep -q "hostname: ${DOMAIN}" "${CONFIG_YML}"; then
+    log "Ingress for ${DOMAIN} already exists in ${CONFIG_YML}"
+else
+    python3 -c '
+import sys
+path = sys.argv[1]
+domain = sys.argv[2]
+service = sys.argv[3]
+with open(path, "r") as f:
+    content = f.read()
+new_rule = f"  - hostname: {domain}\n    service: {service}\n"
+if "  - service: http_status:404" in content:
+    content = content.replace("  - service: http_status:404", new_rule + "  - service: http_status:404")
+else:
+    content += new_rule
+with open(path, "w") as f:
+    f.write(content)
+' "${CONFIG_YML}" "${DOMAIN}" "http://${CONTAINER}:${PORT}"
+fi
+
+# 3. Restart cloudflared
+log "Restarting cloudflared..."
+cd "${REPO_DIR}" && docker compose restart cloudflared
+
+# 4. Configure Access App & Policy if gated
+if [[ "${MODE}" == "gated" ]]; then
+    log "Configuring Cloudflare Access app and policy for ${DOMAIN}..."
+    apps_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/access/apps" \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json")"
+
+    app_id="$(jq -r --arg dom "${DOMAIN}" '.result[]? | select(.domain == $dom) | .id // empty' <<<"${apps_resp}")"
+
+    if [[ -z "${app_id}" ]]; then
+        log "Creating Access application..."
+        create_app_resp="$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/access/apps" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "{
+                \"name\": \"${DOMAIN}\",
+                \"domain\": \"${DOMAIN}\",
+                \"type\": \"self_hosted\",
+                \"session_duration\": \"24h\"
+            }")"
+        app_id="$(jq -r '.result.id // empty' <<<"${create_app_resp}")"
+        [[ -n "${app_id}" ]] || { log "Failed to create Access app: ${create_app_resp}"; exit 1; }
+    else
+        log "Access app already exists (id: ${app_id})"
+    fi
+
+    log "Configuring Access policy (meonly)..."
+    policies_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/access/apps/${app_id}/policies" \
+        -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+        -H "Content-Type: application/json")"
+
+    policy_id="$(jq -r '.result[]? | select(.name == "meonly") | .id // empty' <<<"${policies_resp}")"
+
+    policy_payload='{
+        "name": "meonly",
+        "decision": "allow",
+        "include": [
+            {
+                "email": {
+                    "email": "kevin.j.carruthers@gmail.com"
+                }
+            }
+        ]
+    }'
+
+    if [[ -z "${policy_id}" ]]; then
+        curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/access/apps/${app_id}/policies" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "${policy_payload}" >/dev/null
+    else
+        curl -s -X PUT "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/access/apps/${app_id}/policies/${policy_id}" \
+            -H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "${policy_payload}" >/dev/null
+    fi
+fi
+
+# 5. Verification
+log "Verifying ${DOMAIN}..."
+sleep 2
+http_code="$(curl -s -o /dev/null -w '%{http_code}' "https://${DOMAIN}" || true)"
+log "Verification curl status for https://${DOMAIN}: ${http_code}"
+if [[ "${MODE}" == "gated" ]]; then
+    if [[ "${http_code}" =~ ^(302|303|403|401)$ ]]; then
+        log "Verification successful (gated app correctly guarded, HTTP ${http_code})"
+    else
+        log "Warning: unexpected http status ${http_code} for gated app"
+    fi
+else
+    if [[ "${http_code}" =~ ^([23][0-9][0-9]|401|403|502)$ ]]; then
+        log "Verification successful (ungated app reachable, HTTP ${http_code})"
+    else
+        log "Warning: unexpected http status ${http_code} for ungated app"
+    fi
+fi

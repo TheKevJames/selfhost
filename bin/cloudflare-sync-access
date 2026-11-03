@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090
+set -euo pipefail
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
+SECRETS_ENV="$REPO_DIR/secrets/cloudflare.env"
+
+[[ -r "$SECRETS_ENV" ]] || { echo "cannot read $SECRETS_ENV" >&2; exit 1; }
+. "$SECRETS_ENV"
+
+: "${CLOUDFLARE_API_TOKEN:?not set}"
+: "${CLOUDFLARE_ACCOUNT_ID:?not set}"
+
+CONFIG_YML="$REPO_DIR/data/cloudflared/config.yml"
+log() { printf 'cloudflare-sync-access: %s\n' "$*" >&2; }
+
+GATED_SERVICES=(
+    "bazarr.thekev.in"
+    "fava.thekev.in"
+    "netdata.thekev.in"
+    "prowlarr.thekev.in"
+    "qbittorrent.thekev.in"
+    "radarr.thekev.in"
+    "sonarr.thekev.in"
+)
+
+log "Syncing Access apps and policies for gated services..."
+
+for domain in "${GATED_SERVICES[@]}"; do
+    if ! grep -q "hostname: $domain" "$CONFIG_YML"; then
+        log "Skipping $domain (not present in ingress config)"
+        continue
+    fi
+
+    log "Syncing Access app for $domain..."
+    apps_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps" \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        -H "Content-Type: application/json")"
+
+    app_id="$(jq -r --arg dom "$domain" '.result[]? | select(.domain == $dom) | .id // empty' <<<"$apps_resp")"
+
+    if [[ -z "$app_id" ]]; then
+        log "Creating Access application for $domain..."
+        create_app_resp="$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{
+                \"name\": \"$domain\",
+                \"domain\": \"$domain\",
+                \"type\": \"self_hosted\",
+                \"session_duration\": \"24h\"
+            }")"
+        app_id="$(jq -r '.result.id // empty' <<<"$create_app_resp")"
+        [[ -n "$app_id" ]] || { log "Failed to create Access app for $domain: $create_app_resp"; exit 1; }
+    fi
+
+    policies_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id/policies" \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        -H "Content-Type: application/json")"
+
+    policy_id="$(jq -r '.result[]? | select(.name == "meonly") | .id // empty' <<<"$policies_resp")"
+
+    policy_payload='{
+        "name": "meonly",
+        "decision": "allow",
+        "include": [
+            {
+                "email": {
+                    "email": "kevin.j.carruthers@gmail.com"
+                }
+            }
+        ]
+    }'
+
+    if [[ -z "$policy_id" ]]; then
+        curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id/policies" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "$policy_payload" >/dev/null
+    else
+        curl -s -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id/policies/$policy_id" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "$policy_payload" >/dev/null
+    fi
+    log "Synced $domain successfully."
+done
+log "Access sync complete."

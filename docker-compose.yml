@@ -45,7 +45,7 @@ services:
       - APP_URL=https://bookorbit.thekev.in
       - BOOKS_HOST_PATH=/books
       - CLIENT_URL=https://bookorbit.thekev.in
-      - DISABLE_LOCAL_AUTH=false  # TODO: defer auth to caddy
+      - DISABLE_LOCAL_AUTH=true
       - LIBRARY_BROWSE_ROOT=/books
       - NODE_ENV=production
       - NODE_MAX_OLD_SPACE_SIZE=2048
@@ -93,19 +93,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
-
-  caddy:
-    container_name: caddy
-    image: quay.io/thekevjames/caddy-security:2.11.7-1.6.2
-    command: caddy run --config /config/caddy/Caddyfile --adapter caddyfile
-    restart: unless-stopped
-    ports:
-      - 2019:2019/tcp
-    env_file:
-      - ./secrets/google.env
-    volumes:
-      - ./config/caddy:/config/caddy:Z
-      - ./data/caddy:/data/caddy:Z
 
   cloudflared:
     container_name: cloudflared

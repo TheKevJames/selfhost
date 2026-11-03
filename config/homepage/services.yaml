@@ -156,15 +156,6 @@
         icon: n8n
         server: local
         container: n8n
-    - Caddy:
-        href: https://auth.thekev.in/
-        description: Secure Reverse Proxy
-        icon: caddy
-        server: local
-        container: caddy
-        widget:
-          type: caddy
-          url: http://caddy:2019
     - Syncthing:
         href: http://syncthing.local:8384/
         description: Syncthing

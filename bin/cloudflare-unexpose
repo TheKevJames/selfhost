@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1090
+set -euo pipefail
+
+DOMAIN="${1:?usage: $0 DOMAIN}"
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname -- "$SCRIPT_DIR")"
+SECRETS_ENV="$REPO_DIR/secrets/cloudflare.env"
+
+[[ -r "$SECRETS_ENV" ]] || { echo "cannot read $SECRETS_ENV" >&2; exit 1; }
+. "$SECRETS_ENV"
+
+: "${CLOUDFLARE_API_TOKEN:?not set}"
+: "${CLOUDFLARE_ACCOUNT_ID:?not set}"
+
+CONFIG_YML="$REPO_DIR/data/cloudflared/config.yml"
+log() { printf 'cloudflare-unexpose: %s\n' "$*" >&2; }
+
+# 1. Remove ingress rule from config.yml
+log "Removing ingress rule for $DOMAIN from $CONFIG_YML..."
+python3 -c '
+import sys, re
+path = sys.argv[1]
+domain = sys.argv[2]
+with open(path, "r") as f:
+    content = f.read()
+
+pattern = rf"\s*-\s*hostname:\s*{re.escape(domain)}\s*\n\s*service:\s*[^\n]+\n"
+new_content, count = re.subn(pattern, "", content)
+if count == 0:
+    print(f"Warning: hostname {domain} not found in ingress rules.", file=sys.stderr)
+with open(path, "w") as f:
+    f.write(new_content)
+' "$CONFIG_YML" "$DOMAIN"
+
+# 2. Restart cloudflared
+log "Restarting cloudflared..."
+cd "$REPO_DIR" && docker compose restart cloudflared
+
+# 3. Delete Access App if it exists
+log "Checking for Cloudflare Access application for $DOMAIN..."
+apps_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps" \
+    -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+    -H "Content-Type: application/json")"
+
+app_id="$(jq -r --arg dom "$DOMAIN" '.result[]? | select(.domain == $dom) | .id // empty' <<<"$apps_resp")"
+
+if [[ -n "$app_id" ]]; then
+    log "Deleting Access application (id: $app_id)..."
+    curl -s -X DELETE "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id" \
+        -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+        -H "Content-Type: application/json" >/dev/null
+    log "Access application deleted."
+else
+    log "No Access application found for $DOMAIN."
+fi
