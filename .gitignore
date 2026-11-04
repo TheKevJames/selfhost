@@ -4,12 +4,6 @@
 # ./config/ is tracked; ignore only the regenerable runtime artifacts some apps
 # write into their config mount.
 /config/homepage/logs/
-/config/netdata/health_alarm_notify.conf
-/config/netdata/.container-hostname
-/config/netdata/.environment
-/config/netdata/.install-type
-/config/netdata/edit-config
-/config/netdata/orig
 
 # ./data/ is runtime state: ignore everything, but keep the directory structure
 # (**/) so the specific app-managed config files tracked in place stay tracked.

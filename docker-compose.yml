@@ -1,19 +1,16 @@
-secrets:
-  syncthing_metrics_token:
-    file: ./secrets/syncthing_metrics_token
-
 services:
-  atc1441-exporter:
-    container_name: atc1441-exporter
-    image: quay.io/thekevjames/atc1441-exporter:0.1.9
-    command: --port=9091 /app/config.ini
-    restart: unless-stopped
-    environment:
-      - DEBUG=false
-    network_mode: host
-    privileged: true
-    volumes:
-      - ./config/atc1441/config.ini:/app/config.ini:Z
+  # TODO: integrate with beszel, once it supports custom metrics
+  # atc1441-exporter:
+  #   container_name: atc1441-exporter
+  #   image: quay.io/thekevjames/atc1441-exporter:0.1.9
+  #   command: --port=9091 /app/config.ini
+  #   restart: unless-stopped
+  #   environment:
+  #     - DEBUG=false
+  #   network_mode: host
+  #   privileged: true
+  #   volumes:
+  #     - ./config/atc1441/config.ini:/app/config.ini:Z
 
   bazarr:
     container_name: bazarr
@@ -30,6 +27,53 @@ services:
       - ./data/bazarr:/config:Z
       - /mnt/4tb/movies:/data/media/movies
       - /mnt/8tb/shows:/data/media/shows
+
+  beszel:
+    container_name: beszel
+    image: ghcr.io/henrygd/beszel:v0.21.1
+    restart: unless-stopped
+    environment:
+      - APP_URL=https://beszel.thekev.in
+      - AUTO_LOGIN=kevin.j.carruthers@gmail.com
+      - DISABLE_PASSWORD_AUTH=true
+      - TRUSTED_AUTH_HEADER=Cf-Access-Authenticated-User-Email
+      - USER_EMAIL=kevin.j.carruthers@gmail.com
+    ports:
+      - 8090:8090
+    volumes:
+      - ./data/beszel/hub:/beszel_data:Z
+      - ./data/beszel/socket:/beszel_socket
+    healthcheck:
+      test: ['CMD', '/beszel', 'health', '--url', 'http://localhost:8090']
+      interval: 120s
+      start_period: 10s
+      timeout: 5s
+
+  beszel-agent:
+    container_name: beszel-agent
+    image: ghcr.io/henrygd/beszel-agent:v0.21.1
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - DISK_USAGE_CACHE=1h
+      # - DOCKER_HOST=docker-socket-proxy:2375  # TODO: switch to docket proxy
+      - LISTEN=:45876
+      - SKIP_GPU=true
+      - SKIP_SYSTEMD_LOGS=true
+      - SKIP_WIFI=true
+    volumes:
+      - ./data/beszel/agent:/var/lib/beszel-agent:Z
+      - ./data/beszel/socket:/beszel_socket
+      - /mnt/1tb/.beszel:/extra-filesystems/1tb:ro
+      - /mnt/4tb/.beszel:/extra-filesystems/4tb:ro
+      - /mnt/8tb/.beszel:/extra-filesystems/8tb:ro
+      - /mnt/ssd/.beszel:/extra-filesystems/ssd:ro
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # - /var/run/systemd/private:/var/run/systemd/private:ro  # TODO: do I need this?
+    healthcheck:
+      test: ['CMD', '/agent', 'health']
+      interval: 120s
 
   bookorbit:
     container_name: bookorbit
@@ -97,7 +141,7 @@ services:
   cloudflared:
     container_name: cloudflared
     image: docker.io/cloudflare/cloudflared:2026.10.7@sha256:4955524aeaa379e154023d5a027c250f7b35041a2e7e950cf13f144bc9b9c5ba
-    command: tunnel --metrics 0.0.0.0:20241 run
+    command: tunnel run
     restart: unless-stopped
     volumes:
       - ./data/cloudflared:/home/nonroot/.cloudflared:Z
@@ -267,50 +311,6 @@ services:
       retries: 3
       start_period: 120s
 
-  jellyfin-exporter:
-    container_name: jellyfin-exporter
-    image: docker.io/rebelcore/jellyfin-exporter:v1.6.0
-    restart: unless-stopped
-    environment:
-      - JELLYFIN_ADDRESS=http://jellyfin:8096
-    env_file:
-      - ./secrets/jellyfin.env
-    depends_on:
-      - jellyfin
-
-  netdata:
-    container_name: netdata
-    image: netdata/netdata:v2.12.2
-    restart: unless-stopped
-    cpu_shares: 1152
-    init: true
-    ports:
-      - 19999:19999
-    environment:
-      - DOCKER_HOST=docker-socket-proxy:2375
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    cap_add:
-      - SYS_ADMIN
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - ./config/netdata:/etc/netdata:Z
-      - netdata-cache:/var/cache/netdata
-      - netdata-lib:/var/lib/netdata
-      - /:/host/root:ro,rslave
-      - /etc/group:/host/etc/group:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /etc/passwd:/host/etc/passwd:ro
-      - /proc:/host/proc:ro
-      - /run/dbus:/run/dbus:ro
-      - /sys:/host/sys:ro
-      - /var/log:/host/var/log:ro
-    secrets:
-      - syncthing_metrics_token
-
   n8n:
     container_name: n8n
     image: docker.n8n.io/n8nio/n8n:2.47.0
@@ -321,8 +321,7 @@ services:
       - EXECUTIONS_DATA_MAX_AGE=168
       - EXECUTIONS_DATA_PRUNE_MAX_COUNT=1000
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
-      - N8N_METRICS=true
-      - N8N_METRICS_INCLUDE_QUEUE_METRICS=true
+      - N8N_METRICS=false
       - N8N_HOST=n8n.thekev.in
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
@@ -381,21 +380,6 @@ services:
       - /mnt/1tb/torrents:/data/torrents
       - ./data/qbittorrent:/config:Z
 
-  qbittorrent-exporter:
-    container_name: qbittorrent-exporter
-    image: ghcr.io/martabal/qbittorrent-exporter:v2.0.4
-    restart: unless-stopped
-    environment:
-      - QBITTORRENT_BASE_URL=http://qbittorrent:8080
-      # Authenticate with username/password rather than a generated API key, so
-      # no plaintext token is written into the tracked qBittorrent.conf. The
-      # 5.2+ session cookie is QBT_SID_<WebUI\Port> (8080 here).
-      - QBITTORRENT_COOKIE_NAME=QBT_SID_8080
-    env_file:
-      - ./secrets/qbittorrent.env
-    depends_on:
-      - qbittorrent
-
   radarr:
     container_name: radarr
     image: quay.io/linuxserver.io/radarr:6.4.4
@@ -411,30 +395,6 @@ services:
       - /mnt/1tb/torrents:/data/torrents
       - /mnt/4tb/movies:/data/media/movies
       - ./data/radarr:/config:Z
-
-  scraparr:
-    container_name: scraparr
-    image: ghcr.io/thecfu/scraparr:3.2.0
-    restart: unless-stopped
-    environment:
-      - BAZARR_URL=http://bazarr:6767
-      - BAZARR_INTERVAL=300
-      - PROWLARR_URL=http://prowlarr:9696
-      - PROWLARR_INTERVAL=300
-      - RADARR_URL=http://radarr:7878
-      - RADARR_INTERVAL=300
-      - SONARR_URL=http://sonarr:8989
-      - SONARR_INTERVAL=300
-      # Skips the per-series episode-file walk (one API call per series each scrape),
-      # which is the dominant CPU cost of scraping Sonarr.
-      - SONARR_EPISODE_QUALITY_STATS=false
-    env_file:
-      - ./secrets/scraparr.env
-    depends_on:
-      - bazarr
-      - prowlarr
-      - radarr
-      - sonarr
 
   sonarr:
     container_name: sonarr
@@ -492,5 +452,3 @@ services:
 volumes:
   gerbera: {}
   model-cache: {}
-  netdata-cache: {}
-  netdata-lib: {}

@@ -17,8 +17,8 @@ log() { printf 'cloudflare-sync-access: %s\n' "$*" >&2; }
 
 GATED_SERVICES=(
     "bazarr.thekev.in"
+    "beszel.thekev.in"
     "fava.thekev.in"
-    "netdata.thekev.in"
     "prowlarr.thekev.in"
     "qbittorrent.thekev.in"
     "radarr.thekev.in"

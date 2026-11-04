@@ -95,37 +95,27 @@
         icon: mdi-home-circle
         server: local
         container: homepage
-    - Netdata:
-        href: https://netdata.thekev.in/
-        description: Realtime Infrastructure Monitoring
-        icon: netdata
+    - Beszel:
+        href: https://beszel.thekev.in/
+        description: Server Monitoring Hub
+        icon: mdi-chart-line
         server: local
-        container: netdata
+        container: beszel
+    - Beszel Agent:
+        description: Server Monitoring Agent
+        icon: mdi-chart-line
+        server: local
+        container: beszel-agent
     - Dolce:
         description: Docker Container Event Notifications
         icon: mdi-bell-alert
         server: local
         container: dolce
-    - ATC1441 Exporter:
-        description: Monitoring Agent for ATC1441 Sensors
-        icon: mdi-thermometer
-        server: local
-        container: atc1441-exporter
-    - Jellyfin Exporter:
-        description: Metrics Exporter for Jellyfin
-        icon: jellyfin
-        server: local
-        container: jellyfin-exporter
-    - qBittorrent Exporter:
-        description: Metrics Exporter for qBittorrent
-        icon: qbittorrent
-        server: local
-        container: qbittorrent-exporter
-    - Scraparr:
-        description: Metrics Exporter for the *arr Suite
-        icon: sh-scraparr
-        server: local
-        container: scraparr
+    # - ATC1441 Exporter:
+    #     description: Monitoring Agent for ATC1441 Sensors
+    #     icon: mdi-thermometer
+    #     server: local
+    #     container: atc1441-exporter
 
 - Networking:
     - Gerbera:

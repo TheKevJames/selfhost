@@ -91,21 +91,6 @@ repo::
     $ echo 'GOOGLE_CLIENT_ID="..."' >> secrets/google.env
     $ echo 'GOOGLE_CLIENT_SECRET="..."' >> secrets/google.env
 
-    # metrics: credentials for the exporters/collectors that feed netdata
-    # (see "Metrics" below for how each token is routed)
-    $ echo 'JELLYFIN_TOKEN="..."'      >> secrets/jellyfin.env       # Jellyfin API key
-    $ cat >> secrets/qbittorrent.env <<'EOF'                        # WebUI login (avoids a plaintext API key in qBittorrent.conf)
-    QBITTORRENT_USERNAME=...
-    QBITTORRENT_PASSWORD=...
-    EOF
-    $ cat >> secrets/scraparr.env <<'EOF'
-    BAZARR_API_KEY=...
-    PROWLARR_API_KEY=...
-    RADARR_API_KEY=...
-    SONARR_API_KEY=...
-    EOF
-    $ printf '%s' '...' > secrets/syncthing_metrics_token          # Syncthing GUI API key
-
     $ echo "JWT_SECRET=\"$(openssl rand -hex 32)\"" > secrets/bookorbit.env
     $ echo "PODCAST_ENCRYPTION_KEY=\"$(openssl rand -hex 32)\"" >> secrets/bookorbit.env
     $ echo "SETUP_BOOTSTRAP_TOKEN=\"$(openssl rand -hex 16)\"" >> secrets/bookorbit.env
@@ -266,37 +251,6 @@ First-time setup:
 
 #. In the Google Home app, open the Hub's *Photo Frame* settings, choose
    *Google Photos* and select the album named by ``GPHOTOS_ALBUM``.
-
-Metrics
-~~~~~~~
-
-All metrics funnel into netdata. netdata scrapes Prometheus endpoints via its
-built-in go.d ``prometheus`` collector (``config/netdata/go.d/prometheus.conf``),
-reaching each target by container name on the default compose network. Apps that
-do not speak Prometheus natively get a small sidecar exporter:
-
-* **jellyfin** -- ``jellyfin-exporter`` (rebelcore) on ``:9594``; needs a
-  Jellyfin API key in ``secrets/jellyfin.env``.
-* **prowlarr / radarr / sonarr / bazarr** -- one ``scraparr`` container on
-  ``:7100`` exports the whole \*arr suite; API keys in ``secrets/scraparr.env``.
-* **qbittorrent** -- ``qbittorrent-exporter`` (martabal) on ``:8090``. Auth uses
-  the WebUI username/password (``secrets/qbittorrent.env``) rather than a
-  generated API key, so no plaintext token is written into the tracked
-  ``qBittorrent.conf``; the compose file sets ``QBITTORRENT_COOKIE_NAME`` to the
-  5.2+ session cookie ``QBT_SID_<WebUI-port>``.
-* **syncthing** -- exposes ``/metrics`` natively on ``:8384``; netdata scrapes
-  it with the Syncthing API key supplied as a bearer token via the
-  ``syncthing_metrics_token`` docker secret.
-* **ping** -- netdata's native ``ping`` collector (``config/netdata/go.d/ping.conf``)
-  samples RTT + packet loss to the LAN gateway and the internet. Paired with the
-  native ``net.*`` (interface throughput) and ``nf_conntrack`` charts, it shows
-  WAN bufferbloat -- latency spiking while the uplink saturates -- which is the
-  leading suspect for clients failing WiFi connectivity checks. Runs in
-  unprivileged (UDP) mode (``privileged: no``) because the container lacks
-  ``CAP_NET_RAW``; this relies on the host's ``net.ipv4.ping_group_range``.
-
-The netdata dashboard (``:19999``) shows each job under *Nodes -> go.d /
-prometheus*; ``docker logs netdata`` surfaces any job that fails to scrape.
 
 Updates
 -------
