@@ -84,6 +84,60 @@ for domain in "${GATED_SERVICES[@]}"; do
             -H "Content-Type: application/json" \
             --data "$policy_payload" >/dev/null
     fi
+
+    if [[ "$domain" == "beszel.thekev.in" ]]; then
+        log "Fetching or creating service token 'bmaxbox-selfhost-beszel'..."
+        tokens_resp="$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/service_tokens" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json")"
+
+        token_id="$(jq -r --arg name "bmaxbox-selfhost-beszel" '.result[]? | select(.name == $name) | .id // empty' <<<"$tokens_resp")"
+
+        if [[ -z "$token_id" ]]; then
+            log "Creating service token 'bmaxbox-selfhost-beszel'..."
+            create_token_resp="$(curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/service_tokens" \
+                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data '{
+                    "name": "bmaxbox-selfhost-beszel",
+                    "duration": "forever"
+                }')"
+            token_id="$(jq -r '.result.id // empty' <<<"$create_token_resp")"
+            [[ -n "$token_id" ]] || { log "Failed to create service token: $create_token_resp"; exit 1; }
+            log "Created service token 'bmaxbox-selfhost-beszel' (id: $token_id)"
+        else
+            log "Found service token 'bmaxbox-selfhost-beszel' (id: $token_id)"
+        fi
+
+        log "Configuring Access policy (beszel)..."
+        beszel_policy_id="$(jq -r '.result[]? | select(.name == "beszel") | .id // empty' <<<"$policies_resp")"
+
+        beszel_policy_payload="$(jq -n \
+            --arg tid "$token_id" \
+            '{
+                "name": "beszel",
+                "decision": "non_identity",
+                "include": [
+                    {
+                        "service_token": {
+                            "token_id": $tid
+                        }
+                    }
+                ]
+            }')"
+
+        if [[ -z "$beszel_policy_id" ]]; then
+            curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id/policies" \
+                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data "$beszel_policy_payload" >/dev/null
+        else
+            curl -s -X PUT "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/access/apps/$app_id/policies/$beszel_policy_id" \
+                -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+                -H "Content-Type: application/json" \
+                --data "$beszel_policy_payload" >/dev/null
+        fi
+    fi
     log "Synced $domain successfully."
 done
 log "Access sync complete."
