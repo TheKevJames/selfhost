@@ -3,12 +3,3 @@
     cpu: true
     memory: true
     disk: /
-
-- resources:
-    label: Storage
-    expanded: true
-    disk:
-        - /mnt/ssd
-        - /mnt/1tb
-        - /mnt/4tb
-        - /mnt/8tb
