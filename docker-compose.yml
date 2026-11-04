@@ -45,7 +45,7 @@ services:
       - APP_URL=https://bookorbit.thekev.in
       - BOOKS_HOST_PATH=/books
       - CLIENT_URL=https://bookorbit.thekev.in
-      - DISABLE_LOCAL_AUTH=true
+      - DISABLE_LOCAL_AUTH=false  # TODO: defer to cloudflared oauth
       - LIBRARY_BROWSE_ROOT=/books
       - NODE_ENV=production
       - NODE_MAX_OLD_SPACE_SIZE=2048
