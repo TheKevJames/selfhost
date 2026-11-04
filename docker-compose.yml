@@ -30,14 +30,17 @@ services:
 
   beszel:
     container_name: beszel
-    image: ghcr.io/henrygd/beszel:v0.21.1
+    image: ghcr.io/henrygd/beszel/beszel:0.21.1
     restart: unless-stopped
     environment:
       - APP_URL=https://beszel.thekev.in
       - AUTO_LOGIN=kevin.j.carruthers@gmail.com
       - DISABLE_PASSWORD_AUTH=true
       - TRUSTED_AUTH_HEADER=Cf-Access-Authenticated-User-Email
+      - TRUSTED_PROXY_IPS=172.18.0.0/16
       - USER_EMAIL=kevin.j.carruthers@gmail.com
+      # N.B. uncomment for bootstrapping, then change password
+      # - USER_PASSWORD=a-strong-temporary-password
     ports:
       - 8090:8090
     volumes:
@@ -51,13 +54,16 @@ services:
 
   beszel-agent:
     container_name: beszel-agent
-    image: ghcr.io/henrygd/beszel-agent:v0.21.1
+    image: ghcr.io/henrygd/beszel/beszel-agent:0.21.1-alpine
     restart: unless-stopped
     network_mode: host
+    env_file:
+      - ./secrets/beszel.env
     environment:
       - DISK_USAGE_CACHE=1h
       # - DOCKER_HOST=docker-socket-proxy:2375  # TODO: switch to docket proxy
-      - LISTEN=:45876
+      - HUB_URL=https://beszel.thekev.in
+      - LISTEN=/beszel_socket/beszel.sock
       - SKIP_GPU=true
       - SKIP_SYSTEMD_LOGS=true
       - SKIP_WIFI=true
@@ -122,7 +128,7 @@ services:
 
   bookorbit-postgres:
     container_name: bookorbit-postgres
-    image: pgvector/pgvector:pg18
+    image: docker.io/pgvector/pgvector:pg18
     restart: unless-stopped
     env_file:
       - ./secrets/bookorbit_postgres.env
@@ -161,7 +167,7 @@ services:
 
   dolce:
     container_name: dolce
-    image: dangrie158/dolce:v4.0.2
+    image: docker.io/dangrie158/dolce:v4.0.2
     restart: unless-stopped
     env_file:
       - ./secrets/dolce.env
@@ -187,7 +193,7 @@ services:
 
   gerbera:
     container_name: gerbera
-    image: gerbera/gerbera:3.3.0
+    image: docker.io/gerbera/gerbera:3.3.0
     command: gerbera -p 49152 -c /etc/gerbera/config.xml
     restart: unless-stopped
     cpus: 0.5
@@ -220,12 +226,7 @@ services:
 
   immich-machine-learning:
     container_name: immich-machine-learning
-    # For hardware acceleration, add one of -[armnn, cuda, rocm, openvino, rknn] to the image tag.
-    # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:v3.3.5
-    # extends: # uncomment this section for hardware acceleration - see https://docs.immich.app/features/ml-hardware-acceleration
-    #   file: hwaccel.ml.yml
-    #   service: cpu # set to one of [armnn, cuda, rocm, openvino, openvino-wsl, rknn] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     restart: always
     cpus: 1.0
     cpu_shares: 256
@@ -263,9 +264,6 @@ services:
   immich-server:
     container_name: immich-server
     image: ghcr.io/immich-app/immich-server:v3.3.5
-    # extends:
-    #   file: hwaccel.transcoding.yml
-    #   service: cpu # set to one of [nvenc, quicksync, rkmpp, vaapi, vaapi-wsl] for accelerated transcoding
     restart: always
     user: '1000:1000'
     ports:
@@ -336,8 +334,6 @@ services:
     volumes:
       - ./config/n8n:/files
       - ./data/n8n/data:/home/node/.n8n
-      # TODO: backup crontab
-      # */1 * * * * cp /proc/net/arp /home/kevin/src/personal/selfhost/data/n8n/files/host.arp
       - ./data/n8n/files:/home/node/.n8n-files
 
   n8n-runners:
