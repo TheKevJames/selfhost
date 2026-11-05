@@ -222,7 +222,7 @@ services:
 
   immich-machine-learning:
     container_name: immich-machine-learning
-    image: ghcr.io/immich-app/immich-machine-learning:v3.3.5
+    image: ghcr.io/immich-app/immich-machine-learning:v3.3.6
     restart: always
     cpus: 1.0
     cpu_shares: 256
@@ -261,7 +261,7 @@ services:
 
   immich-server:
     container_name: immich-server
-    image: ghcr.io/immich-app/immich-server:v3.3.5
+    image: ghcr.io/immich-app/immich-server:v3.3.6
     restart: always
     user: '1000:1000'
     ports:
