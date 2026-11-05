@@ -70,7 +70,6 @@ services:
     volumes:
       - ./data/beszel/agent:/var/lib/beszel-agent:Z
       - ./data/beszel/socket:/beszel_socket
-      - /mnt/1tb/.beszel:/extra-filesystems/1tb:ro
       - /mnt/4tb/.beszel:/extra-filesystems/4tb:ro
       - /mnt/8tb/.beszel:/extra-filesystems/8tb:ro
       - /mnt/ssd/.beszel:/extra-filesystems/ssd:ro
@@ -372,7 +371,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - /mnt/1tb/torrents:/data/torrents
+      - /mnt/8tb/torrents:/data/torrents
       - ./data/qbittorrent:/config:Z
 
   radarr:
@@ -387,7 +386,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - /mnt/1tb/torrents:/data/torrents
+      - /mnt/8tb/torrents:/data/torrents
       - /mnt/4tb/movies:/data/media/movies
       - ./data/radarr:/config:Z
 
@@ -403,7 +402,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - /mnt/1tb/torrents:/data/torrents
+      - /mnt/8tb/torrents:/data/torrents
       - /mnt/8tb/shows:/data/media/shows
       - ./data/sonarr:/config:Z
 
@@ -438,7 +437,7 @@ services:
       - TZ=Etc/UTC
       - UMASK=002
     volumes:
-      - /mnt/1tb/torrents:/data/torrents
+      - /mnt/8tb/torrents:/data/torrents
       - ./config/unpackerr:/config:Z
 
 # Persistent app state lives under ./data; these named volumes
