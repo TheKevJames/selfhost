@@ -54,7 +54,7 @@ services:
 
   beszel-agent:
     container_name: beszel-agent
-    image: ghcr.io/henrygd/beszel/beszel-agent:0.21.1-alpine
+    image: ghcr.io/henrygd/beszel/beszel-agent:0.21.2-alpine
     restart: unless-stopped
     network_mode: host
     env_file:
