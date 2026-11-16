@@ -166,7 +166,7 @@ services:
 
   dolce:
     container_name: dolce
-    image: docker.io/dangrie158/dolce:v4.0.2
+    image: docker.io/dangrie158/dolce:v4.1.0
     restart: unless-stopped
     env_file:
       - ./secrets/dolce.env
