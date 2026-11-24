@@ -61,7 +61,7 @@ services:
       - ./secrets/beszel.env
     environment:
       - DISK_USAGE_CACHE=1h
-      # - DOCKER_HOST=docker-socket-proxy:2375  # TODO: switch to docket proxy
+      # - DOCKER_HOST=docker-socket-proxy:2375  # TODO: switch to docker proxy
       - HUB_URL=https://beszel.thekev.in
       - LISTEN=/beszel_socket/beszel.sock
       - SKIP_GPU=true
@@ -70,9 +70,9 @@ services:
     volumes:
       - ./data/beszel/agent:/var/lib/beszel-agent:Z
       - ./data/beszel/socket:/beszel_socket
-      - /mnt/4tb/.beszel:/extra-filesystems/4tb:ro
-      - /mnt/8tb/.beszel:/extra-filesystems/8tb:ro
-      - /mnt/ssd/.beszel:/extra-filesystems/ssd:ro
+      - /mnt/4tb/.beszel:/extra-filesystems/sdc1__4tb:ro
+      - /mnt/8tb/.beszel:/extra-filesystems/sdb1__8tb:ro
+      - /mnt/ssd/.beszel:/extra-filesystems/sda1__ssd:ro
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # - /var/run/systemd/private:/var/run/systemd/private:ro  # TODO: do I need this?
