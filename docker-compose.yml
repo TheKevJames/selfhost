@@ -82,7 +82,7 @@ services:
 
   bookorbit:
     container_name: bookorbit
-    image: ghcr.io/bookorbit/bookorbit:3.9.0
+    image: ghcr.io/bookorbit/bookorbit:3.10.0
     restart: unless-stopped
     init: true
     ports:
